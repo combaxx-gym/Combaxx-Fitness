@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+  --background: #161616; /* Blanca Padel Black */
+  --foreground: #ffffff;
+  --accent: #F0D348; /* Blanca Padel Yellow */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Custom Utilities for Minimal Design */
+.btn-primary {
+  @apply bg-[#F0D348] text-black font-bold px-6 py-3 rounded-none hover:bg-white transition-colors uppercase tracking-wider;
+}
+
+.card-hover {
+  @apply transition-transform duration-300 hover:-translate-y-1;
+}
