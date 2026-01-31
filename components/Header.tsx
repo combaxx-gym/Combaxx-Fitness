@@ -20,7 +20,7 @@ export default function Header() {
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out ${
-        scrolled ? "py-4 shadow-xl" : "py-6 bg-gradient-to-b from-black/90 to-transparent"
+        scrolled ? "py-4 shadow-xl backdrop-blur-md bg-black/10" : "py-6 bg-gradient-to-b from-black/90 to-transparent"
       }`}
     >
       <div className="max-w-[1920px] mx-auto px-6 md:px-12 flex items-center justify-between">
