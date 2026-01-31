@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react"
 const SLIDES = [
   {
     id: 1,
-    video: "/videos/video1.mp4",
+    video: "/videos/743f8627-519af9c4.mp4",
     title: "SKILLRUN",
     description:
       "Fast-paced running. Intense climbs and descents. Instant speed and gradient changes. Skillrun is designed for performance running.",
@@ -16,7 +16,7 @@ const SLIDES = [
   },
   {
     id: 2,
-    video: "/videos/video2.mp4",
+    video: "/videos/9560d960.mp4",
     title: "POWER STRENGTH",
     description:
       "Unleash your full potential with our industrial-grade strength equipment. Built for heavy lifting and maximum durability.",
@@ -25,7 +25,7 @@ const SLIDES = [
   },
   {
     id: 3,
-    video: "/videos/video3.mp4",
+    video: "/videos/9af5361d.mp4",
     title: "CARDIO ELITE",
     description:
       "Experience the next level of cardio. Advanced biomechanics meet sleek design to keep you moving further and faster.",
