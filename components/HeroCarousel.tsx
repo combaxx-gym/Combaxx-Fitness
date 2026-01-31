@@ -110,7 +110,7 @@ export default function HeroCarousel() {
           }`}
         >
           {/* Video Background */}
-          <div className="absolute inset-0 bg-black/40 z-10" /> {/* Overlay for text readability */}
+          <div className="absolute inset-0 bg-black/20 z-10" /> {/* Overlay for text readability */}
           <video
             ref={(el) => {
                 if (videoRefs.current) {
@@ -138,9 +138,9 @@ export default function HeroCarousel() {
                 {slide.description}
               </p>
               <Link href={slide.link}>
-                <button className="bg-[#F0D348] text-black font-bold py-4 px-8 uppercase tracking-widest text-sm hover:bg-white transition-colors flex items-center gap-2">
-                  <ChevronRight className="w-4 h-4" />
+                <button className="group border border-white/30 bg-black/20 backdrop-blur-sm text-white font-bold py-4 px-8 rounded-full uppercase tracking-widest text-sm hover:bg-white hover:text-black hover:border-white transition-all duration-300 flex items-center gap-3">
                   {slide.cta}
+                  <ChevronRight className="w-4 h-4 hero-arrow-icon" strokeWidth={3} />
                 </button>
               </Link>
             </div>
