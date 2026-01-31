@@ -47,10 +47,11 @@ export default function Header() {
                 ? "bg-[#1A1A1A] text-white px-8 py-3 rounded-full border border-white/10 shadow-2xl" 
                 : "bg-white/10 backdrop-blur-sm text-white px-8 py-3 rounded-full border border-white/10"
             }`}>
-            <Link href="#" className="hover:text-[#F0D348] transition-colors">Equipment</Link>
-            <Link href="#" className="hover:text-[#F0D348] transition-colors">Apparel</Link>
-            <Link href="#" className="hover:text-[#F0D348] transition-colors">Accessories</Link>
-            <Link href="#" className="hover:text-[#F0D348] transition-colors">About Us</Link>
+            <Link href="/products" className="hover:text-[#F0D348] transition-colors">Products</Link>
+            <Link href="/wellness" className="hover:text-[#F0D348] transition-colors">Wellness</Link>
+            <Link href="/materials-information" className="hover:text-[#F0D348] transition-colors">Materials Information</Link>
+            <Link href="/stories" className="hover:text-[#F0D348] transition-colors">Stories</Link>
+            <Link href="/contact" className="hover:text-[#F0D348] transition-colors">Contact</Link>
             </nav>
         </div>
 
