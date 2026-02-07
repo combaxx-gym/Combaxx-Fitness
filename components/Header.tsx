@@ -47,11 +47,11 @@ export default function Header() {
                 ? "bg-[#1A1A1A] text-white px-8 py-3 rounded-full border border-white/10 shadow-2xl" 
                 : "bg-white/10 backdrop-blur-sm text-white px-8 py-3 rounded-full border border-white/10"
             }`}>
-            <Link href="/products" className="hover:text-[#F0D348] transition-colors">Products</Link>
-            <Link href="/wellness" className="hover:text-[#F0D348] transition-colors">Wellness</Link>
-            <Link href="/materials-information" className="hover:text-[#F0D348] transition-colors">Materials Information</Link>
-            <Link href="/stories" className="hover:text-[#F0D348] transition-colors">Stories</Link>
-            <Link href="/contact" className="hover:text-[#F0D348] transition-colors">Contact</Link>
+            <Link href="/products" className="hover:text-[#FF3333] transition-colors">Products</Link>
+            <Link href="/wellness" className="hover:text-[#FF3333] transition-colors">Wellness</Link>
+            <Link href="/materials-information" className="hover:text-[#FF3333] transition-colors">Materials Information</Link>
+            <Link href="/stories" className="hover:text-[#FF3333] transition-colors">Stories</Link>
+            <Link href="/contact" className="hover:text-[#FF3333] transition-colors">Contact</Link>
             </nav>
         </div>
 
@@ -71,12 +71,12 @@ export default function Header() {
                             className="bg-transparent border-b border-white/30 text-white text-xs focus:outline-none w-32 placeholder:text-white/50"
                             autoFocus
                         />
-                        <button onClick={() => setIsSearchOpen(false)} className="text-white hover:text-[#F0D348] transition-colors">
+                        <button onClick={() => setIsSearchOpen(false)} className="text-white hover:text-[#FF3333] transition-colors">
                             <X size={16} />
                         </button>
                     </div>
                 ) : (
-                    <button onClick={() => setIsSearchOpen(true)} className="text-white hover:text-[#F0D348] transition-colors">
+                    <button onClick={() => setIsSearchOpen(true)} className="text-white hover:text-[#FF3333] transition-colors">
                         <Search size={18} />
                     </button>
                 )}
@@ -84,7 +84,7 @@ export default function Header() {
 
             <SignedOut>
               <SignInButton mode="modal">
-                <button className="text-xs font-bold uppercase tracking-widest text-white hover:text-[#F0D348] transition-colors">
+                <button className="text-xs font-bold uppercase tracking-widest text-white hover:text-[#FF3333] transition-colors">
                   Login
                 </button>
               </SignInButton>
@@ -93,7 +93,7 @@ export default function Header() {
               <UserButton 
                 appearance={{
                   elements: {
-                    avatarBox: "w-8 h-8 ring-2 ring-white/20 hover:ring-[#F0D348] transition-all"
+                    avatarBox: "w-8 h-8 ring-2 ring-white/20 hover:ring-[#FF3333] transition-all"
                   }
                 }}
               />

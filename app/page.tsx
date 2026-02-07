@@ -38,7 +38,7 @@ export default async function Home() {
   const products: Product[] = await getProducts()
 
   return (
-    <div className="min-h-screen bg-[#161616] text-white selection:bg-[#F0D348] selection:text-black">
+    <div className="min-h-screen bg-[#161616] text-white selection:bg-[#FF3333] selection:text-black">
       <Header />
 
       {/* Hero Section */}
@@ -50,7 +50,7 @@ export default async function Home() {
       {/* Story / Materials Section */}
       <section className="py-20 px-4 border-b border-gray-800">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-xs font-bold text-[#F0D348] uppercase tracking-[0.3em] mb-4">Our Obsession</h2>
+          <h2 className="text-xs font-bold text-[#FF3333] uppercase tracking-[0.3em] mb-4">Our Obsession</h2>
           <p className="text-3xl md:text-4xl font-light leading-tight">
             We don't just build gym equipment. We engineer tools for human transformation. 
             Using industrial-grade steel and precision mechanics, our gear is designed 
@@ -63,7 +63,7 @@ export default async function Home() {
       <div className="max-w-7xl mx-auto py-20 px-4">
         <div className="flex justify-between items-end mb-12">
            <h2 className="text-3xl font-bold uppercase tracking-tighter">Latest Gear</h2>
-           <Link href="/shop" className="text-sm text-gray-400 hover:text-[#F0D348] uppercase tracking-widest border-b border-transparent hover:border-[#F0D348] pb-1 transition-all">
+           <Link href="/shop" className="text-sm text-gray-400 hover:text-[#FF3333] uppercase tracking-widest border-b border-transparent hover:border-[#FF3333] pb-1 transition-all">
              View All
            </Link>
         </div>
@@ -88,14 +88,14 @@ export default async function Home() {
                       className="object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                     />
                     {/* Minimal Badge */}
-                    <div className="absolute top-4 left-4 bg-[#F0D348] text-black text-[10px] font-bold px-2 py-1 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute top-4 left-4 bg-[#FF3333] text-black text-[10px] font-bold px-2 py-1 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
                       New Arrival
                     </div>
                   </div>
                 )}
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="text-lg font-bold text-white group-hover:text-[#F0D348] transition-colors uppercase tracking-tight">
+                    <h3 className="text-lg font-bold text-white group-hover:text-[#FF3333] transition-colors uppercase tracking-tight">
                       {product.name}
                     </h3>
                     <p className="text-gray-500 text-sm mt-1 line-clamp-1">{product.description}</p>

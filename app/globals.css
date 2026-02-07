@@ -3,7 +3,7 @@
 :root {
   --background: #161616; /* Blanca Padel Black */
   --foreground: #ffffff;
-  --accent: #F0D348; /* Blanca Padel Yellow */
+  --accent: #FF3333; /* Blanca Padel Red */
 }
 
 @theme inline {
@@ -22,7 +22,7 @@ body {
 
 /* Custom Utilities for Minimal Design */
 .btn-primary {
-  @apply bg-[#F0D348] text-black font-bold px-6 py-3 rounded-none hover:bg-white transition-colors uppercase tracking-wider;
+  @apply bg-[#FF3333] text-black font-bold px-6 py-3 rounded-none hover:bg-white transition-colors uppercase tracking-wider;
 }
 
 .card-hover {
@@ -31,7 +31,7 @@ body {
 
 /* Custom Arrow Icon Style */
 .hero-arrow-icon svg {
-  color: #f0d348 !important;
+  color: #FF3333 !important;
   transition: color 0.3s ease;
 }
 
