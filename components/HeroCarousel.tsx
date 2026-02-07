@@ -153,7 +153,7 @@ export default function HeroCarousel() {
         
         {/* Navigation Arrows */}
         <div className="flex items-center gap-4">
-            <button onClick={prevSlide} className="p-2 text-white hover:text-[#F0D348] transition-colors">
+            <button onClick={prevSlide} className="p-2 text-white hover:text-[#FF3333] transition-colors">
                 <ChevronLeft className="w-6 h-6" />
             </button>
             
@@ -166,7 +166,7 @@ export default function HeroCarousel() {
                     onClick={() => setCurrent(index)}
                 >
                     <div 
-                        className={`absolute top-0 left-0 h-full bg-[#F0D348] transition-all duration-100 ease-linear ${
+                        className={`absolute top-0 left-0 h-full bg-[#FF3333] transition-all duration-100 ease-linear ${
                             index === current ? "opacity-100" : "opacity-0"
                         }`}
                         style={{ width: index === current ? `${progress}%` : '0%' }}
@@ -175,13 +175,13 @@ export default function HeroCarousel() {
             ))}
             </div>
 
-            <button onClick={nextSlide} className="p-2 text-white hover:text-[#F0D348] transition-colors">
+            <button onClick={nextSlide} className="p-2 text-white hover:text-[#FF3333] transition-colors">
                 <ChevronRight className="w-6 h-6" />
             </button>
         </div>
 
         {/* Play/Pause */}
-        <button onClick={togglePlay} className="p-2 text-white hover:text-[#F0D348] transition-colors">
+        <button onClick={togglePlay} className="p-2 text-white hover:text-[#FF3333] transition-colors">
             {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
         </button>
 
