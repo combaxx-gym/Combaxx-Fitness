@@ -41,16 +41,27 @@ export default function HeroCarousel() {
   const duration = 8000 // 8 seconds per slide
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
 
+  const nextSlide = () => {
+    setProgress(0)
+    setCurrent((prev) => (prev + 1) % SLIDES.length)
+  }
+
+  const prevSlide = () => {
+    setProgress(0)
+    setCurrent((prev) => (prev - 1 + SLIDES.length) % SLIDES.length)
+  }
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying)
+  }
+
   useEffect(() => {
-    let interval: NodeJS.Timeout
-    let progressInterval: NodeJS.Timeout
+    let interval: NodeJS.Timeout | undefined
+    let progressInterval: NodeJS.Timeout | undefined
 
     if (isPlaying) {
-      // Reset progress when slide changes
-      setProgress(0)
-      
       const startTime = Date.now()
-      
+
       progressInterval = setInterval(() => {
         const elapsed = Date.now() - startTime
         const newProgress = Math.min((elapsed / duration) * 100, 100)
@@ -63,8 +74,8 @@ export default function HeroCarousel() {
     }
 
     return () => {
-      clearTimeout(interval)
-      clearInterval(progressInterval)
+      if (interval) clearTimeout(interval)
+      if (progressInterval) clearInterval(progressInterval)
     }
   }, [current, isPlaying])
 
@@ -75,7 +86,6 @@ export default function HeroCarousel() {
         if (index === current) {
           video.currentTime = 0
           video.play().catch(() => {
-            // Auto-play might be blocked by browser policies
             console.log("Autoplay blocked or video missing")
           })
         } else {
@@ -84,18 +94,6 @@ export default function HeroCarousel() {
       }
     })
   }, [current])
-
-  const nextSlide = () => {
-    setCurrent((prev) => (prev + 1) % SLIDES.length)
-  }
-
-  const prevSlide = () => {
-    setCurrent((prev) => (prev - 1 + SLIDES.length) % SLIDES.length)
-  }
-
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying)
-  }
 
   return (
     <section className="relative h-screen w-full bg-[#161616] p-4 md:p-6 group">
@@ -163,7 +161,10 @@ export default function HeroCarousel() {
                 <div 
                     key={index} 
                     className="relative w-12 h-1 bg-gray-600 rounded-full overflow-hidden cursor-pointer"
-                    onClick={() => setCurrent(index)}
+                    onClick={() => {
+                      setCurrent(index)
+                      setProgress(0)
+                    }}
                 >
                     <div 
                         className={`absolute top-0 left-0 h-full bg-[#FF3333] transition-all duration-100 ease-linear ${

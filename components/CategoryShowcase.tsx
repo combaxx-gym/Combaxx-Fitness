@@ -6,6 +6,7 @@ import Link from "next/link"
 import { ChevronRight, ChevronLeft } from "lucide-react"
 import { client } from "@/sanity/lib/client"
 import { urlFor } from "@/sanity/lib/image"
+import type { SanityImageSource } from "@sanity/image-url"
 
 // Fallback data if Sanity is empty
 const STATIC_CATEGORIES = [
@@ -21,7 +22,7 @@ interface Category {
   _id: string
   name: string
   slug: { current: string }
-  image: any
+  image: string | SanityImageSource | null
 }
 
 export default function CategoryShowcase() {
@@ -33,6 +34,29 @@ export default function CategoryShowcase() {
   // Use a ref to access the card to measure it
   const cardRef = useRef<HTMLAnchorElement>(null)
   
+  const handleNext = () => {
+    setCurrentIndex(prev => prev + 1)
+  }
+
+  const handlePrev = () => {
+    if (currentIndex === 0) {
+      setIsTransitioning(false)
+      setCurrentIndex(categories.length)
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsTransitioning(true)
+          setCurrentIndex(categories.length - 1)
+        })
+      })
+    } else {
+      setCurrentIndex(prev => prev - 1)
+    }
+  }
+
+  const handleDotClick = (index: number) => {
+    setCurrentIndex(index)
+  }
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -109,32 +133,6 @@ export default function CategoryShowcase() {
       return () => clearTimeout(timer)
     }
   }, [currentIndex, categories.length])
-
-
-  const handleNext = () => {
-    setCurrentIndex(prev => prev + 1)
-  }
-
-  const handlePrev = () => {
-    if (currentIndex === 0) {
-      // Snap to end (cloned start) instantly, then slide to N-1
-      setIsTransitioning(false)
-      setCurrentIndex(categories.length)
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setIsTransitioning(true)
-          setCurrentIndex(categories.length - 1)
-        })
-      })
-    } else {
-      setCurrentIndex(prev => prev - 1)
-    }
-  }
-
-  // Handle dot click
-  const handleDotClick = (index: number) => {
-      setCurrentIndex(index)
-  }
 
   // Double the categories for infinite loop
   const displayCategories = [...categories, ...categories]
