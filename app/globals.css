@@ -38,3 +38,18 @@ body {
 .group:hover .hero-arrow-icon svg {
   color: #000000 !important;
 }
+span.leading-tight {
+    font-size: 24px !important;
+}
+.tracking-tight {
+    line-height: 1.2em;
+}
+
+/* Logos slider animation */
+@keyframes logos-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-logos {
+  animation: logos-scroll 35s linear infinite;
+}

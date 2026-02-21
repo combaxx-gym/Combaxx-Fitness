@@ -18,8 +18,8 @@ async function getProducts(): Promise<ProductsCarouselProduct[]> {
       name,
       slug,
       image,
-      price,
       description
+      ,category->{name, slug}
     }`
     const products = await client.fetch(query)
     return products as ProductsCarouselProduct[]
@@ -50,14 +50,16 @@ export default async function Home() {
       <PerformanceWorld />
 
       {/* Story / Materials Section */}
-      <section className="py-20 px-4 border-b border-gray-800">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="py-20 border-b border-gray-800">
+        <div className="max-w-[1920px] mx-auto px-6 md:px-12">
+          <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-xs font-bold text-[#FF3333] uppercase tracking-[0.3em] mb-4">Our Obsession</h2>
           <p className="text-3xl md:text-4xl font-light leading-tight">
             We don&apos;t just build gym equipment. We engineer tools for human transformation. 
             Using industrial-grade steel and precision mechanics, our gear is designed 
             to withstand your absolute best.
           </p>
+          </div>
         </div>
       </section>
 
@@ -65,9 +67,9 @@ export default async function Home() {
 
       <PartnersStrip />
 
-      <BusinessFaq />
-
       <ProductsCarousel products={products} />
+
+      <BusinessFaq />
 
       <Footer />
     </div>

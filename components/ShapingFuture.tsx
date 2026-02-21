@@ -3,10 +3,10 @@ import Image from 'next/image';
 
 const ShapingFuture = () => {
   return (
-    <div className="bg-black text-white py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+    <div className="bg-black text-white py-20">
+      <div className="max-w-[1920px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
         <div className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-wider uppercase">
+          <h2 className="text-[50px] font-bold tracking-wider uppercase">
             Shaping the future <br /> of performance
           </h2>
           <p className="text-neutral-400 max-w-md">

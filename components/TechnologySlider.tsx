@@ -10,28 +10,28 @@ const SLIDER_ITEMS = [
     id: 1,
     category: "Cardio",
     name: "Sprint Tread",
-    image: "/images/treadmill.jpg",
+    image: "https://images.unsplash.com/photo-1517963628607-235ccdd58bd3?q=80&w=1600&auto=format&fit=crop",
     href: "/products",
   },
   {
     id: 2,
     category: "Strength",
     name: "Power Bench",
-    image: "/images/bench.jpg",
+    image: "https://images.unsplash.com/photo-1517964603305-1349863e3cde?q=80&w=1600&auto=format&fit=crop",
     href: "/products",
   },
   {
     id: 3,
     category: "Cycling",
     name: "Studio Bike",
-    image: "/images/bike.jpg",
+    image: "https://images.unsplash.com/photo-1533560904424-0d24b42299a0?q=80&w=1600&auto=format&fit=crop",
     href: "/products",
   },
   {
     id: 4,
     category: "Multi Gym",
     name: "Performance Station",
-    image: "/images/multigym.jpg",
+    image: "https://images.unsplash.com/photo-1518310952931-168b33a35b04?q=80&w=1600&auto=format&fit=crop",
     href: "/products",
   },
 ]
@@ -57,7 +57,7 @@ export default function TechnologySlider() {
             <p className="text-xs font-bold text-[#FF3333] uppercase tracking-[0.3em] mb-4">
               Elegantly designed. Fueled by technology.
             </p>
-            <h2 className="text-3xl md:text-4xl font-light leading-tight mb-4">
+            <h2 className="text-[50px] font-light leading-tight mb-4">
               Precision engineered equipment, tuned for human performance.
             </h2>
             <p className="text-gray-400 max-w-md">

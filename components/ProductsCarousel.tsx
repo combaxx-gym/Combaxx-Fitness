@@ -1,15 +1,21 @@
+"use client"
 import Image from "next/image"
 import Link from "next/link"
 import { urlFor } from "@/sanity/lib/image"
 import type { SanityImageSource } from "@sanity/image-url"
+import { useEffect, useRef, useState } from "react"
+
+const categoriesOrder = ["Treadmills", "Bikes", "Strength"] as const
+const categorySet = new Set<string>(Array.from(categoriesOrder))
 
 export type ProductsCarouselProduct = {
   _id: string
   name: string
   slug: { current: string }
   image: SanityImageSource
-  price: number
+  price?: number
   description: string
+  category?: { name?: string; slug?: { current?: string } }
 }
 
 interface ProductsCarouselProps {
@@ -17,80 +23,122 @@ interface ProductsCarouselProps {
 }
 
 export default function ProductsCarousel({ products }: ProductsCarouselProps) {
+  const [activeCat, setActiveCat] = useState<string>(categoriesOrder[0])
+  const scrollerRef = useRef<HTMLDivElement | null>(null)
+  const cardRefs = useRef<HTMLDivElement[]>([])
+
+  const filtered = products.filter(p => categorySet.has(p.category?.name ?? ""))
+
+  const firstIndexByCat: Record<string, number> = {}
+  categoriesOrder.forEach(cat => {
+    const idx = filtered.findIndex(p => (p.category?.name || "") === cat)
+    if (idx >= 0) firstIndexByCat[cat] = idx
+  })
+
+  useEffect(() => {
+    const el = scrollerRef.current
+    if (!el) return
+    const onScroll = () => {
+      for (let i = 0; i < cardRefs.current.length; i++) {
+        const card = cardRefs.current[i]
+        if (!card) continue
+        const rect = card.getBoundingClientRect()
+        const vw = window.innerWidth
+        const visible = Math.max(0, Math.min(rect.right, vw) - Math.max(rect.left, 0))
+        const ratio = visible / rect.width
+        if (ratio > 0.6) {
+          const cat = filtered[i]?.category?.name || categoriesOrder[0]
+          if (cat !== activeCat) setActiveCat(cat)
+          break
+        }
+      }
+    }
+    el.addEventListener("scroll", onScroll, { passive: true })
+    return () => el.removeEventListener("scroll", onScroll)
+  }, [filtered, activeCat])
+
+  const scrollToCat = (cat: string) => {
+    const start = firstIndexByCat[cat]
+    if (start == null) return
+    const card = cardRefs.current[start]
+    if (!card || !scrollerRef.current) return
+    const left = card.offsetLeft - 16
+    scrollerRef.current.scrollTo({ left, behavior: "smooth" })
+    setActiveCat(cat)
+  }
+
   if (!products || products.length === 0) {
     return (
-      <section className="border-t border-gray-800 bg-[#161616] px-4 py-20">
-        <div className="mx-auto max-w-7xl text-center">
-          <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-[#FF3333]">
-            Latest Gear
-          </h2>
+      <section className="border-t border-gray-800 bg-[#161616] py-16">
+        <div className="mx-auto max-w-[1920px] text-center">
+          <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-[#FF3333]">Latest Gear</h2>
           <p className="mb-8 text-3xl md:text-4xl font-light">Products coming soon.</p>
-          <Link
-            href="/studio"
-            className="inline-block border border-white/30 px-6 py-3 text-xs font-bold uppercase tracking-[0.25em] text-gray-200 hover:border-[#FF3333] hover:text-[#FF3333] transition-colors"
-          >
-            Add products in Studio
-          </Link>
+          <Link href="/studio" className="inline-block border border-white/30 px-6 py-3 text-xs font-bold uppercase tracking-[0.25em] text-gray-200 hover:border-[#FF3333] hover:text-[#FF3333] transition-colors">Add products in Studio</Link>
         </div>
       </section>
     )
   }
 
   return (
-    <section className="border-t border-gray-800 bg-[#161616] px-4 py-20">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex items-end justify-between gap-6">
-          <div>
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-[#FF3333]">
-              Latest Gear
-            </p>
-            <h2 className="text-3xl md:text-4xl font-light leading-tight">
-              Shop by product
-              <span className="block text-sm font-normal uppercase tracking-[0.25em] text-gray-400 md:text-xs">
-                Treadmills · Bikes · Strength · Multi gyms
-              </span>
-            </h2>
-          </div>
-          <Link
-            href="/shop"
-            className="text-xs font-bold uppercase tracking-[0.25em] text-gray-400 border-b border-transparent hover:text-[#FF3333] hover:border-[#FF3333] pb-1 transition-colors"
-          >
-            View all
-          </Link>
+    <section className="border-t border-gray-800 bg-[#161616] py-16">
+      <div className="mx-auto max-w-[1920px] px-4 md:px-12">
+        <div className="mb-6 flex items-center justify-center gap-8">
+          {categoriesOrder.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => scrollToCat(cat)}
+              className={`text-xs font-bold uppercase tracking-[0.3em] transition-colors ${
+                activeCat === cat ? "text-white" : "text-gray-400 hover:text-white"
+              }`}
+            >
+              {cat}
+              {activeCat === cat && <span className="ml-2 inline-block align-middle h-[3px] w-2 rounded-full bg-[#FFCC00]" />}
+            </button>
+          ))}
         </div>
 
         <div className="relative">
-          <div className="flex gap-6 overflow-x-auto pb-4 scroll-smooth scrollbar-none">
-            {products.map((product) => (
-              <Link
+          <div ref={scrollerRef} className="flex gap-6 overflow-x-auto pb-6 scroll-smooth scrollbar-none">
+            {filtered.map((product, idx) => (
+              <div
                 key={product._id}
-                href="/products"
-                className="group relative min-w-[260px] sm:min-w-[280px] md:min-w-[320px] lg:min-w-[340px] overflow-hidden rounded-3xl bg-[#111111]"
+                ref={(el) => { if (el) cardRefs.current[idx] = el }}
+                className="group relative min-w-[280px] md:min-w-[360px] lg:min-w-[420px] rounded-3xl bg-[#E0E0DA] text-black"
               >
-                <div className="relative aspect-[3/4] w-full">
-                  <Image
-                    src={urlFor(product.image).width(900).height(1100).url()}
-                    alt={product.name}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-                </div>
+                <Link href={`/products/${product.slug?.current ?? product._id}`} className="block">
+                  <div className="relative w-full aspect-[4/3]">
+                    <Image
+                      src={urlFor(product.image).width(1200).height(900).url()}
+                      alt={product.name}
+                      fill
+                      className="object-contain p-6"
+                    />
+                  </div>
+                </Link>
                 <div className="absolute inset-x-6 bottom-6 flex items-center justify-between gap-4">
                   <div>
-                    <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-gray-300">
-                      {product.price ? `$${product.price.toFixed(0)}` : "Premium"}
+                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gray-700">
+                      {product.category?.name}
                     </p>
                     <p className="text-sm font-bold uppercase tracking-[0.12em]">
                       {product.name}
                     </p>
                   </div>
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/60 bg-black/60 text-white/90 group-hover:border-[#FF3333] group-hover:text-[#FF3333] transition-colors">
+                  <Link
+                    href={`/products/${product.slug?.current ?? product._id}`}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-black/30 bg-white/70 text-black hover:border-[#FF3333] hover:text-[#FF3333] transition-colors"
+                    aria-label="View product"
+                  >
                     <span className="text-lg leading-none">›</span>
-                  </span>
+                  </Link>
                 </div>
-              </Link>
+              </div>
             ))}
+          </div>
+          <div className="mx-auto mt-2 flex w-40 items-center justify-center gap-2">
+            <span className={`h-[2px] w-6 rounded-full ${activeCat === "Treadmills" ? "bg-[#FFCC00]/80" : "bg-white/20"}`} />
+            <span className={`h-[2px] w-6 rounded-full ${activeCat === "Bikes" ? "bg-[#FFCC00]/80" : "bg-white/20"}`} />
+            <span className={`h-[2px] w-6 rounded-full ${activeCat === "Strength" ? "bg-[#FFCC00]/80" : "bg-white/20"}`} />
           </div>
         </div>
       </div>

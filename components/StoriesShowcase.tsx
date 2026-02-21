@@ -3,14 +3,14 @@ import Link from "next/link"
 
 export default function StoriesShowcase() {
   return (
-    <section className="border-b border-gray-800 bg-[#161616] px-4 py-20">
-      <div className="max-w-7xl mx-auto">
+    <section className="border-b border-gray-800 bg-[#161616] py-20">
+      <div className="max-w-[1920px] mx-auto px-6 md:px-12">
         <div className="mb-10 flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs font-bold text-[#FF3333] uppercase tracking-[0.3em] mb-4">
               Stories
             </p>
-            <h2 className="text-3xl md:text-5xl font-light leading-tight">
+            <h2 className="text-[50px] font-light leading-tight">
               Human stories
               <span className="block text-gray-400">written on every rep.</span>
             </h2>

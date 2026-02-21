@@ -10,12 +10,12 @@ import type { SanityImageSource } from "@sanity/image-url"
 
 // Fallback data if Sanity is empty
 const STATIC_CATEGORIES = [
-  { _id: "1", name: "Treadmills", slug: { current: "treadmills" }, image: "/images/treadmill.jpg" },
-  { _id: "2", name: "Bikes", slug: { current: "bikes" }, image: "/images/bike.jpg" },
-  { _id: "3", name: "Weight Benches", slug: { current: "weight-benches" }, image: "/images/bench.jpg" },
-  { _id: "4", name: "Multi Gyms", slug: { current: "multi-gyms" }, image: "/images/multigym.jpg" },
-  { _id: "5", name: "Cross Trainers", slug: { current: "cross-trainers" }, image: "/images/crosstrainer.jpg" },
-  { _id: "6", name: "Dumbbells", slug: { current: "dumbbells" }, image: "/images/dumbbells.jpg" },
+  { _id: "1", name: "Treadmills", slug: { current: "treadmills" }, image: "https://images.unsplash.com/photo-1517963628607-235ccdd58bd3?q=80&w=1600&auto=format&fit=crop" },
+  { _id: "2", name: "Bikes", slug: { current: "bikes" }, image: "https://images.unsplash.com/photo-1533560904424-0d24b42299a0?q=80&w=1600&auto=format&fit=crop" },
+  { _id: "3", name: "Weight Benches", slug: { current: "weight-benches" }, image: "https://images.unsplash.com/photo-1517964603305-1349863e3cde?q=80&w=1600&auto=format&fit=crop" },
+  { _id: "4", name: "Multi Gyms", slug: { current: "multi-gyms" }, image: "https://images.unsplash.com/photo-1518310952931-168b33a35b04?q=80&w=1600&auto=format&fit=crop" },
+  { _id: "5", name: "Cross Trainers", slug: { current: "cross-trainers" }, image: "https://images.unsplash.com/photo-1526404869-8faa2b62b7cb?q=80&w=1600&auto=format&fit=crop" },
+  { _id: "6", name: "Dumbbells", slug: { current: "dumbbells" }, image: "https://images.unsplash.com/photo-1599058917122-d7358b7163ce?q=80&w=1600&auto=format&fit=crop" },
 ]
 
 interface Category {
@@ -143,7 +143,7 @@ export default function CategoryShowcase() {
   return (
     <section className="py-20 bg-[#f4f4f4] dark:bg-[#161616] transition-colors duration-300 overflow-hidden">
       <div className="max-w-[1920px] mx-auto px-6 md:px-12">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 uppercase tracking-widest text-black dark:text-white">
+        <h2 className="text-[50px] font-bold text-center mb-12 uppercase tracking-widest text-black dark:text-white">
           Shop by Category
         </h2>
 

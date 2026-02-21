@@ -2,13 +2,13 @@ import { Dumbbell, HeartPulse, ShieldCheck, Globe2 } from "lucide-react"
 
 export default function PerformanceWorld() {
   return (
-    <section className="border-y border-gray-800 bg-[#111111] px-4 py-16">
-      <div className="max-w-7xl mx-auto flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
+    <section className="border-y border-gray-800 bg-[#111111] py-16">
+      <div className="max-w-[1920px] mx-auto px-6 md:px-12 flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-xs font-bold text-[#FF3333] uppercase tracking-[0.3em] mb-3">
             Enter the performance world
           </p>
-          <h2 className="text-3xl md:text-4xl font-light leading-tight mb-4">
+          <h2 className="text-[50px] font-light leading-tight mb-4">
             Built for athletes, clubs and high-performance spaces.
           </h2>
           <p className="text-gray-400 max-w-lg">
