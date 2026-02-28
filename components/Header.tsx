@@ -27,15 +27,15 @@ export default function Header() {
         
         {/* Logo Section */}
         <div className="flex-shrink-0 z-50">
-             <Link href="/">
-                <Image 
-                  src="/images/combaxx white.png" 
-                  alt="Combaxx Logo" 
-                  width={200} 
-                  height={80} 
-                  className="object-contain h-12 md:h-16 w-auto" 
-                /> 
-             </Link>
+            <Link href="/">
+               <Image 
+                 src="/images/COMBAXX FITNESS logo.png" 
+                 alt="COMBAXX FITNESS Logo" 
+                 width={150} 
+                 height={80} 
+                 className="object-contain h-12 md:h-16 ml-4" 
+               /> 
+            </Link>
         </div>
 
         {/* Center Navigation - The "Pill" Style from Screenshot */}

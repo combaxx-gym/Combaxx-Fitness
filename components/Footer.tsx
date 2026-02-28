@@ -45,11 +45,11 @@ export default function Footer() {
         <div className="flex justify-center mb-8">
             <Link href="/" className="block w-fit">
               <Image 
-                  src="/images/combaxx white.png" 
-                  alt="Combaxx Logo" 
-                  width={280} 
+                  src="/images/COMBAXX FITNESS logo.png" 
+                  alt="COMBAXX FITNESS Logo" 
+                  width={200} 
                   height={120} 
-                  className="object-contain h-20 w-auto" 
+                  className="object-contain h-20" 
               />
             </Link>
         </div>

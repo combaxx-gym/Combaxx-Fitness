@@ -119,7 +119,7 @@ export default function HeroCarousel() {
             muted
             loop
             playsInline
-            poster={`/images/Combaxx-Logo.avif`}
+            poster={`/images/combaxx white.png`}
           >
             <source src={slide.video} type="video/mp4" />
           </video>
