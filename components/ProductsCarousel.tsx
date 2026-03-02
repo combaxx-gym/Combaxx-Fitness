@@ -108,12 +108,26 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
         </div>
 
         <div className="relative">
-          <div ref={scrollerRef} className="flex gap-6 overflow-x-auto pb-6 scroll-smooth scrollbar-none">
+          <button
+            onClick={() => scrollerRef.current?.scrollBy({ left: -((scrollerRef.current?.clientWidth || 0) * 0.9), behavior: "smooth" })}
+            aria-label="Previous"
+            className="absolute left-2 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-black/70 md:flex"
+          >
+            ‹
+          </button>
+          <button
+            onClick={() => scrollerRef.current?.scrollBy({ left: (scrollerRef.current?.clientWidth || 0) * 0.9, behavior: "smooth" })}
+            aria-label="Next"
+            className="absolute right-2 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-black/70 md:flex"
+          >
+            ›
+          </button>
+          <div ref={scrollerRef} className="flex gap-6 overflow-x-auto pb-6 scroll-smooth hide-scrollbar snap-x snap-mandatory">
             {filtered.map((product, idx) => (
               <div
                 key={product._id}
                 ref={(el) => { if (el) cardRefs.current[idx] = el }}
-                className="group relative min-w-[280px] md:min-w-[360px] lg:min-w-[420px] rounded-3xl bg-[#E0E0DA] text-black"
+                className="group relative min-w-[280px] md:min-w-[360px] lg:min-w-[420px] rounded-3xl bg-[#E0E0DA] text-black snap-start"
               >
                 <Link href={`/products/${product.slug?.current ?? product._id}`} className="block">
                   <div className="relative w-full aspect-[4/3]">
