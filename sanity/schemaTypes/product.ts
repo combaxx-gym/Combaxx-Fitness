@@ -31,6 +31,25 @@ export const product = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'gallery',
+      title: 'Gallery',
+      type: 'array',
+      options: { layout: 'grid' },
+      of: [
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            {
+              name: 'alt',
+              title: 'Alt text',
+              type: 'string',
+            },
+          ],
+        },
+      ],
+    }),
+    defineField({
       name: 'price',
       title: 'Price',
       type: 'number',
@@ -59,7 +78,7 @@ export const product = defineType({
       type: 'reference',
       to: [{ type: 'subCategory' }],
       options: {
-        filter: ({ document }) => {
+        filter: () => {
           // Ideally filter subcategories that belong to the selected category
           // This is a simple filter to ensure we select a subCategory
           return {

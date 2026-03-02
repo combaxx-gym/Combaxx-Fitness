@@ -18,6 +18,7 @@ async function getProducts(): Promise<ProductsCarouselProduct[]> {
       name,
       slug,
       image,
+      gallery[],
       description
       ,category->{name, slug}
       ,categories[]->{name, slug}
