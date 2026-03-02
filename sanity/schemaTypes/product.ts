@@ -42,11 +42,16 @@ export const product = defineType({
       type: 'text',
     }),
     defineField({
-      name: 'category',
-      title: 'Category',
-      type: 'reference',
-      to: [{ type: 'category' }],
-      validation: (Rule) => Rule.required(),
+      name: 'categories',
+      title: 'Categories',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'category' }],
+        },
+      ],
+      validation: (Rule) => Rule.min(1),
     }),
     defineField({
       name: 'subCategory',

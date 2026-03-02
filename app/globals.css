@@ -53,3 +53,6 @@ span.leading-tight {
 .animate-logos {
   animation: logos-scroll 35s linear infinite;
 }
+.logo-width{
+  width: 150px;
+}

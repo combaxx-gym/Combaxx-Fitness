@@ -20,28 +20,26 @@ export default function Header() {
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out ${
-        scrolled ? "py-4 shadow-xl backdrop-blur-md bg-black/10" : "py-6 bg-gradient-to-b from-black/90 to-transparent"
+        scrolled ? "py-6 shadow-xl backdrop-blur-md bg-black/10" : "py-10 bg-gradient-to-b from-black/90 to-transparent"
       }`}
     >
       <div className="max-w-[1920px] mx-auto px-6 md:px-12 flex items-center justify-between">
         
         {/* Logo Section */}
-        <div className="flex-shrink-0 z-50">
+        <div className="flex-shrink-0 z-50 ml-4 md:ml-6">
             <Link href="/">
                <Image 
                  src="/images/COMBAXX FITNESS logo.png" 
                  alt="COMBAXX FITNESS Logo" 
                  width={150} 
                  height={80} 
-                 className="object-contain h-12 md:h-16 ml-4" 
+                 className="object-contain w-30 md:w-40 h-auto"
                /> 
             </Link>
         </div>
 
         {/* Center Navigation - The "Pill" Style from Screenshot */}
-        <div className={`absolute left-1/2 -translate-x-1/2 transition-all duration-500 ${
-            scrolled ? "top-4" : "top-8"
-        }`}>
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-500">
             <nav className={`hidden md:flex items-center gap-8 text-[12px] font-bold uppercase tracking-[0.15em] transition-all duration-500 ${
                 scrolled 
                 ? "bg-[#1A1A1A] text-white px-8 py-3 rounded-full border border-white/10 shadow-2xl" 

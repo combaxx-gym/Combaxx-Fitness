@@ -16,6 +16,7 @@ export type ProductsCarouselProduct = {
   price?: number
   description: string
   category?: { name?: string; slug?: { current?: string } }
+  categories?: Array<{ name?: string; slug?: { current?: string } }>
 }
 
 interface ProductsCarouselProps {
@@ -27,11 +28,20 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
   const scrollerRef = useRef<HTMLDivElement | null>(null)
   const cardRefs = useRef<HTMLDivElement[]>([])
 
-  const filtered = products.filter(p => categorySet.has(p.category?.name ?? ""))
+  const getPrimaryCategory = (p: ProductsCarouselProduct): string => {
+    const names = [
+      ...(p.categories?.map(c => c?.name || "") || []),
+      p.category?.name || "",
+    ].filter(Boolean) as string[]
+    const matched = Array.from(categoriesOrder).find(cat => names.includes(cat))
+    return matched || names[0] || ""
+  }
+
+  const filtered = products.filter(p => categorySet.has(getPrimaryCategory(p)))
 
   const firstIndexByCat: Record<string, number> = {}
   categoriesOrder.forEach(cat => {
-    const idx = filtered.findIndex(p => (p.category?.name || "") === cat)
+    const idx = filtered.findIndex(p => getPrimaryCategory(p) === cat)
     if (idx >= 0) firstIndexByCat[cat] = idx
   })
 
@@ -47,7 +57,7 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
         const visible = Math.max(0, Math.min(rect.right, vw) - Math.max(rect.left, 0))
         const ratio = visible / rect.width
         if (ratio > 0.6) {
-          const cat = filtered[i]?.category?.name || categoriesOrder[0]
+          const cat = getPrimaryCategory(filtered[i]) || categoriesOrder[0]
           if (cat !== activeCat) setActiveCat(cat)
           break
         }
@@ -118,7 +128,7 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
                 <div className="absolute inset-x-6 bottom-6 flex items-center justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gray-700">
-                      {product.category?.name}
+                      {getPrimaryCategory(product)}
                     </p>
                     <p className="text-sm font-bold uppercase tracking-[0.12em]">
                       {product.name}

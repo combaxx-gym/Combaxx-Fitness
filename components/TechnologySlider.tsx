@@ -4,8 +4,19 @@ import { useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { urlFor } from "@/sanity/lib/image"
+import type { SanityImageSource } from "@sanity/image-url"
+import type { ProductsCarouselProduct } from "./ProductsCarousel"
 
-const SLIDER_ITEMS = [
+type StaticItem = {
+  id: number
+  category: string
+  name: string
+  image: string
+  href: string
+}
+
+const SLIDER_ITEMS: StaticItem[] = [
   {
     id: 1,
     category: "Cardio",
@@ -36,8 +47,14 @@ const SLIDER_ITEMS = [
   },
 ]
 
-export default function TechnologySlider() {
+type TechSliderProps = {
+  products?: ProductsCarouselProduct[]
+}
+
+export default function TechnologySlider({ products = [] }: TechSliderProps) {
   const trackRef = useRef<HTMLDivElement | null>(null)
+  const items: Array<ProductsCarouselProduct | StaticItem> = products.length > 0 ? products : SLIDER_ITEMS
+  const isStatic = (it: ProductsCarouselProduct | StaticItem): it is StaticItem => "href" in it
 
   const scroll = (direction: "left" | "right") => {
     const node = trackRef.current
@@ -90,25 +107,34 @@ export default function TechnologySlider() {
             ref={trackRef}
             className="flex gap-6 overflow-x-auto pb-4 scroll-smooth scrollbar-none"
           >
-            {SLIDER_ITEMS.map((item) => (
+            {items.map((item) => (
               <Link
-                key={item.id}
-                href={item.href}
+                key={isStatic(item) ? `static-${item.id}` : item._id}
+                href={isStatic(item) ? item.href : `/products/${item.slug?.current ?? item._id}`}
                 className="group relative min-w-[260px] sm:min-w-[280px] md:min-w-[320px] lg:min-w-[340px] overflow-hidden rounded-3xl bg-[#111111]"
               >
                 <div className="relative aspect-[3/4] w-full">
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
+                  {isStatic(item) ? (
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : (
+                    <Image
+                      src={urlFor(item.image as SanityImageSource).width(900).height(1200).url()}
+                      alt={item.name}
+                      fill
+                      className="object-contain bg-[#0d0d0d] transition-transform duration-700 group-hover:scale-105"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                 </div>
                 <div className="absolute inset-x-6 bottom-6 flex items-center justify-between gap-4">
                   <div>
                     <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-gray-200">
-                      {item.category}
+                      {isStatic(item) ? item.category : item.category?.name}
                     </p>
                     <p className="text-sm font-bold uppercase tracking-[0.12em]">
                       {item.name}

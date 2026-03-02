@@ -66,9 +66,13 @@ export default function CategoryShowcase() {
           slug,
           image
         }`
-        const result = await client.fetch(query)
-        if (result.length > 0) {
-          setCategories(result)
+        const result = await client.fetch(query) as Category[]
+        const filtered = (result || []).filter(
+          (c) => (c.slug?.current || "").toLowerCase() !== "top-selling-products" &&
+                 (c.name || "").toLowerCase() !== "top selling products"
+        )
+        if (filtered.length > 0) {
+          setCategories(filtered)
         } else {
           setCategories(STATIC_CATEGORIES)
         }

@@ -20,6 +20,7 @@ async function getProducts(): Promise<ProductsCarouselProduct[]> {
       image,
       description
       ,category->{name, slug}
+      ,categories[]->{name, slug}
     }`
     const products = await client.fetch(query)
     return products as ProductsCarouselProduct[]
@@ -31,6 +32,26 @@ async function getProducts(): Promise<ProductsCarouselProduct[]> {
 
 export default async function Home() {
   const products = await getProducts()
+  const isTopSelling = (p: ProductsCarouselProduct) => {
+    const match = (name?: string, slug?: string) => {
+      const n = (name || "").toLowerCase()
+      const s = (slug || "").toLowerCase()
+      return (
+        n === "top selling products" ||
+        n === "top selling" ||
+        s === "top-selling-products" ||
+        s === "top-selling"
+      )
+    }
+    if (match(p.category?.name, p.category?.slug?.current)) return true
+    if (Array.isArray(p.categories)) {
+      for (const c of p.categories) {
+        if (match(c?.name, c?.slug?.current)) return true
+      }
+    }
+    return false
+  }
+  const topSellingProducts = products.filter(isTopSelling)
 
   return (
     <div className="min-h-screen bg-[#161616] text-white selection:bg-[#FF3333] selection:text-black">
@@ -39,7 +60,7 @@ export default async function Home() {
       {/* Hero Section */}
       <HeroCarousel />
 
-      <TechnologySlider />
+      <TechnologySlider products={topSellingProducts} />
 
       {/* Category Section */}
       <CategoryShowcase />
@@ -48,20 +69,6 @@ export default async function Home() {
       <ShapingFuture />
 
       <PerformanceWorld />
-
-      {/* Story / Materials Section */}
-      <section className="py-20 border-b border-gray-800">
-        <div className="max-w-[1920px] mx-auto px-6 md:px-12">
-          <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-xs font-bold text-[#FF3333] uppercase tracking-[0.3em] mb-4">Our Obsession</h2>
-          <p className="text-3xl md:text-4xl font-light leading-tight">
-            We don&apos;t just build gym equipment. We engineer tools for human transformation. 
-            Using industrial-grade steel and precision mechanics, our gear is designed 
-            to withstand your absolute best.
-          </p>
-          </div>
-        </div>
-      </section>
 
       <StoriesShowcase />
 
