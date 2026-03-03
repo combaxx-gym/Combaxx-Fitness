@@ -23,12 +23,16 @@ async function getProduct(ref?: string): Promise<Product | null> {
   const refLower = ref.toLowerCase()
   const types = ["product", "products"]
   const refLike = `*${refLower}*`
+  const altLower = refLower.replace(/-/g, " ")
+  const altLike = `*${altLower}*`
   const query = `*[_type in $types && (
       slug.current == $ref ||
       lower(slug.current) == $refLower ||
       lower(slug.current) match $refLike ||
       lower(name) == $refLower ||
       lower(name) match $refLike ||
+      lower(name) == $altLower ||
+      lower(name) match $altLike ||
       _id == $ref
     )][0]{
     _id, name, slug, image, description, price,
@@ -37,7 +41,7 @@ async function getProduct(ref?: string): Promise<Product | null> {
     specs[]{key, value},
     category->{name, slug}
   }`
-  const params = { ref, refLower, refLike, types }
+  const params = { ref, refLower, refLike, altLower, altLike, types }
   const published = await client.fetch(query, params)
   if (published) return published
   const previewClient = client.withConfig({ perspective: "previewDrafts" })

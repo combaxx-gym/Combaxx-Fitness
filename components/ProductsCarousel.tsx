@@ -8,6 +8,15 @@ import { useEffect, useMemo, useState } from "react"
 const categoriesOrder = ["Treadmills", "Bikes", "Strength"] as const
 const categorySet = new Set<string>(Array.from(categoriesOrder))
 
+const toSlug = (s?: string) =>
+  (s || "")
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+
 export type ProductsCarouselProduct = {
   _id: string
   name: string
@@ -138,7 +147,7 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
                       key={product._id}
                       className="group relative rounded-3xl bg-[#E0E0DA] text-black"
                     >
-                      <Link href={`/products/${product._id}`} className="block">
+                      <Link href={`/products/${product.slug?.current ?? toSlug(product.name)}`} className="block">
                         <div className="relative w-full aspect-[4/3]">
                           <Image
                             src={urlFor(product.image).width(1200).height(900).url()}
@@ -158,7 +167,7 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
                           </p>
                         </div>
                         <Link
-                          href={`/products/${product._id}`}
+                          href={`/products/${product.slug?.current ?? toSlug(product.name)}`}
                           className="flex h-9 w-9 items-center justify-center rounded-full border border-black/30 bg-white/70 text-black hover:border-[#FF3333] hover:text-[#FF3333] transition-colors"
                           aria-label="View product"
                         >

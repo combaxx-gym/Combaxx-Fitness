@@ -18,6 +18,15 @@ type TechSliderProps = {
   products?: ProductsCarouselProduct[]
 }
 
+const toSlug = (s?: string) =>
+  (s || "")
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+
 export default function TechnologySlider({ products = [] }: TechSliderProps) {
   const items: ProductsCarouselProduct[] = useMemo(() => {
     return (products || []).filter(p => {
@@ -162,7 +171,7 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
             >
               {displayProducts.map((product, index) => (
                 <Link 
-                  href={`/products/${product._id}`} 
+                  href={`/products/${product.slug?.current ?? toSlug(product.name)}`} 
                   key={`${product._id}-${index}`}
                   ref={index === 0 ? cardRef : null}
                   className="flex-shrink-0 w-[220px] sm:w-[260px] md:w-[320px] lg:w-[380px] xl:w-[420px] h-[360px] sm:h-[420px] md:h-[460px] lg:h-[500px] xl:h-[520px] relative rounded-2xl overflow-hidden group/card border border-transparent hover:border-[#FF3333] transition-all duration-500 bg-[#0d0d0d]"
