@@ -20,6 +20,11 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
+/* Prevent horizontal page scroll */
+html, body {
+  overflow-x: hidden;
+}
+
 /* Custom Utilities for Minimal Design */
 .btn-primary {
   @apply bg-[#FF3333] text-black font-bold px-6 py-3 rounded-none hover:bg-white transition-colors uppercase tracking-wider;
@@ -43,6 +48,19 @@ span.leading-tight {
 }
 .tracking-tight {
     line-height: 1.2em;
+}
+
+.site-logo {
+  width: 150px;
+  height: 80px;
+  display: block;
+  object-fit: contain;
+}
+@media (min-width: 768px) {
+  .site-logo {
+    width: 160px;
+    height: auto;
+  }
 }
 
 /* Logos slider animation */

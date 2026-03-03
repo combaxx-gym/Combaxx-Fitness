@@ -30,9 +30,12 @@ export default function CategoryShowcase() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(true)
   const [cardWidth, setCardWidth] = useState(0)
+  const [centerOffset, setCenterOffset] = useState(0)
   
   // Use a ref to access the card to measure it
   const cardRef = useRef<HTMLAnchorElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const maskRef = useRef<HTMLDivElement>(null)
   
   const handleNext = () => {
     setCurrentIndex(prev => prev + 1)
@@ -88,8 +91,23 @@ export default function CategoryShowcase() {
   useEffect(() => {
     const updateWidth = () => {
       if (cardRef.current) {
-        // card width + gap (24px = 1.5rem)
-        setCardWidth(cardRef.current.offsetWidth + 24)
+        let gap = 24
+        if (trackRef.current) {
+          const style = getComputedStyle(trackRef.current)
+          const gapStr = style.columnGap || (style as CSSStyleDeclaration).gap || "24px"
+          const parsed = parseFloat(gapStr)
+          if (!Number.isNaN(parsed)) gap = parsed
+        }
+        const cardW = cardRef.current.offsetWidth
+        setCardWidth(cardW + gap)
+        if (maskRef.current) {
+          let offset = 0
+          if (typeof window !== "undefined" && window.matchMedia("(max-width: 639px)").matches) {
+            const maskW = maskRef.current.clientWidth
+            offset = Math.max(0, (maskW - cardW) / 2)
+          }
+          setCenterOffset(offset)
+        }
       }
     }
 
@@ -146,36 +164,37 @@ export default function CategoryShowcase() {
 
   return (
     <section className="py-20 bg-[#f4f4f4] dark:bg-[#161616] transition-colors duration-300 overflow-hidden">
-      <div className="max-w-[1920px] mx-auto px-6 md:px-12">
-        <h2 className="text-[50px] font-bold text-center mb-12 uppercase tracking-widest text-black dark:text-white">
+      <div className="max-w-[1920px] mx-auto px-4 sm:px-6 md:px-12">
+        <h2 className="text-3xl sm:text-4xl md:text-[50px] font-bold text-center mb-8 md:mb-12 uppercase tracking-widest text-black dark:text-white">
           Shop by Category
         </h2>
 
-        <div className="relative group">
+        <div className="relative group overflow-hidden ml-[calc(50%-50vw)] mr-[calc(50%-50vw)]">
           {/* Scroll Buttons */}
           <button 
             onClick={handlePrev} 
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-[#FF3333] text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm -ml-4 cursor-pointer"
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-[#FF3333] text-white p-2 sm:p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm cursor-pointer"
             aria-label="Previous slide"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
           </button>
           
           <button 
             onClick={handleNext} 
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-[#FF3333] text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm -mr-4 cursor-pointer"
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-[#FF3333] text-white p-2 sm:p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm cursor-pointer"
             aria-label="Next slide"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
           </button>
 
           {/* Cards Container - Mask */}
-          <div className="overflow-hidden -mx-6 md:-mx-12 px-6 md:px-12 pb-12">
+          <div ref={maskRef} className="overflow-hidden px-6 md:px-12 pb-12">
             {/* Track */}
             <div 
-              className="flex gap-6 will-change-transform"
+              ref={trackRef}
+              className="flex gap-3 sm:gap-4 md:gap-6 will-change-transform"
               style={{
-                transform: `translateX(-${currentIndex * cardWidth}px)`,
+                transform: `translateX(${-(currentIndex * cardWidth) + centerOffset}px)`,
                 transition: isTransitioning ? 'transform 500ms ease-out' : 'none'
               }}
             >
@@ -184,7 +203,7 @@ export default function CategoryShowcase() {
                   href={`/shop?category=${category.slug.current}`} 
                   key={`${category._id}-${index}`}
                   ref={index === 0 ? cardRef : null}
-                  className="flex-shrink-0 w-[300px] md:w-[400px] h-[500px] relative rounded-2xl overflow-hidden group/card border border-transparent hover:border-[#FF3333] transition-all duration-500"
+                  className="flex-shrink-0 w-[220px] sm:w-[260px] md:w-[320px] lg:w-[380px] xl:w-[420px] h-[360px] sm:h-[420px] md:h-[460px] lg:h-[500px] xl:h-[520px] relative rounded-2xl overflow-hidden group/card border border-transparent hover:border-[#FF3333] transition-all duration-500"
                 >
                   {/* Image */}
                   <div className="absolute inset-0 bg-gray-800">

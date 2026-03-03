@@ -8,6 +8,7 @@ const SLIDES = [
   {
     id: 1,
     video: "/videos/743f8627-519af9c4.mp4",
+    poster: "/images/hero-section-slide-1.webp",
     title: "SKILLRUN",
     description:
       "Fast-paced running. Intense climbs and descents. Instant speed and gradient changes. Skillrun is designed for performance running.",
@@ -17,6 +18,7 @@ const SLIDES = [
   {
     id: 2,
     video: "/videos/9560d960.mp4",
+      poster: "/images/hero-section-slide-2.webp",
     title: "POWER STRENGTH",
     description:
       "Unleash your full potential with our industrial-grade strength equipment. Built for heavy lifting and maximum durability.",
@@ -26,6 +28,7 @@ const SLIDES = [
   {
     id: 3,
     video: "/videos/9af5361d.mp4",
+    poster: "/images/hero-section-slide-3.webp",
     title: "CARDIO ELITE",
     description:
       "Experience the next level of cardio. Advanced biomechanics meet sleek design to keep you moving further and faster.",
@@ -119,7 +122,7 @@ export default function HeroCarousel() {
             muted
             loop
             playsInline
-            poster={`/images/COMBAXX FITNESS logo.png`}
+            poster={slide.poster ?? `/images/COMBAXX FITNESS logo.png`}
           >
             <source src={slide.video} type="video/mp4" />
           </video>

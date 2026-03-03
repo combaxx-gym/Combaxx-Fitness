@@ -1,9 +1,7 @@
 import { client } from "@/sanity/lib/client"
-import Header from "@/components/Header"
 import HeroCarousel from "@/components/HeroCarousel"
 import CategoryShowcase from "@/components/CategoryShowcase"
 import ShapingFuture from "@/components/ShapingFuture"
-import Footer from "@/components/Footer"
 import TechnologySlider from "@/components/TechnologySlider"
 import PerformanceWorld from "@/components/PerformanceWorld"
 import StoriesShowcase from "@/components/StoriesShowcase"
@@ -56,7 +54,6 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-[#161616] text-white selection:bg-[#FF3333] selection:text-black">
-      <Header />
 
       {/* Hero Section */}
       <HeroCarousel />
@@ -79,7 +76,6 @@ export default async function Home() {
 
       <BusinessFaq />
 
-      <Footer />
     </div>
   )
 }

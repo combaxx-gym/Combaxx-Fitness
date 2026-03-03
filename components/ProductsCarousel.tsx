@@ -3,7 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { urlFor } from "@/sanity/lib/image"
 import type { SanityImageSource } from "@sanity/image-url"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 const categoriesOrder = ["Treadmills", "Bikes", "Strength"] as const
 const categorySet = new Set<string>(Array.from(categoriesOrder))
@@ -24,9 +24,8 @@ interface ProductsCarouselProps {
 }
 
 export default function ProductsCarousel({ products }: ProductsCarouselProps) {
-  const [activeCat, setActiveCat] = useState<string>(categoriesOrder[0])
-  const scrollerRef = useRef<HTMLDivElement | null>(null)
-  const cardRefs = useRef<HTMLDivElement[]>([])
+  const [page, setPage] = useState(0)
+  const [perPage, setPerPage] = useState(3)
 
   const getPrimaryCategory = (p: ProductsCarouselProduct): string => {
     const names = [
@@ -46,35 +45,36 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
   })
 
   useEffect(() => {
-    const el = scrollerRef.current
-    if (!el) return
-    const onScroll = () => {
-      for (let i = 0; i < cardRefs.current.length; i++) {
-        const card = cardRefs.current[i]
-        if (!card) continue
-        const rect = card.getBoundingClientRect()
-        const vw = window.innerWidth
-        const visible = Math.max(0, Math.min(rect.right, vw) - Math.max(rect.left, 0))
-        const ratio = visible / rect.width
-        if (ratio > 0.6) {
-          const cat = getPrimaryCategory(filtered[i]) || categoriesOrder[0]
-          if (cat !== activeCat) setActiveCat(cat)
-          break
-        }
-      }
+    const calc = () => {
+      const w = typeof window !== "undefined" ? window.innerWidth : 1200
+      if (w < 768) setPerPage(1)
+      else if (w < 1024) setPerPage(2)
+      else setPerPage(3)
     }
-    el.addEventListener("scroll", onScroll, { passive: true })
-    return () => el.removeEventListener("scroll", onScroll)
-  }, [filtered, activeCat])
+    calc()
+    window.addEventListener("resize", calc, { passive: true })
+    return () => window.removeEventListener("resize", calc)
+  }, [])
+
+  const activeCat = useMemo(() => {
+    const idx = Math.min(page * perPage, Math.max(0, filtered.length - 1))
+    const item = filtered[idx] ?? filtered[0]
+    return (item ? getPrimaryCategory(item) : categoriesOrder[0]) || categoriesOrder[0]
+  }, [page, perPage, filtered])
+
+  const slides = useMemo(() => {
+    const out: ProductsCarouselProduct[][] = []
+    for (let i = 0; i < filtered.length; i += perPage) {
+      out.push(filtered.slice(i, i + perPage))
+    }
+    return out
+  }, [filtered, perPage])
 
   const scrollToCat = (cat: string) => {
     const start = firstIndexByCat[cat]
     if (start == null) return
-    const card = cardRefs.current[start]
-    if (!card || !scrollerRef.current) return
-    const left = card.offsetLeft - 16
-    scrollerRef.current.scrollTo({ left, behavior: "smooth" })
-    setActiveCat(cat)
+    const targetPage = Math.floor(start / perPage)
+    setPage(targetPage)
   }
 
   if (!products || products.length === 0) {
@@ -109,55 +109,67 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
 
         <div className="relative">
           <button
-            onClick={() => scrollerRef.current?.scrollBy({ left: -((scrollerRef.current?.clientWidth || 0) * 0.9), behavior: "smooth" })}
+            onClick={() => setPage(p => Math.max(0, p - 1))}
             aria-label="Previous"
             className="absolute left-2 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-black/70 md:flex"
           >
             ‹
           </button>
           <button
-            onClick={() => scrollerRef.current?.scrollBy({ left: (scrollerRef.current?.clientWidth || 0) * 0.9, behavior: "smooth" })}
+            onClick={() => setPage(p => Math.min(slides.length - 1, p + 1))}
             aria-label="Next"
             className="absolute right-2 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-black/70 md:flex"
           >
             ›
           </button>
-          <div ref={scrollerRef} className="flex gap-6 overflow-x-auto pb-6 scroll-smooth hide-scrollbar snap-x snap-mandatory">
-            {filtered.map((product, idx) => (
-              <div
-                key={product._id}
-                ref={(el) => { if (el) cardRefs.current[idx] = el }}
-                className="group relative min-w-[280px] md:min-w-[360px] lg:min-w-[420px] rounded-3xl bg-[#E0E0DA] text-black snap-start"
-              >
-                <Link href={`/products/${product.slug?.current ?? product._id}`} className="block">
-                  <div className="relative w-full aspect-[4/3]">
-                    <Image
-                      src={urlFor(product.image).width(1200).height(900).url()}
-                      alt={product.name}
-                      fill
-                      className="object-contain p-6"
-                    />
-                  </div>
-                </Link>
-                <div className="absolute inset-x-6 bottom-6 flex items-center justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gray-700">
-                      {getPrimaryCategory(product)}
-                    </p>
-                    <p className="text-sm font-bold uppercase tracking-[0.12em]">
-                      {product.name}
-                    </p>
-                  </div>
-                  <Link
-                    href={`/products/${product.slug?.current ?? product._id}`}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-black/30 bg-white/70 text-black hover:border-[#FF3333] hover:text-[#FF3333] transition-colors"
-                    aria-label="View product"
-                  >
-                    <span className="text-lg leading-none">›</span>
-                  </Link>
+          <div className="overflow-hidden pb-6">
+            <div
+              className="flex gap-6 transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${page * 100}%)`, width: `${slides.length * 100}%` }}
+            >
+              {slides.map((group, gi) => (
+                <div
+                  key={gi}
+                  className="grid gap-6 px-1"
+                  style={{ gridTemplateColumns: `repeat(${perPage}, minmax(0,1fr))`, width: `${100 / slides.length}%` }}
+                >
+                  {group.map((product) => (
+                    <div
+                      key={product._id}
+                      className="group relative rounded-3xl bg-[#E0E0DA] text-black"
+                    >
+                      <Link href={`/products/${product._id}`} className="block">
+                        <div className="relative w-full aspect-[4/3]">
+                          <Image
+                            src={urlFor(product.image).width(1200).height(900).url()}
+                            alt={product.name}
+                            fill
+                            className="object-contain p-6"
+                          />
+                        </div>
+                      </Link>
+                      <div className="absolute inset-x-6 bottom-6 flex items-center justify-between gap-4">
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gray-700">
+                            {getPrimaryCategory(product)}
+                          </p>
+                          <p className="text-sm font-bold uppercase tracking-[0.12em]">
+                            {product.name}
+                          </p>
+                        </div>
+                        <Link
+                          href={`/products/${product._id}`}
+                          className="flex h-9 w-9 items-center justify-center rounded-full border border-black/30 bg-white/70 text-black hover:border-[#FF3333] hover:text-[#FF3333] transition-colors"
+                          aria-label="View product"
+                        >
+                          <span className="text-lg leading-none">›</span>
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
           <div className="mx-auto mt-2 flex w-40 items-center justify-center gap-2">
             <span className={`h-[2px] w-6 rounded-full ${activeCat === "Treadmills" ? "bg-[#FFCC00]/80" : "bg-white/20"}`} />

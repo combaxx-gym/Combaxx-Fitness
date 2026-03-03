@@ -33,7 +33,9 @@ export default function Header() {
                  alt="COMBAXX FITNESS Logo" 
                  width={150} 
                  height={80} 
-                 className="object-contain w-30 md:w-40 h-auto"
+                 className="site-logo"
+                 sizes="(min-width: 768px) 160px, 150px"
+                 priority
                /> 
             </Link>
         </div>
