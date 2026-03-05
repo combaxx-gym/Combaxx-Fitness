@@ -80,7 +80,7 @@ export default function Footer() {
              <div>
                 <h5 className="text-xl font-bold text-[#FFF] uppercase tracking-widest mb-6">Explore</h5>
                 <ul className="space-y-4 text-lg text-white">
-                   <li><Link href="/products" className="hover:text-[#FF3333] transition-colors">Products</Link></li>
+                   <li><Link href="/shop" className="hover:text-[#FF3333] transition-colors">Products</Link></li>
                    <li><Link href="/wellness" className="hover:text-[#FF3333] transition-colors">Wellness</Link></li>
                    <li><Link href="/materials-information" className="hover:text-[#FF3333] transition-colors">Materials Information</Link></li>
                    <li><Link href="/stories" className="hover:text-[#FF3333] transition-colors">Stories</Link></li>
@@ -92,12 +92,12 @@ export default function Footer() {
              <div>
                 <h5 className="text-xl font-bold text-[#FFF] uppercase tracking-widest mb-6">Categories</h5>
                 <ul className="space-y-4 text-lg text-white">
-                   <li><Link href="/product-categories" className="hover:text-[#FF3333] transition-colors">Treadmills</Link></li>
-                   <li><Link href="/product-categories" className="hover:text-[#FF3333] transition-colors">Bikes</Link></li>
-                   <li><Link href="/product-categories" className="hover:text-[#FF3333] transition-colors">Ellipticals</Link></li>
-                   <li><Link href="/product-categories" className="hover:text-[#FF3333] transition-colors">Rower</Link></li>
-                   <li><Link href="/product-categories" className="hover:text-[#FF3333] transition-colors">Strength</Link></li>
-                   <li><Link href="/product-categories" className="hover:text-[#FF3333] transition-colors">Exercise Tools</Link></li>
+                   <li><Link href="/treadmills" className="hover:text-[#FF3333] transition-colors">Treadmills</Link></li>
+                   <li><Link href="/bikes" className="hover:text-[#FF3333] transition-colors">Bikes</Link></li>
+                   <li><Link href="/ellipticals" className="hover:text-[#FF3333] transition-colors">Ellipticals</Link></li>
+                   <li><Link href="/rower" className="hover:text-[#FF3333] transition-colors">Rower</Link></li>
+                   <li><Link href="/strength" className="hover:text-[#FF3333] transition-colors">Strength</Link></li>
+                   <li><Link href="/exercise-tools" className="hover:text-[#FF3333] transition-colors">Exercise Tools</Link></li>
                 </ul>
              </div>
 

@@ -42,7 +42,7 @@ export default function StoriesShowcase() {
           </div>
           <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-[#111111]">
             <Image
-              src="https://images.unsplash.com/photo-1554344058-8d1d1dbc5960?q=80&w=1200&auto=format&fit=crop"
+              src="/images/hero-section-slide-1.webp"
               alt="Coach adjusting athlete posture"
               fill
               className="object-cover"

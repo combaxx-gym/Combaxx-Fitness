@@ -200,7 +200,7 @@ export default function CategoryShowcase() {
             >
               {displayCategories.map((category, index) => (
                 <Link 
-                  href={`/shop?category=${category.slug.current}`} 
+                  href={`/${category.slug.current}`} 
                   key={`${category._id}-${index}`}
                   ref={index === 0 ? cardRef : null}
                   className="flex-shrink-0 w-[220px] sm:w-[260px] md:w-[320px] lg:w-[380px] xl:w-[420px] h-[360px] sm:h-[420px] md:h-[460px] lg:h-[500px] xl:h-[520px] relative rounded-2xl overflow-hidden group/card border border-transparent hover:border-[#FF3333] transition-all duration-500"

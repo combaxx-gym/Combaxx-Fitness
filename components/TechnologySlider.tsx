@@ -171,7 +171,7 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
             >
               {displayProducts.map((product, index) => (
                 <Link 
-                  href={`/products/${product.slug?.current ?? toSlug(product.name)}`} 
+                  href={`/products/${product.slug?.current ?? toSlug(product.name || product.title)}`} 
                   key={`${product._id}-${index}`}
                   ref={index === 0 ? cardRef : null}
                   className="flex-shrink-0 w-[220px] sm:w-[260px] md:w-[320px] lg:w-[380px] xl:w-[420px] h-[360px] sm:h-[420px] md:h-[460px] lg:h-[500px] xl:h-[520px] relative rounded-2xl overflow-hidden group/card border border-transparent hover:border-[#FF3333] transition-all duration-500 bg-[#0d0d0d]"
@@ -179,7 +179,7 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
                   <div className="absolute inset-0">
                     <Image
                       src={urlFor(product.image as SanityImageSource).width(1200).height(1500).url()}
-                      alt={product.name}
+                      alt={product.name || product.title || "Product image"}
                       fill
                       className="object-contain transition-transform duration-700 group-hover/card:scale-105"
                     />
@@ -191,7 +191,7 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
                         {product.category?.name}
                       </p>
                       <h3 className="text-xl md:text-2xl font-bold text-white group-hover/card:text-[#FF3333] transition-colors duration-300 uppercase tracking-wider">
-                        {product.name}
+                        {product.name || product.title}
                       </h3>
                     </div>
                     <div className="shrink-0 w-10 h-10 aspect-square border border-white/30 rounded-full flex items-center justify-center text-white group-hover/card:bg-[#FF3333] group-hover/card:border-[#FF3333] transition-all duration-300">

@@ -19,7 +19,8 @@ const toSlug = (s?: string) =>
 
 export type ProductsCarouselProduct = {
   _id: string
-  name: string
+  name?: string
+  title?: string
   slug: { current: string }
   image: SanityImageSource
   price?: number
@@ -43,6 +44,13 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
     ].filter(Boolean) as string[]
     const matched = Array.from(categoriesOrder).find(cat => names.includes(cat))
     return matched || names[0] || ""
+  }
+  const getPrimaryCategorySlug = (p: ProductsCarouselProduct): string => {
+    const slug =
+      p.category?.slug?.current ||
+      p.categories?.find(c => !!c?.slug?.current)?.slug?.current ||
+      ""
+    return slug || toSlug(getPrimaryCategory(p))
   }
 
   const filtered = products.filter(p => categorySet.has(getPrimaryCategory(p)))
@@ -147,11 +155,11 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
                       key={product._id}
                       className="group relative rounded-3xl bg-[#E0E0DA] text-black"
                     >
-                      <Link href={`/products/${product.slug?.current ?? toSlug(product.name)}`} className="block">
+                      <Link href={`/${getPrimaryCategorySlug(product)}/${product.slug?.current ?? toSlug(product.name || product.title)}`} className="block">
                         <div className="relative w-full aspect-[4/3]">
                           <Image
                             src={urlFor(product.image).width(1200).height(900).url()}
-                            alt={product.name}
+                            alt={product.name || product.title || "Product image"}
                             fill
                             className="object-contain p-6"
                           />
@@ -163,11 +171,11 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
                             {getPrimaryCategory(product)}
                           </p>
                           <p className="text-sm font-bold uppercase tracking-[0.12em]">
-                            {product.name}
+                            {product.name || product.title}
                           </p>
                         </div>
                         <Link
-                          href={`/products/${product.slug?.current ?? toSlug(product.name)}`}
+                          href={`/${getPrimaryCategorySlug(product)}/${product.slug?.current ?? toSlug(product.name || product.title)}`}
                           className="flex h-9 w-9 items-center justify-center rounded-full border border-black/30 bg-white/70 text-black hover:border-[#FF3333] hover:text-[#FF3333] transition-colors"
                           aria-label="View product"
                         >

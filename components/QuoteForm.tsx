@@ -54,7 +54,7 @@ export default function QuoteForm({ productName }: QuoteFormProps) {
           type="email"
           name="email"
           placeholder="Email Address"
-          className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text_white placeholder:text-gray-500 focus:outline-none focus:border-[#FF3333]"
+          className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF3333]"
           required
         />
       </div>
@@ -62,24 +62,24 @@ export default function QuoteForm({ productName }: QuoteFormProps) {
         <input
           name="phone"
           placeholder="Phone"
-          className="w-full rounded-xl border border_white/20 bg-black/40 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF3333]"
+          className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF3333]"
         />
         <input
           name="company"
           placeholder="Company / Organization"
-          className="w-full rounded-xl border border_white/20 bg-black/40 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF3333]"
+          className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF3333]"
         />
       </div>
       <textarea
         name="message"
         placeholder="Tell us about your requirements"
         rows={4}
-        className="w-full rounded-xl border border_white/20 bg-black/40 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF3333]"
+        className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF3333]"
       />
       <button
         type="submit"
         disabled={status === "loading"}
-        className="inline-flex items-center justify-center gap-3 rounded-full bg-[#FF3333] px-6 py-3 text-sm font-bold uppercase tracking-[0.25em] text-black hover:bg_white hover:text-black transition-colors disabled:opacity-60"
+        className="inline-flex items-center justify-center gap-3 rounded-full bg-[#FF3333] px-6 py-3 text-sm font-bold uppercase tracking-[0.25em] text-black hover:bg-white hover:text-black transition-colors disabled:opacity-60"
       >
         {status === "loading" ? "Sending..." : "Request a Quote"}
       </button>

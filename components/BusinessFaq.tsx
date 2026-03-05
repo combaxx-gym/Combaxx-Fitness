@@ -1,4 +1,5 @@
 import { ChevronRight } from "lucide-react"
+import Link from "next/link"
 
 export default function BusinessFaq() {
   const items = [
@@ -92,7 +93,7 @@ export default function BusinessFaq() {
                 Since 1983, we&apos;ve been empowering health and wellness facilities with top‑notch technology.
                 Revolutionize your business and boost customer engagement with our integrated ecosystem.
               </p>
-              <a
+              <Link
                 href="/business"
                 className="mt-8 inline-flex items-center rounded-full bg-[#FF3333] px-5 py-3 text-sm font-bold uppercase tracking-[0.25em] text-black shadow-md hover:bg-white hover:text-black transition-colors"
               >
@@ -100,7 +101,7 @@ export default function BusinessFaq() {
                 <span className="flex ml-2 h-6 w-6 items-center justify-center rounded-full bg-black text-white shrink-0">
                   <ChevronRight className="h-4 w-4" />
                 </span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

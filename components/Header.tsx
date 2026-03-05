@@ -47,7 +47,7 @@ export default function Header() {
                 ? "bg-[#1A1A1A] text-white px-8 py-3 rounded-full border border-white/10 shadow-2xl" 
                 : "bg-white/10 backdrop-blur-sm text-white px-8 py-3 rounded-full border border-white/10"
             }`}>
-            <Link href="/products" className="hover:text-[#FF3333] transition-colors">Products</Link>
+            <Link href="/shop" className="hover:text-[#FF3333] transition-colors">Products</Link>
             <Link href="/wellness" className="hover:text-[#FF3333] transition-colors">Wellness</Link>
             <Link href="/materials-information" className="hover:text-[#FF3333] transition-colors">Materials Information</Link>
             <Link href="/stories" className="hover:text-[#FF3333] transition-colors">Stories</Link>

@@ -3,7 +3,6 @@ import { urlFor } from "@/sanity/lib/image"
 import Image from "next/image"
 import Link from "next/link"
 import type { SanityImageSource } from "@sanity/image-url"
-import { redirect } from "next/navigation"
 
 type Cat = { _id: string; name?: string; slug?: { current?: string } }
 type Product = {
@@ -17,25 +16,14 @@ type Product = {
   categories?: Array<{ name?: string; slug?: { current?: string } }>
 }
 
-async function getCategories(): Promise<Cat[]> {
-  const cats = await client.fetch(
-    `*[_type=="category"]|order(name asc){_id,name,slug}`
+async function getCategory(slug: string): Promise<Cat | null> {
+  return await client.fetch(
+    `*[_type=="category" && slug.current==$slug][0]{_id,name,slug}`,
+    { slug }
   )
-  return cats as Cat[]
 }
 
-async function getProductsByCategory(slug?: string): Promise<Product[]> {
-  if (!slug) {
-    const all = await client.fetch(
-      `*[_type=="product"]{
-        _id,
-        name, title, slug, image, description,
-        category->{name,slug},
-        categories[]->{name,slug}
-      }`
-    )
-    return all as Product[]
-  }
+async function getProductsByCategory(slug: string): Promise<Product[]> {
   const products = await client.fetch(
     `*[_type=="product" && references(*[_type=="category" && slug.current==$slug]._id)]{
       _id,
@@ -48,46 +36,21 @@ async function getProductsByCategory(slug?: string): Promise<Product[]> {
   return products as Product[]
 }
 
-export default async function ShopPage({ searchParams }: { searchParams?: Promise<{ category?: string }> }) {
-  const sp = (await (searchParams || Promise.resolve({}))) as { category?: string }
-  const selected = sp.category
-  if (selected) {
-    redirect(`/${selected}`)
-  }
-  const [categories, products] = await Promise.all([
-    getCategories(),
-    getProductsByCategory(undefined),
+export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
+  const { category } = await params
+  const [cat, products] = await Promise.all([
+    getCategory(category),
+    getProductsByCategory(category),
   ])
-
-  const title = "Shop"
+  const title = cat?.name || category.replace(/-/g, " ")
 
   return (
     <div className="min-h-screen pt-28 md:pt-32 px-6 md:px-12 bg-neutral-900 text-white">
       <div className="max-w-[1920px] mx-auto">
         <h1 className="text-4xl md:text-6xl font-bold mb-4 text-[#FF3333]">{title}</h1>
         <p className="text-lg md:text-xl text-gray-300 mb-8">
-          Explore all of our latest gym equipment and product collections.
+          Explore {title} products.
         </p>
-
-        <div className="mb-8 flex flex-wrap items-center gap-2">
-          <Link
-            href="/shop"
-            className={`px-4 py-2 text-xs font-bold uppercase tracking-[0.25em] rounded-full border ${
-              !selected ? "border-[#FF3333] text-[#FF3333]" : "border-white/20 text-gray-300 hover:text-white"
-            }`}
-          >
-            All
-          </Link>
-          {categories.map(c => (
-            <Link
-              key={c._id}
-              href={`/${c.slug?.current}`}
-              className="px-4 py-2 text-xs font-bold uppercase tracking-[0.25em] rounded-full border border-white/20 text-gray-300 hover:text-white"
-            >
-              {c.name}
-            </Link>
-          ))}
-        </div>
 
         {products.length === 0 ? (
           <div className="py-16 text-center text-gray-400">
@@ -95,11 +58,9 @@ export default async function ShopPage({ searchParams }: { searchParams?: Promis
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map(p => {
-              const catSlug = p.category?.slug?.current || p.categories?.[0]?.slug?.current || "shop"
-              return (
+            {products.map((p) => (
               <div key={p._id} className="group relative rounded-3xl bg-[#E0E0DA] text-black overflow-hidden">
-                <Link href={`/${catSlug}/${p.slug.current}`} className="block">
+                <Link href={`/${category}/${p.slug.current}`} className="block">
                   <div className="relative w-full aspect-[4/3]">
                     <Image
                       src={urlFor(p.image).width(1200).height(900).url()}
@@ -119,15 +80,15 @@ export default async function ShopPage({ searchParams }: { searchParams?: Promis
                     </p>
                   </div>
                   <Link
-                    href={`/${catSlug}/${p.slug.current}`}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-black/30 bg-white/70 text-black hover:border-[#FF3333] hover:text-[#FF3333] transition-colors"
+                    href={`/${category}/${p.slug.current}`}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-black/30 bg-white/70 text_black hover:border-[#FF3333] hover:text-[#FF3333] transition-colors"
                     aria-label="View product"
                   >
                     <span className="text-lg leading-none">›</span>
                   </Link>
                 </div>
               </div>
-            )})}
+            ))}
           </div>
         )}
       </div>
