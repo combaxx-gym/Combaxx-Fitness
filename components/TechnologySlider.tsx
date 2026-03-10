@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronLeft, ChevronRight } from "lucide-react"
@@ -8,15 +8,13 @@ import { urlFor } from "@/sanity/lib/image"
 import type { SanityImageSource } from "@sanity/image-url"
 import type { ProductsCarouselProduct } from "./ProductsCarousel"
 
-const isTopSellingMatch = (name?: string, slug?: string) => {
-  const n = (name || "").toLowerCase()
-  const s = (slug || "").toLowerCase()
-  return n === "top selling products" || n === "top selling" || s === "top-selling-products" || s === "top-selling"
-}
-
 type TechSliderProps = {
   products?: ProductsCarouselProduct[]
 }
+
+const categoriesOrder = ["Treadmills", "Bikes", "Strength"] as const
+
+const displayLabel = (cat: string) => (cat === "Strength" ? "Titan Series" : cat)
 
 const toSlug = (s?: string) =>
   (s || "")
@@ -27,18 +25,29 @@ const toSlug = (s?: string) =>
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
 
-export default function TechnologySlider({ products = [] }: TechSliderProps) {
-  const items: ProductsCarouselProduct[] = useMemo(() => {
-    return (products || []).filter(p => {
-      if (isTopSellingMatch(p.category?.name, p.category?.slug?.current)) return true
-      const cats = (p as unknown as { categories?: Array<{ name?: string; slug?: { current?: string } }> }).categories
-      if (Array.isArray(cats)) {
-        return cats.some(c => isTopSellingMatch(c?.name, c?.slug?.current))
-      }
-      return false
-    })
-  }, [products])
+const normalizeCat = (name: string) => {
+  const n = (name || "").trim().toLowerCase()
+  if (n === "titan series" || n === "titan-series") return "Strength"
+  if (n === "strength") return "Strength"
+  return name
+}
 
+const mapToCanonical = (raw?: string) => {
+  const s = (raw || "").trim().toLowerCase()
+  if (!s) return ""
+  if (s.includes("titan")) return "Strength"
+  if (s === "titan series" || s === "titan-series") return "Strength"
+  if (s === "power strength") return "Strength"
+  if (s === "strength equipment") return "Strength"
+  if (s === "weight benches" || s === "bench" || s.includes("bench")) return "Strength"
+  if (s === "multi gyms" || s.includes("gym")) return "Strength"
+  if (s === "treadmills" || s.includes("treadmill")) return "Treadmills"
+  if (s === "bikes" || s.includes("bike") || s.includes("cycle")) return "Bikes"
+  if (s === "strength") return "Strength"
+  return ""
+}
+
+export default function TechnologySlider({ products = [] }: TechSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(true)
   const [cardWidth, setCardWidth] = useState(0)
@@ -47,10 +56,52 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const maskRef = useRef<HTMLDivElement>(null)
 
+  const getPrimaryCategory = (p: ProductsCarouselProduct): string => {
+    const names = [
+      ...(p.categories?.map(c => c?.name || "") || []),
+      p.category?.name || "",
+    ].filter(Boolean) as string[]
+    const slugs = [
+      ...(p.categories?.map(c => c?.slug?.current || "") || []),
+      p.category?.slug?.current || "",
+    ].filter(Boolean) as string[]
+    const candidates = [...names, ...slugs]
+    for (const v of candidates) {
+      const canon = mapToCanonical(v) || normalizeCat(v)
+      if (canon && (categoriesOrder as readonly string[]).includes(canon)) return canon
+    }
+    const fallback = normalizeCat(names[0] || slugs[0] || "")
+    return (fallback && (categoriesOrder as readonly string[]).includes(fallback)) ? fallback : categoriesOrder[0]
+  }
+  const getPrimaryCategorySlug = (p: ProductsCarouselProduct): string => {
+    const slug =
+      p.category?.slug?.current ||
+      p.categories?.find(c => !!c?.slug?.current)?.slug?.current ||
+      ""
+    return slug || toSlug(getPrimaryCategory(p))
+  }
+
+  const all = (products || []).filter(p => {
+    const names = [
+      ...(p.categories?.map(c => (c?.name || "").trim()) || []),
+      (p.category?.name || "").trim(),
+    ].filter(Boolean) as string[]
+    const slugs = [
+      ...(p.categories?.map(c => (c?.slug?.current || "").trim()) || []),
+      (p.category?.slug?.current || "").trim(),
+    ].filter(Boolean) as string[]
+    const match = names.concat(slugs)
+      .map(s => s.toLowerCase().replace(/\s+/g, " ").trim())
+      .map(s => (s === "titan series" || s === "titan-series") ? "strength" : s)
+    const synonyms = ["strength", "power strength", "strength equipment", "weight benches", "bench", "multi gyms", "titan"]
+    const canonical = ["treadmills", "bikes", "strength"]
+    return match.some(m => canonical.includes(m) || synonyms.includes(m) || m.includes("titan"))
+  })
+  const items = all
+
   const handleNext = () => {
     setCurrentIndex(prev => prev + 1)
   }
-
   const handlePrev = () => {
     if (currentIndex === 0) {
       setIsTransitioning(false)
@@ -65,18 +116,16 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
       setCurrentIndex(prev => prev - 1)
     }
   }
-
   const handleDotClick = (index: number) => {
     setCurrentIndex(index)
   }
-
   useEffect(() => {
     const updateWidth = () => {
       if (cardRef.current) {
         let gap = 24
         if (trackRef.current) {
           const style = getComputedStyle(trackRef.current)
-          const gapStr = style.columnGap || (style as CSSStyleDeclaration).gap || "24px"
+          const gapStr = (style as CSSStyleDeclaration).columnGap || (style as CSSStyleDeclaration).gap || "24px"
           const parsed = parseFloat(gapStr)
           if (!Number.isNaN(parsed)) gap = parsed
         }
@@ -100,7 +149,6 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
       clearTimeout(timer)
     }
   }, [items])
-
   useEffect(() => {
     if (items.length === 0) return
     const interval = setInterval(() => {
@@ -108,7 +156,6 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
     }, 3000)
     return () => clearInterval(interval)
   }, [items.length])
-
   useEffect(() => {
     if (currentIndex === items.length) {
       const timer = setTimeout(() => {
@@ -123,15 +170,16 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
       return () => clearTimeout(timer)
     }
   }, [currentIndex, items.length])
-
   const displayProducts = [...items, ...items]
   const activeDotIndex = items.length ? currentIndex % items.length : 0
+
+  
 
   return (
     <section className="bg-[#111111] border-y border-gray-900 py-16">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8 md:mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div>
+        <div className="mb-8 md:mb-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div className="md:max-w-[55%]">
             <p className="text-xs font-bold text-[#FF3333] uppercase tracking-[0.3em] mb-4">
               Elegantly designed. Fueled by technology.
             </p>
@@ -143,35 +191,45 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
               feel smooth, solid and responsive at speed.
             </p>
           </div>
+          <div className="flex items-center justify-center md:justify-center md:items-center md:min-w-[320px]">
+            <Link
+              href="/shop"
+              className="inline-flex w-[220px] sm:w-[240px] items-center justify-center gap-2 text-sm font-bold uppercase tracking-[0.25em] border border-white/20 px-6 py-3 rounded-full text-white hover:text-[#FF3333] hover:border-[#FF3333] transition-colors"
+            >
+              Shop online
+            </Link>
+          </div>
         </div>
 
-        <div className="relative group overflow-hidden ml-[calc(50%-50vw)] mr-[calc(50%-50vw)]">
-          <button 
-            onClick={handlePrev} 
-            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-[#FF3333] text-white p-2 sm:p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm cursor-pointer"
-            aria-label="Previous slide"
+        
+
+        <div className="relative ml-[calc(50%-50vw)] mr-[calc(50%-50vw)]">
+          <button
+            onClick={handlePrev}
+            aria-label="Previous"
+            className="absolute left-2 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-black/70 md:flex"
           >
-            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+            <ChevronLeft className="w-5 h-5" />
           </button>
-          <button 
-            onClick={handleNext} 
-            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-[#FF3333] text-white p-2 sm:p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm cursor-pointer"
-            aria-label="Next slide"
+          <button
+            onClick={handleNext}
+            aria-label="Next"
+            className="absolute right-2 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-black/70 md:flex"
           >
-            <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+            <ChevronRight className="w-5 h-5" />
           </button>
           <div ref={maskRef} className="overflow-hidden px-6 md:px-12 pb-12">
-            <div 
+            <div
               ref={trackRef}
               className="flex gap-3 sm:gap-4 md:gap-6 will-change-transform"
               style={{
                 transform: `translateX(${-(currentIndex * cardWidth) + centerOffset}px)`,
-                transition: isTransitioning ? "transform 500ms ease-out" : "none"
+                transition: isTransitioning ? "transform 500ms ease-out" : "none",
               }}
             >
               {displayProducts.map((product, index) => (
-                <Link 
-                  href={`/products/${product.slug?.current ?? toSlug(product.name || product.title)}`} 
+                <Link
+                  href={`/${getPrimaryCategorySlug(product)}/${product.slug?.current ?? toSlug(product.name || product.title)}`}
                   key={`${product._id}-${index}`}
                   ref={index === 0 ? cardRef : null}
                   className="flex-shrink-0 w-[220px] sm:w-[260px] md:w-[320px] lg:w-[380px] xl:w-[420px] h-[360px] sm:h-[420px] md:h-[460px] lg:h-[500px] xl:h-[520px] relative rounded-2xl overflow-hidden group/card border border-transparent hover:border-[#FF3333] transition-all duration-500 bg-[#0d0d0d]"
@@ -188,7 +246,7 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
                   <div className="absolute bottom-0 left-0 right-0 p-8 flex justify-between items-end">
                     <div>
                       <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gray-300 mb-1">
-                        {product.category?.name}
+                        {displayLabel(getPrimaryCategory(product))}
                       </p>
                       <h3 className="text-xl md:text-2xl font-bold text-white group-hover/card:text-[#FF3333] transition-colors duration-300 uppercase tracking-wider">
                         {product.name || product.title}
@@ -208,9 +266,7 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
                 key={index}
                 onClick={() => handleDotClick(index)}
                 className={`h-2 rounded-full transition-all duration-300 ${
-                  index === activeDotIndex 
-                    ? "w-[30px] bg-[#FF3333]" 
-                    : "w-2 bg-gray-600 hover:bg-gray-400"
+                  index === activeDotIndex ? "w-[30px] bg-[#FF3333]" : "w-2 bg-gray-600 hover:bg-gray-400"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
