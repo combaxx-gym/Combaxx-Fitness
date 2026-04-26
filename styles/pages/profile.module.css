@@ -1,0 +1,12 @@
+/* ============================================
+   PROFILE PAGE
+   ============================================ */
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #161616;
+  padding: 2.5rem 1rem;
+}

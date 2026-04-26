@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import styles from "@/styles/components/QuoteForm.module.css"
 
 interface QuoteFormProps {
   productName: string
@@ -42,51 +43,51 @@ export default function QuoteForm({ productName }: QuoteFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.row}>
         <input
           name="name"
           placeholder="Your Name"
-          className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF3333]"
+          className={styles.input}
           required
         />
         <input
           type="email"
           name="email"
           placeholder="Email Address"
-          className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF3333]"
+          className={styles.input}
           required
         />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className={styles.row}>
         <input
           name="phone"
           placeholder="Phone"
-          className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF3333]"
+          className={styles.input}
         />
         <input
           name="company"
           placeholder="Company / Organization"
-          className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF3333]"
+          className={styles.input}
         />
       </div>
       <textarea
         name="message"
         placeholder="Tell us about your requirements"
         rows={4}
-        className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF3333]"
+        className={styles.textarea}
       />
       <button
         type="submit"
         disabled={status === "loading"}
-        className="inline-flex items-center justify-center gap-3 rounded-full bg-[#FF3333] px-6 py-3 text-sm font-bold uppercase tracking-[0.25em] text-black hover:bg-white hover:text-black transition-colors disabled:opacity-60"
+        className={styles.submitBtn}
       >
         {status === "loading" ? "Sending..." : "Request a Quote"}
       </button>
       {status === "success" && (
-        <p className="text-green-400 text-sm">Thanks! We&apos;ll get back to you shortly.</p>
+        <p className={styles.successMsg}>Thanks! We&apos;ll get back to you shortly.</p>
       )}
-      {status === "error" && <p className="text-red-400 text-sm">{error}</p>}
+      {status === "error" && <p className={styles.errorMsg}>{error}</p>}
     </form>
   )
 }

@@ -1,180 +1,319 @@
-import { client } from "@/sanity/lib/client"
-import Link from "next/link"
-import { redirect, notFound } from "next/navigation"
-import QuoteForm from "@/components/QuoteForm"
-import type { SanityImageSource } from "@sanity/image-url"
-import ProductGallery from "@/components/ProductGallery"
+import { client } from '@/sanity/lib/client'
+import { urlFor } from '@/sanity/lib/image'
+import Link from 'next/link'
+import { redirect, notFound } from 'next/navigation'
+import type { Metadata } from 'next'
+import type { SanityImageSource } from '@sanity/image-url'
+
+import ProductImageGallery from '@/components/ProductImageGallery'
+import ProductHeroInfo from '@/components/ProductHeroInfo'
+import StickyActionBar from '@/components/StickyActionBar'
+import ProductFeatures from '@/components/ProductFeatures'
+import ProductSpecifications from '@/components/ProductSpecifications'
+import TrustBadges from '@/components/TrustBadges'
+import InstallationWarranty from '@/components/InstallationWarranty'
+import ProductAddons from '@/components/ProductAddons'
+import ProductFaqs from '@/components/ProductFaqs'
+import ProductDownloads from '@/components/ProductDownloads'
+import InquiryForm from '@/components/InquiryForm'
+import RelatedProductsSlider from '@/components/RelatedProductsSlider'
+
+import styles from '@/styles/pages/product.module.css'
+
+/* ─────────────────────────────────────────
+   Types
+───────────────────────────────────────── */
+
+interface SpecItem { key: string; value: string }
+interface SpecCategory { category: string; items: SpecItem[] }
 
 interface Product {
   _id: string
   name: string
   slug: { current: string }
+  sku?: string
   image: SanityImageSource
-  description: string
-  price?: number
+  description?: string
   gallery?: SanityImageSource[]
+  model3D?: { asset?: { url?: string } }
   features?: string[]
-  specs?: Array<{ key: string; value: string }>
+  productFeatures?: Array<{ title: string; description: string; icon?: string }>
+  specifications?: SpecCategory[]
+  specs?: SpecItem[]
+  addons?: Array<{ name: string; description?: string; image?: SanityImageSource }>
+  downloads?: Array<{ name: string; file?: { asset?: { url?: string } }; fileType?: string }>
+  installation?: string
+  warranty?: string
   category?: { name?: string; slug?: { current?: string } }
   categories?: Array<{ name?: string; slug?: { current?: string } }>
+  specsPdf?: { asset?: { url?: string } }
+  faqs?: Array<{ question: string; answer: string }>
+  additionalSections?: Array<{ title: string; content: string }>
 }
 
-async function getProduct(ref?: string): Promise<Product | null> {
-  if (!ref) return null
-  const types = ["product", "products"]
+interface RelatedProduct {
+  _id: string
+  name: string
+  slug: { current: string }
+  image?: SanityImageSource
+  category?: { slug?: { current?: string } }
+  categories?: Array<{ slug?: { current?: string } }>
+}
+
+/* ─────────────────────────────────────────
+   Data fetching
+───────────────────────────────────────── */
+
+const PRODUCT_FIELDS = `
+  _id,
+  "name": coalesce(name, title),
+  slug,
+  sku,
+  image,
+  description,
+  gallery[]{..., asset->},
+  model3D{asset->{url}},
+  features[],
+  productFeatures[]{title, description, icon},
+  specifications[]{category, items[]{key, value}},
+  specs[]{key, value},
+  addons[]{name, description, image{..., asset->}},
+  downloads[]{name, file{asset->{url}}, fileType},
+  installation,
+  warranty,
+  category->{name, slug},
+  categories[]->{name, slug},
+  specsPdf{asset->{url}},
+  faqs[]{question, answer},
+  additionalSections[]{title, content}
+`
+
+async function getProduct(ref: string): Promise<Product | null> {
+  const types = ['product', 'products']
 
   type Minimal = { _id: string; slug?: { current?: string }; name?: string; title?: string }
-  const minimal: Minimal[] = await client.fetch(
-    `*[_type in $types]{ _id, slug, name, title }`,
-    { types }
-  )
+  const minimal: Minimal[] = await client.fetch(`*[_type in $types]{ _id, slug, name, title }`, { types })
+
   const normalize = (s?: string) =>
-    (s || "")
-      .toLowerCase()
-      .trim()
-      .replace(/&/g, "and")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/-+/g, "-")
-      .replace(/(^-|-$)/g, "")
+    (s || '').toLowerCase().trim()
+      .replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-')
+      .replace(/-+/g, '-').replace(/(^-|-$)/g, '')
+
   const target = normalize(ref)
   const hit = minimal.find(m => {
-    const slugN = normalize(m.slug?.current)
-    const nameN = normalize(m.name)
-    const titleN = normalize(m.title)
-    return slugN === target || nameN === target || titleN === target
+    return normalize(m.slug?.current) === target ||
+      normalize(m.name) === target ||
+      normalize(m.title) === target
   })
+
   if (hit) {
-    const byId = await client.fetch(
-      `*[_id == $id][0]{
-        _id,
-        "name": coalesce(name, title),
-        slug, image, description, price,
-        gallery[]{asset->},
-        features[],
-        specs[]{key, value},
-        category->{name, slug},
-        categories[]->{name, slug}
-      }`,
-      { id: hit._id }
-    )
-    if (byId) return byId
+    return await client.fetch(`*[_id == $id][0]{ ${PRODUCT_FIELDS} }`, { id: hit._id })
   }
 
   const refLower = ref.toLowerCase()
-  const refLike = `*${refLower}*`
-  const altLower = refLower.replace(/-/g, " ")
-  const altLike = `*${altLower}*`
-  const query = `*[_type in $types && (
+  return await client.fetch(
+    `*[_type in $types && (
       slug.current == $ref ||
       lower(slug.current) == $refLower ||
-      lower(slug.current) match $refLike ||
       lower(name) == $refLower ||
-      lower(name) match $refLike ||
-      lower(name) == $altLower ||
-      lower(name) match $altLike ||
       lower(title) == $refLower ||
-      lower(title) match $refLike ||
-      lower(title) == $altLower ||
-      lower(title) match $altLike ||
       _id == $ref
-    )][0]{
-      _id,
-      "name": coalesce(name, title),
-      slug, image, description, price,
-      gallery[]{asset->},
-      features[],
-      specs[]{key, value},
-      category->{name, slug},
-      categories[]->{name, slug}
-    }`
-  const params = { ref, refLower, refLike, altLower, altLike, types }
-  const published = await client.fetch(query, params)
-  if (published) return published
-  return null
+    )][0]{ ${PRODUCT_FIELDS} }`,
+    { ref, refLower, types }
+  )
 }
 
-export default async function CategoryProductPage(props: { params: Promise<{ category: string; product: string }> }) {
+async function getRelatedProducts(currentId: string, categorySlug?: string): Promise<RelatedProduct[]> {
+  const params: Record<string, string> = { currentId }
+  let filter = `_type == "product" && _id != $currentId`
+  if (categorySlug) {
+    filter += ` && (category->slug.current == $categorySlug || categories[]->slug.current match $categorySlug)`
+    params.categorySlug = categorySlug
+  }
+  return await client.fetch(
+    `*[${filter}] | order(_createdAt desc) [0...8]{
+      _id, "name": coalesce(name, title), slug, image,
+      category->{slug}, categories[]->{slug}
+    }`,
+    params
+  )
+}
+
+/* ─────────────────────────────────────────
+   Metadata
+───────────────────────────────────────── */
+
+export async function generateMetadata(props: { params: Promise<{ category: string; product: string }> }): Promise<Metadata> {
+  const { product: prodSlug } = await props.params
+  const product = await getProduct(prodSlug)
+  if (!product) return { title: 'Product Not Found' }
+
+  const imageUrl = product.image ? urlFor(product.image).width(1200).height(630).url() : undefined
+
+  return {
+    title: `${product.name} | Commercial Gym Equipment`,
+    description: product.description?.slice(0, 160) ?? `Premium commercial ${product.name} for gyms and fitness facilities.`,
+    openGraph: {
+      title: product.name,
+      description: product.description?.slice(0, 160),
+      images: imageUrl ? [{ url: imageUrl, width: 1200, height: 630 }] : [],
+    },
+  }
+}
+
+/* ─────────────────────────────────────────
+   Page Component
+───────────────────────────────────────── */
+
+export default async function ProductPage(
+  props: { params: Promise<{ category: string; product: string }> }
+) {
   const { category, product: prodSlug } = await props.params
   const product = await getProduct(prodSlug)
-  if (!product) {
-    notFound()
-  }
+  if (!product) notFound()
+
   const primaryCatSlug =
     product.category?.slug?.current ||
     product.categories?.[0]?.slug?.current ||
     null
+
   if (primaryCatSlug && primaryCatSlug !== category) {
     redirect(`/${primaryCatSlug}/${product.slug.current}`)
   }
 
+  const categoryName = product.category?.name || product.categories?.[0]?.name
+  const relatedProducts = await getRelatedProducts(product._id, primaryCatSlug || undefined)
+
+  const model3DUrl = product.model3D?.asset?.url
+  const specsPdfUrl = product.specsPdf?.asset?.url
+
+  const hasFeatureCards = Array.isArray(product.productFeatures) && product.productFeatures.length > 0
+  const hasSpecs = (Array.isArray(product.specifications) && product.specifications.length > 0) ||
+    (Array.isArray(product.specs) && product.specs.length > 0)
+  const hasAddons = Array.isArray(product.addons) && product.addons.length > 0
+  const hasFaqs = Array.isArray(product.faqs) && product.faqs.length > 0
+  const hasDownloads = (Array.isArray(product.downloads) && product.downloads.length > 0) || !!specsPdfUrl
+  const hasAdditional = Array.isArray(product.additionalSections) && product.additionalSections.length > 0
+
   return (
-    <div className="min-h-screen bg-[#161616] text-white pt-28 md:pt-32">
-      <div className="max-w-[1920px] mx-auto px-4 sm:px-6 md:px-12 py-10 md:py-16">
-        <div className="mb-8 flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-gray-400">
-          <Link href="/" className="hover:text-white">Home</Link>
-          <span>/</span>
-          <Link href="/shop" className="hover:text-white">Products</Link>
-          {primaryCatSlug && (
-            <>
-              <span>/</span>
-              <Link href={`/${primaryCatSlug}`} className="hover:text-white">
-                {product.category?.name || product.categories?.[0]?.name || "Category"}
-              </Link>
-            </>
+    <>
+      {/* Sticky Action Bar — client component, observes scroll */}
+      {/* <StickyActionBar
+        productId={product._id}
+        productName={product.name}
+        productSku={product.sku}
+        productSlug={product.slug.current}
+      /> */}
+
+      <main className={styles.page}>
+        <div className={styles.container}>
+
+          {/* ── Breadcrumb ── */}
+          <nav className={styles.breadcrumb} aria-label="Breadcrumb">
+            <Link href="/" className={styles.breadcrumbLink}>Home</Link>
+            <span className={styles.breadcrumbSep}>/</span>
+            <Link href="/shop" className={styles.breadcrumbLink}>Products</Link>
+            {primaryCatSlug && (
+              <>
+                <span className={styles.breadcrumbSep}>/</span>
+                <Link href={`/${primaryCatSlug}`} className={styles.breadcrumbLink}>
+                  {categoryName || 'Category'}
+                </Link>
+              </>
+            )}
+            <span className={styles.breadcrumbSep}>/</span>
+            <span className={styles.breadcrumbCurrent}>{product.name}</span>
+          </nav>
+
+          {/* ── Hero Section ── */}
+          <section className={styles.heroGrid} aria-label="Product overview">
+            {/* Gallery */}
+            <ProductImageGallery
+              name={product.name}
+              mainImage={product.image}
+              gallery={product.gallery || []}
+              model3DUrl={model3DUrl}
+            />
+
+            {/* Info panel */}
+            <ProductHeroInfo
+              productId={product._id}
+              productName={product.name}
+              productSku={product.sku}
+              productSlug={product.slug.current}
+              categoryName={categoryName}
+              description={product.description}
+              features={product.features || []}
+              specsPdfUrl={specsPdfUrl}
+            />
+          </section>
+
+          {/* ── Detailed Feature Cards ── */}
+          {hasFeatureCards && (
+            <ProductFeatures features={product.productFeatures!} />
           )}
-          <span>/</span>
-          <span className="text-white">{product.name}</span>
-        </div>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-7">
-            <ProductGallery name={product.name} mainImage={product.image} gallery={product.gallery || []} />
-          </div>
+          {/* ── Specifications ── */}
+          {hasSpecs && (
+            <ProductSpecifications
+              specifications={product.specifications}
+              flatSpecs={product.specs}
+            />
+          )}
 
-          <div className="lg:col-span-5">
-            <div className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-[#FF3333]">
-              {product.category?.name || product.categories?.[0]?.name || "Product"}
+          {/* ── Trust Badges ── */}
+          <TrustBadges />
+
+          {/* ── Installation & Warranty ── */}
+          <InstallationWarranty
+            installation={product.installation}
+            warranty={product.warranty}
+          />
+
+          {/* ── Add-ons ── */}
+          {hasAddons && <ProductAddons addons={product.addons!} />}
+
+          {/* ── FAQs ── */}
+          {hasFaqs && <ProductFaqs faqs={product.faqs!} />}
+
+          {/* ── Downloads ── */}
+          {hasDownloads && (
+            <ProductDownloads
+              downloads={product.downloads}
+              specsPdfUrl={specsPdfUrl}
+            />
+          )}
+
+          {/* ── Additional CMS Sections ── */}
+          {hasAdditional && (
+            <div className={styles.additionalSections}>
+              {product.additionalSections!.map((sec, i) => (
+                <div key={i} className={styles.additionalSection}>
+                  <h2 className={styles.sectionTitle}>{sec.title}</h2>
+                  <p className={styles.sectionContent}>{sec.content}</p>
+                </div>
+              ))}
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-[50px] font-bold uppercase tracking-tight">{product.name}</h1>
-            {product.price != null && (
-              <div className="mt-3 text-2xl font-semibold text-white/90">${product.price.toLocaleString()}</div>
-            )}
-            <p className="mt-6 text-gray-300 leading-relaxed">{product.description}</p>
+          )}
 
-            {Array.isArray(product.features) && product.features.length > 0 && (
-              <div className="mt-8">
-                <h2 className="mb-3 text-sm font-bold uppercase tracking-[0.25em] text-gray-400">Key Features</h2>
-                <ul className="grid grid-cols-1 gap-2">
-                  {product.features.slice(0, 8).map((f, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm text-gray-200">
-                      <span className="mt-[6px] h-1.5 w-1.5 rounded-full bg-[#FF3333]" />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+          {/* ── Inquiry Form ── */}
+          <InquiryForm
+            productId={product._id}
+            productName={product.name}
+            productSku={product.sku}
+            productSlug={product.slug.current}
+          />
 
-            {Array.isArray(product.specs) && product.specs.length > 0 && (
-              <div className="mt-10">
-                <h2 className="mb-3 text-sm font-bold uppercase tracking-[0.25em] text-gray-400">Specifications</h2>
-                <dl className="grid grid-cols-1 gap-2">
-                  {product.specs.map((s, i) => (
-                    <div key={i} className="flex items-center justify-between gap-6 border-b border-white/10 py-3">
-                      <dt className="text-xs uppercase tracking-[0.25em] text-gray-400">{s.key}</dt>
-                      <dd className="text-sm text-gray-200">{s.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            )}
+          {/* ── Related Products ── */}
+          {relatedProducts.length > 0 && (
+            <RelatedProductsSlider
+              products={relatedProducts}
+              categorySlug={primaryCatSlug || undefined}
+            />
+          )}
 
-            <div className="mt-10">
-              <QuoteForm productName={product.name} />
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
+      </main>
+    </>
   )
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react"
+import styles from "@/styles/components/HeroCarousel.module.css"
 
 const SLIDES = [
   {
@@ -18,7 +19,7 @@ const SLIDES = [
   {
     id: 2,
     video: "/videos/9560d960.mp4",
-      poster: "/images/hero-section-slide-2.webp",
+    poster: "/images/hero-section-slide-2.webp",
     title: "POWER STRENGTH",
     description:
       "Unleash your full potential with our industrial-grade strength equipment. Built for heavy lifting and maximum durability.",
@@ -41,7 +42,7 @@ export default function HeroCarousel() {
   const [current, setCurrent] = useState(0)
   const [isPlaying, setIsPlaying] = useState(true)
   const [progress, setProgress] = useState(0)
-  const duration = 8000 // 8 seconds per slide
+  const duration = 8000
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
 
   const nextSlide = () => {
@@ -82,7 +83,6 @@ export default function HeroCarousel() {
     }
   }, [current, isPlaying])
 
-  // Handle video playback when slide changes
   useEffect(() => {
     videoRefs.current.forEach((video, index) => {
       if (video) {
@@ -99,98 +99,85 @@ export default function HeroCarousel() {
   }, [current])
 
   return (
-    <section className="relative h-screen w-full bg-[#161616] p-4 md:p-6 group">
-      <div className="relative w-full h-full rounded-[2rem] overflow-hidden">
-      
-      {/* Slides */}
-      {SLIDES.map((slide, index) => (
-        <div
-          key={slide.id}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-            index === current ? "opacity-100 z-10" : "opacity-0 z-0"
-          }`}
-        >
-          {/* Video Background */}
-          <div className="absolute inset-0 bg-black/20 z-10" /> {/* Overlay for text readability */}
-          <video
-            ref={(el) => {
-                if (videoRefs.current) {
-                    videoRefs.current[index] = el;
-                }
-            }}
-            className="w-full h-full object-cover"
-            muted
-            loop
-            playsInline
-            poster={slide.poster ?? `/images/COMBAXX FITNESS logo.png`}
-          >
-            <source src={slide.video} type="video/mp4" />
-          </video>
+    <section className={styles.section}>
+      <div className={styles.inner}>
 
-          {/* Content */}
-          <div className="absolute inset-0 z-20 flex flex-col justify-center px-6 md:px-20 max-w-[1920px] mx-auto">
-            <div className={`max-w-2xl transition-all duration-700 transform ${
-                index === current ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-            }`}>
-              <h2 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tighter uppercase">
-                {slide.title}
-              </h2>
-              <p className="text-lg md:text-xl text-gray-200 mb-10 leading-relaxed max-w-xl">
-                {slide.description}
-              </p>
-              <Link href={slide.link}>
-                <button className="group border border-white/30 bg-black/20 backdrop-blur-sm text-white font-bold py-4 px-8 rounded-full uppercase tracking-widest text-sm hover:bg-white hover:text-black hover:border-white transition-all duration-300 flex items-center gap-3">
-                  {slide.cta}
-                  <ChevronRight className="w-4 h-4 hero-arrow-icon" strokeWidth={3} />
-                </button>
-              </Link>
+        {/* Slides */}
+        {SLIDES.map((slide, index) => (
+          <div
+            key={slide.id}
+            className={`${styles.slide} ${index === current ? styles.slideActive : ""}`}
+          >
+            {/* Video overlay */}
+            <div className={styles.videoOverlay} />
+            <video
+              ref={(el) => {
+                if (videoRefs.current) {
+                  videoRefs.current[index] = el
+                }
+              }}
+              className={styles.video}
+              muted
+              loop
+              playsInline
+              poster={slide.poster ?? `/images/COMBAXX FITNESS logo.png`}
+            >
+              <source src={slide.video} type="video/mp4" />
+            </video>
+
+            {/* Content */}
+            <div className={styles.content}>
+              <div className={`${styles.contentInner} ${index === current ? "" : styles.contentInnerHidden}`}>
+                <h2 className={styles.slideTitle}>{slide.title}</h2>
+                <p className={styles.slideDesc}>{slide.description}</p>
+                <Link href={slide.link}>
+                  <button className={styles.ctaBtn}>
+                    {slide.cta}
+                    <ChevronRight className="w-4 h-4 hero-arrow-icon" strokeWidth={3} />
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
 
-      {/* Controls - Bottom Right */}
-      <div className="absolute bottom-12 right-6 md:right-20 z-30 flex items-center gap-6">
-        
-        {/* Navigation Arrows */}
-        <div className="flex items-center gap-4">
-            <button onClick={prevSlide} className="p-2 text-white hover:text-[#FF3333] transition-colors">
-                <ChevronLeft className="w-6 h-6" />
+        {/* Controls */}
+        <div className={styles.controls}>
+          <div className={styles.navGroup}>
+            <button onClick={prevSlide} className={styles.arrowBtn}>
+              <ChevronLeft className="w-6 h-6" />
             </button>
-            
+
             {/* Progress Bars */}
-            <div className="flex items-center gap-2">
-            {SLIDES.map((_, index) => (
-                <div 
-                    key={index} 
-                    className="relative w-12 h-1 bg-gray-600 rounded-full overflow-hidden cursor-pointer"
-                    onClick={() => {
-                      setCurrent(index)
-                      setProgress(0)
-                    }}
+            <div className={styles.progressBars}>
+              {SLIDES.map((_, index) => (
+                <div
+                  key={index}
+                  className={styles.progressTrack}
+                  onClick={() => {
+                    setCurrent(index)
+                    setProgress(0)
+                  }}
                 >
-                    <div 
-                        className={`absolute top-0 left-0 h-full bg-[#FF3333] transition-all duration-100 ease-linear ${
-                            index === current ? "opacity-100" : "opacity-0"
-                        }`}
-                        style={{ width: index === current ? `${progress}%` : '0%' }}
-                    />
+                  <div
+                    className={`${styles.progressFill} ${index === current ? styles.progressFillActive : ""}`}
+                    style={{ width: index === current ? `${progress}%` : "0%" }}
+                  />
                 </div>
-            ))}
+              ))}
             </div>
 
-            <button onClick={nextSlide} className="p-2 text-white hover:text-[#FF3333] transition-colors">
-                <ChevronRight className="w-6 h-6" />
+            <button onClick={nextSlide} className={styles.arrowBtn}>
+              <ChevronRight className="w-6 h-6" />
             </button>
+          </div>
+
+          {/* Play/Pause */}
+          <button onClick={togglePlay} className={styles.playBtn}>
+            {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+          </button>
         </div>
 
-        {/* Play/Pause */}
-        <button onClick={togglePlay} className="p-2 text-white hover:text-[#FF3333] transition-colors">
-            {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-        </button>
-
-      </div>
-      
       </div>
     </section>
   )

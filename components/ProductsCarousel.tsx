@@ -5,8 +5,7 @@ import Link from "next/link"
 import { urlFor } from "@/sanity/lib/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import type { SanityImageSource } from "@sanity/image-url"
-
- 
+import styles from "@/styles/components/ProductsCarousel.module.css"
 
 const toSlug = (s?: string) =>
   (s || "")
@@ -30,13 +29,8 @@ const catKey = (p: ProductsCarouselProduct): string => {
   if (all.some(s => s.includes("treadmill"))) return "treadmills"
   if (all.some(s => s.includes("bike") || s.includes("cycle"))) return "bikes"
   if (all.some(s =>
-    s.includes("titan") ||
-    s.includes("strength") ||
-    s.includes("bench") ||
-    s.includes("weight") ||
-    s.includes("multi gym") ||
-    s.includes("gym") ||
-    s.includes("press")
+    s.includes("titan") || s.includes("strength") || s.includes("bench") ||
+    s.includes("weight") || s.includes("multi gym") || s.includes("gym") || s.includes("press")
   )) return "strength"
   return ""
 }
@@ -121,17 +115,12 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
     updateWidth()
     window.addEventListener("resize", updateWidth)
     const timer = setTimeout(updateWidth, 500)
-    return () => {
-      window.removeEventListener("resize", updateWidth)
-      clearTimeout(timer)
-    }
+    return () => { window.removeEventListener("resize", updateWidth); clearTimeout(timer) }
   }, [items])
 
   useEffect(() => {
     if (items.length === 0) return
-    const interval = setInterval(() => {
-      handleNext()
-    }, 3000)
+    const interval = setInterval(() => { handleNext() }, 3000)
     return () => clearInterval(interval)
   }, [items.length])
 
@@ -140,11 +129,7 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
       const timer = setTimeout(() => {
         setIsTransitioning(false)
         setCurrentIndex(0)
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            setIsTransitioning(true)
-          })
-        })
+        requestAnimationFrame(() => { requestAnimationFrame(() => { setIsTransitioning(true) }) })
       }, 500)
       return () => clearTimeout(timer)
     }
@@ -159,11 +144,7 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
     let start = 0
     for (let i = 1; i < items.length; i++) {
       const k = catKey(items[i])
-      if (k !== currentKey) {
-        res.push({ key: currentKey, start, end: i }) // end exclusive
-        currentKey = k
-        start = i
-      }
+      if (k !== currentKey) { res.push({ key: currentKey, start, end: i }); currentKey = k; start = i }
     }
     res.push({ key: currentKey, start, end: items.length })
     return res
@@ -179,7 +160,9 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
       activeCategory = baseIndex >= threshold ? nextG.key : g.key
     }
   }
-  const categoryKeys = groups.length ? groups.map(g => g.key) : ["treadmills", "bikes", "strength"].filter(k => items.some(p => catKey(p) === k))
+  const categoryKeys = groups.length
+    ? groups.map(g => g.key)
+    : ["treadmills", "bikes", "strength"].filter(k => items.some(p => catKey(p) === k))
   const catLabel = (k: string) => (k === "strength" ? "TITAN SERIES" : k.toUpperCase())
   const handleCategoryClick = (k: string) => {
     const g = groups.find(gr => gr.key === k)
@@ -188,51 +171,42 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
   }
 
   const getCatSlug = (p: ProductsCarouselProduct): string => {
-    const slug =
-      p.category?.slug?.current ||
-      p.categories?.find(c => !!c?.slug?.current)?.slug?.current ||
-      ""
+    const slug = p.category?.slug?.current || p.categories?.find(c => !!c?.slug?.current)?.slug?.current || ""
     return slug || toSlug(p.category?.name || p.categories?.[0]?.name || "products")
   }
-  const getProdSlug = (p: ProductsCarouselProduct) =>
-    p.slug?.current ?? toSlug(p.name || p.title)
+  const getProdSlug = (p: ProductsCarouselProduct) => p.slug?.current ?? toSlug(p.name || p.title)
 
   return (
-    <section className="border-t border-gray-800 bg-[#161616] py-16">
-      <div className="mx-auto max-w-[1920px] px-4 md:px-12">
-        <div className="relative ml-[calc(50%-50vw)] mr-[calc(50%-50vw)]">
-          <div className="mb-10 flex items-center justify-center gap-6 px-6 md:px-12">
+    <section className={styles.section}>
+      <div className={styles.container}>
+        <div className={styles.carouselOuter}>
+          {/* Category tabs */}
+          <div className={styles.catTabs}>
             {categoryKeys.map(k => (
               <button
                 key={k}
                 onClick={() => handleCategoryClick(k)}
-                className={`text-[14px] sm:text-[15px] md:text-[16px] font-bold tracking-[0.2em] uppercase transition-colors ${
-                  activeCategory === k ? "text-[#FF3333]" : "text-gray-500 hover:text-gray-300"
-                }`}
+                className={`${styles.catTab} ${activeCategory === k ? styles.catTabActive : ""}`}
                 aria-pressed={activeCategory === k}
               >
                 {catLabel(k)}
               </button>
             ))}
           </div>
-          <button
-            onClick={handlePrev}
-            aria-label="Previous"
-            className="absolute left-6 sm:left-8 md:left-10 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-black/70 md:flex"
-          >
+
+          {/* Arrows */}
+          <button onClick={handlePrev} aria-label="Previous" className={`${styles.arrowBtn} ${styles.arrowLeft}`}>
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <button
-            onClick={handleNext}
-            aria-label="Next"
-            className="absolute right-6 sm:right-8 md:right-10 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-black/70 md:flex"
-          >
+          <button onClick={handleNext} aria-label="Next" className={`${styles.arrowBtn} ${styles.arrowRight}`}>
             <ChevronRight className="w-5 h-5" />
           </button>
-          <div ref={maskRef} className="overflow-hidden px-6 md:px-12 pb-10">
+
+          {/* Mask + track */}
+          <div ref={maskRef} className={styles.mask}>
             <div
               ref={trackRef}
-              className="flex gap-3 sm:gap-4 md:gap-6 will-change-transform"
+              className={styles.track}
               style={{
                 transform: `translateX(${-(currentIndex * cardWidth) + centerOffset}px)`,
                 transition: isTransitioning ? "transform 500ms ease-out" : "none",
@@ -241,51 +215,47 @@ export default function ProductsCarousel({ products }: ProductsCarouselProps) {
               {displayProducts.map((product, index) => {
                 const isActive = catKey(product) === activeCategory
                 return (
-                <Link
-                  href={`/${getCatSlug(product)}/${getProdSlug(product)}`}
-                  key={`${product._id}-${index}`}
-                  ref={index === 0 ? cardRef : null}
-                  className="flex-shrink-0 w-[220px] sm:w-[260px] md:w-[320px] lg:w-[380px] xl:w-[420px] h-[360px] sm:h-[420px] md:h-[460px] lg:h-[500px] xl:h-[520px] relative rounded-2xl overflow-hidden group/card border border-transparent hover:border-[#FF3333] transition-all duration-500 bg-[#0d0d0d]"
-                >
-                  <div className="absolute inset-0 z-0">
-                    <Image
-                      src={urlFor(product.image as SanityImageSource).width(1200).height(1500).url()}
-                      alt={product.name || product.title || "Product image"}
-                      fill
-                      className="object-contain transition-transform duration-700 group-hover/card:scale-105"
-                    />
-                  </div>
-                  {!isActive && (
-                    <div className="absolute inset-0 z-20 bg-black/50 pointer-events-none transition-opacity duration-300" />
-                  )}
-                  <div className="absolute inset-0 pointer-events-none z-10">
-                    <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-80 group-hover/card:opacity-90 transition-opacity" />
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 z-30 p-8 flex justify-between items-end">
-                    <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gray-300 mb-1">
-                        {displayCatLabel(product)}
-                      </p>
-                      <h3 className="text-xl md:text-2xl font-bold text-white group-hover/card:text-[#FF3333] transition-colors uppercase tracking-wider">
-                        {product.name || product.title}
-                      </h3>
+                  <Link
+                    href={`/${getCatSlug(product)}/${getProdSlug(product)}`}
+                    key={`${product._id}-${index}`}
+                    ref={index === 0 ? cardRef : null}
+                    className={styles.card}
+                  >
+                    <div className={styles.cardImageWrap}>
+                      <Image
+                        src={urlFor(product.image as SanityImageSource).width(1200).height(1500).url()}
+                        alt={product.name || product.title || "Product image"}
+                        fill
+                        className={styles.cardImage}
+                        unoptimized
+                      />
                     </div>
-                    <div className="shrink-0 w-10 h-10 aspect-square border border-white/30 rounded-full flex items-center justify-center text-white group-hover/card:bg-[#FF3333] group-hover/card:border-[#FF3333] transition-all duration-300">
-                      <ChevronRight className="w-5 h-5" />
+                    {!isActive && <div className={styles.cardDimOverlay} />}
+                    <div className={styles.cardGradient}>
+                      <div className={styles.cardGradientInner} />
                     </div>
-                  </div>
-                </Link>
-              )})}
+                    <div className={styles.cardContent}>
+                      <div>
+                        <p className={styles.cardLabel}>{displayCatLabel(product)}</p>
+                        <h3 className={styles.cardTitle}>{product.name || product.title}</h3>
+                      </div>
+                      <div className={styles.cardArrow}>
+                        <ChevronRight className="w-5 h-5" />
+                      </div>
+                    </div>
+                  </Link>
+                )
+              })}
             </div>
           </div>
-          <div className="flex justify-center items-center gap-2 mt-2">
+
+          {/* Dots */}
+          <div className={styles.dots}>
             {items.map((_, index) => (
               <button
                 key={index}
                 onClick={() => handleDotClick(index)}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  index === activeDotIndex ? "w-[30px] bg-[#FF3333]" : "w-2 bg-gray-600 hover:bg-gray-400"
-                }`}
+                className={`${styles.dot} ${index === activeDotIndex ? styles.dotActive : ""}`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}

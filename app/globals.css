@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "../styles/globals/variables.css";
+@import "../styles/utilities/helpers.css";
 
 :root {
   --background: #161616; /* Blanca Padel Black */

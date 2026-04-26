@@ -4,6 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import type { SanityImageSource } from "@sanity/image-url"
 import { redirect } from "next/navigation"
+import styles from "@/styles/pages/shop.module.css"
 
 type Cat = { _id: string; name?: string; slug?: { current?: string } }
 type Product = {
@@ -62,19 +63,17 @@ export default async function ShopPage({ searchParams }: { searchParams?: Promis
   const title = "Shop"
 
   return (
-    <div className="min-h-screen pt-28 md:pt-32 px-6 md:px-12 bg-neutral-900 text-white">
-      <div className="max-w-[1920px] mx-auto">
-        <h1 className="text-4xl md:text-6xl font-bold mb-4 text-[#FF3333]">{title}</h1>
-        <p className="text-lg md:text-xl text-gray-300 mb-8">
+    <div className={styles.page}>
+      <div className={styles.container}>
+        <h1 className={styles.pageTitle}>{title}</h1>
+        <p className={styles.pageDesc}>
           Explore all of our latest gym equipment and product collections.
         </p>
 
-        <div className="mb-8 flex flex-wrap items-center gap-2">
+        <div className={styles.filterBar}>
           <Link
             href="/shop"
-            className={`px-4 py-2 text-xs font-bold uppercase tracking-[0.25em] rounded-full border ${
-              !selected ? "border-[#FF3333] text-[#FF3333]" : "border-white/20 text-gray-300 hover:text-white"
-            }`}
+            className={`${styles.filterChip} ${!selected ? styles.filterChipActive : ""}`}
           >
             All
           </Link>
@@ -82,7 +81,7 @@ export default async function ShopPage({ searchParams }: { searchParams?: Promis
             <Link
               key={c._id}
               href={`/${c.slug?.current}`}
-              className="px-4 py-2 text-xs font-bold uppercase tracking-[0.25em] rounded-full border border-white/20 text-gray-300 hover:text-white"
+              className={styles.filterChip}
             >
               {c.name}
             </Link>
@@ -90,44 +89,42 @@ export default async function ShopPage({ searchParams }: { searchParams?: Promis
         </div>
 
         {products.length === 0 ? (
-          <div className="py-16 text-center text-gray-400">
-            No products found.
-          </div>
+          <div className={styles.emptyState}>No products found.</div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className={styles.productGrid}>
             {products.map(p => {
               const catSlug = p.category?.slug?.current || p.categories?.[0]?.slug?.current || "shop"
               return (
-              <div key={p._id} className="group relative rounded-3xl bg-[#E0E0DA] text-black overflow-hidden">
-                <Link href={`/${catSlug}/${p.slug.current}`} className="block">
-                  <div className="relative w-full aspect-[4/3]">
-                    <Image
-                      src={urlFor(p.image).width(1200).height(900).url()}
-                      alt={p.name || p.title || "Product"}
-                      fill
-                      className="object-contain p-6"
-                    />
-                  </div>
-                </Link>
-                <div className="absolute inset-x-6 bottom-6 flex items-center justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gray-700">
-                      {p.category?.name || p.categories?.[0]?.name || "Product"}
-                    </p>
-                    <p className="text-sm font-bold uppercase tracking-[0.12em]">
-                      {p.name || p.title}
-                    </p>
-                  </div>
-                  <Link
-                    href={`/${catSlug}/${p.slug.current}`}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-black/30 bg-white/70 text-black hover:border-[#FF3333] hover:text-[#FF3333] transition-colors"
-                    aria-label="View product"
-                  >
-                    <span className="text-lg leading-none">›</span>
+                <div key={p._id} className={styles.productCard}>
+                  <Link href={`/${catSlug}/${p.slug.current}`} className={styles.productCardLink}>
+                    <div className={styles.productImageWrap}>
+                      <Image
+                        src={urlFor(p.image).width(1200).height(900).url()}
+                        alt={p.name || p.title || "Product"}
+                        fill
+                        className={styles.productImage}
+                        unoptimized
+                      />
+                    </div>
                   </Link>
+                  <div className={styles.productCardFooter}>
+                    <div>
+                      <p className={styles.productCardCategory}>
+                        {p.category?.name || p.categories?.[0]?.name || "Product"}
+                      </p>
+                      <p className={styles.productCardName}>{p.name || p.title}</p>
+                    </div>
+                    <Link
+                      href={`/${catSlug}/${p.slug.current}`}
+                      className={styles.productCardArrow}
+                      aria-label="View product"
+                    >
+                      <span>›</span>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            )})}
+              )
+            })}
           </div>
         )}
       </div>

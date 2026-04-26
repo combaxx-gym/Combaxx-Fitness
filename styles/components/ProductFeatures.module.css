@@ -1,0 +1,139 @@
+/* ============================================
+   PRODUCT FEATURES (DETAILED CARDS)
+   ============================================ */
+
+.section {
+  padding: 5rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #FF3333;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin: 0;
+}
+
+@media (min-width: 768px) { .title { font-size: 2.5rem; } }
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #FF3333, transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover {
+  border-color: rgba(255, 51, 51, 0.25);
+  background: rgba(255, 51, 51, 0.03);
+  transform: translateY(-4px);
+}
+
+.card:hover::after { opacity: 1; }
+
+.iconWrapper {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 51, 51, 0.1);
+  border-radius: 10px;
+  margin-bottom: 1.25rem;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  color: #FF3333;
+}
+
+.featureTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.featureDesc {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Hero features list ── */
+.heroFeatures {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.heroFeatureItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #e5e7eb;
+  line-height: 1.5;
+}
+
+.heroDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #FF3333;
+  flex-shrink: 0;
+  margin-top: 0.45rem;
+}

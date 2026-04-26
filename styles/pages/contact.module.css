@@ -1,0 +1,327 @@
+/* ============================================
+   CONTACT PAGE
+   ============================================ */
+
+.page {
+  min-height: 100vh;
+  background-color: #161616;
+  color: #fff;
+}
+
+.page ::selection {
+  background-color: #FF3333;
+  color: #000;
+}
+
+.container {
+  max-width: 1920px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 6rem;
+  padding-bottom: 4rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  margin-top: 0;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-top: 7rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    margin-top: 3rem;
+  }
+}
+
+/* ── Two-column layout ── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 5fr 7fr;
+    gap: 3rem;
+  }
+}
+
+/* ── Left column ── */
+.breadcrumb {
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: #9ca3af;
+}
+
+.breadcrumbLink {
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.breadcrumbLink:hover { color: #fff; }
+
+.breadcrumbSep { color: rgba(255,255,255,0.2); }
+.breadcrumbActive { color: #FF3333; }
+
+.pageTitle {
+  font-size: 2.25rem;
+  font-weight: 300;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) { .pageTitle { font-size: 3rem; } }
+@media (min-width: 768px) { .pageTitle { font-size: 3.75rem; } }
+
+.pageDesc {
+  color: #d1d5db;
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 36rem;
+}
+
+@media (min-width: 640px) { .pageDesc { font-size: 1.125rem; } }
+
+/* ── Contact cards ── */
+.cardList {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contactCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  background-color: rgba(0,0,0,0.3);
+  padding: 1.25rem 1.5rem;
+  text-decoration: none;
+  color: #fff;
+  transition: border-color 0.3s ease;
+}
+
+.contactCard:hover { border-color: #FF3333; }
+
+.contactCardLabel {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  color: #9ca3af;
+}
+
+.contactCardTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.contactCardIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.8);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.contactCard:hover .contactCardIcon {
+  border-color: #FF3333;
+  color: #FF3333;
+}
+
+.arrowIcon {
+  color: rgba(255,255,255,0.4);
+  transition: color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.contactCard:hover .arrowIcon { color: #FF3333; }
+
+/* ── Right column: form box ── */
+.formBox {
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  background-color: #0f0f0f;
+  padding: 1.5rem;
+}
+
+@media (min-width: 640px) { .formBox { padding: 2rem; } }
+@media (min-width: 768px) { .formBox { padding: 2.5rem; } }
+
+.formHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.formTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+@media (min-width: 640px) { .formTitle { font-size: 1.5rem; } }
+
+.formSubtitle {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.responseBadge {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) { .responseBadge { display: flex; } }
+
+.responseBadgeInner {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background-color: rgba(0,0,0,0.3);
+  padding: 0.5rem 1rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: #d1d5db;
+}
+
+/* ── Form fields ── */
+.form {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .formRow { grid-template-columns: repeat(2, 1fr); }
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255,255,255,0.2);
+  background-color: rgba(0,0,0,0.4);
+  padding: 0.75rem 1rem;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.input::placeholder, .textarea::placeholder { color: #6b7280; }
+.input:focus, .select:focus, .textarea:focus { border-color: #FF3333; }
+
+.selectWrap {
+  position: relative;
+}
+
+.select {
+  appearance: none;
+  padding-right: 3.5rem;
+}
+
+.selectChevron {
+  pointer-events: none;
+  position: absolute;
+  inset-block: 0;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  color: rgba(255,255,255,0.7);
+}
+
+.textarea { resize: vertical; }
+
+.formActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .formActions {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+  }
+}
+
+.submitBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background-color: rgba(0,0,0,0.2);
+  padding: 1rem 2rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #fff;
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submitBtn:hover {
+  background-color: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+.submitBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.submitArrow {
+  color: #FF3333;
+  transition: color 0.3s ease;
+}
+
+.submitBtn:hover .submitArrow { color: #000; }
+
+.disclaimer {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  line-height: 1.6;
+}
+
+.successMsg { font-size: 0.875rem; color: #4ade80; }
+.errorMsg   { font-size: 0.875rem; color: #f87171; }

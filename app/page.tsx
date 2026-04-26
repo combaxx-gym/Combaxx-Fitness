@@ -8,6 +8,7 @@ import StoriesShowcase from "@/components/StoriesShowcase"
 import PartnersStrip from "@/components/PartnersStrip"
 import BusinessFaq from "@/components/BusinessFaq"
 import ProductsCarousel, { ProductsCarouselProduct } from "@/components/ProductsCarousel"
+import styles from "@/styles/pages/home.module.css"
 
 async function getProducts(): Promise<ProductsCarouselProduct[]> {
   try {
@@ -53,29 +54,16 @@ export default async function Home() {
   const topSellingProducts = products.filter(isTopSelling)
 
   return (
-    <div className="min-h-screen bg-[#161616] text-white selection:bg-[#FF3333] selection:text-black">
-
-      {/* Hero Section */}
+    <div className={styles.page}>
       <HeroCarousel />
-
       <TechnologySlider products={topSellingProducts} />
-
-      {/* Category Section */}
       <CategoryShowcase />
-
-      {/* Shaping the Future Section */}
       <ShapingFuture />
-
       <PerformanceWorld />
-
       <StoriesShowcase />
-
       <PartnersStrip />
-
       <ProductsCarousel products={products} />
-
       <BusinessFaq />
-
     </div>
   )
 }

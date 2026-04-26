@@ -1,0 +1,131 @@
+/* ============================================
+   PRODUCT GALLERY COMPONENT
+   ============================================ */
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .galleryGrid {
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* ── Thumbnail sidebar (desktop only) ── */
+.thumbSidebar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .thumbSidebar {
+    display: block;
+    grid-column: span 2;
+    align-self: start;
+  }
+}
+
+.thumbSidebarInner {
+  border-radius: 1.5rem;
+  background-color: #111111;
+  padding: 0.5rem;
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  .thumbSidebarInner {
+    padding: 0.75rem;
+  }
+}
+
+.thumbList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+}
+
+/* ── Thumbnail button ── */
+.thumbBtn {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  background-color: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.thumbBtn:hover {
+  border-color: rgba(255,255,255,0.3);
+}
+
+.thumbBtnActive {
+  border-color: #FF3333;
+}
+
+.thumbImage {
+  object-fit: contain;
+  padding: 0.25rem;
+}
+
+/* ── Main image ── */
+.mainCol {
+  align-self: start;
+}
+
+@media (min-width: 768px) {
+  .mainCol {
+    grid-column: span 10;
+  }
+}
+
+.mainWrap {
+  border-radius: 1.5rem;
+  background-color: #111111;
+  padding: 0.5rem;
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  .mainWrap {
+    padding: 0.75rem;
+  }
+}
+
+.mainImageBox {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 1rem;
+  background-color: #fff;
+}
+
+.mainImage {
+  object-fit: contain;
+}
+
+/* ── Mobile thumbnail strip ── */
+.thumbMobileGrid {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .thumbMobileGrid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .thumbMobileGrid {
+    display: none;
+  }
+}

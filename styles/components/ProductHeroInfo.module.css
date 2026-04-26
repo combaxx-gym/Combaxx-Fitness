@@ -1,0 +1,195 @@
+/* ============================================
+   PRODUCT HERO INFO PANEL
+   ============================================ */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.categoryLabel {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #FF3333;
+  margin-bottom: 0.75rem;
+}
+
+.productName {
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #fff;
+  line-height: 1.1;
+  margin: 0 0 0.625rem;
+}
+
+@media (min-width: 640px) { .productName { font-size: 2.5rem; } }
+@media (min-width: 1280px) { .productName { font-size: 3rem; } }
+
+.skuRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.skuLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.skuValue {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.07);
+  padding: 0.15rem 0.5rem;
+  border-radius: 2px;
+}
+
+.description {
+  font-size: 1rem;
+  color: #d1d5db;
+  line-height: 1.75;
+  margin: 0 0 2rem;
+}
+
+/* ── Key Features ── */
+.featuresBlock {
+  margin-bottom: 2.5rem;
+}
+
+.featuresTitle {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin: 0 0 0.875rem;
+}
+
+.featuresList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.featureItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #e5e7eb;
+  line-height: 1.5;
+}
+
+.featureDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #FF3333;
+  flex-shrink: 0;
+  margin-top: 0.45rem;
+}
+
+/* ── Action Buttons ── */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.btnCart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 1rem 1.75rem;
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background 0.25s ease, color 0.25s ease;
+  width: 100%;
+}
+
+.btnCart:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.btnCartAdded {
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+.btnQuote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 1rem 1.75rem;
+  background: #FF3333;
+  border: 1.5px solid #FF3333;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s ease;
+  width: 100%;
+}
+
+.btnQuote:hover { background: #e62929; border-color: #e62929; }
+
+.btnPdf {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1.75rem;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  width: 100%;
+}
+
+.btnPdf:hover { color: #fff; }
+
+.btnIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ── Divider ── */
+.divider {
+  width: 48px;
+  height: 2px;
+  background: #FF3333;
+  margin: 2rem 0;
+}

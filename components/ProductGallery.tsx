@@ -4,6 +4,7 @@ import { useState, useMemo } from "react"
 import Image from "next/image"
 import { urlFor } from "@/sanity/lib/image"
 import type { SanityImageSource } from "@sanity/image-url"
+import styles from "@/styles/components/ProductGallery.module.css"
 
 interface ProductGalleryProps {
   name: string
@@ -31,29 +32,28 @@ export default function ProductGallery({ name, mainImage, gallery }: ProductGall
   const activeSrc = urlFor(images[active] || mainImage).width(1600).height(1200).url()
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 md:gap-4 items-start">
+    <div className={styles.galleryGrid}>
+      {/* Desktop thumbnail sidebar */}
       {images.length > 1 && (
-        <div className="hidden md:block md:col-span-2 self-start">
-          <div className="rounded-3xl bg-[#111111] p-2 md:p-3 h-full">
-            <div className="flex flex-col gap-2 h-full">
+        <div className={styles.thumbSidebar}>
+          <div className={styles.thumbSidebarInner}>
+            <div className={styles.thumbList}>
               {images.slice(0, 8).map((img, i) => {
                 const thumb = urlFor(img).width(300).height(300).url()
-                const isActive = i === active
                 return (
                   <button
                     key={thumb + i}
                     onClick={() => setActive(i)}
-                    className={`relative aspect-square overflow-hidden rounded-xl border ${
-                      isActive ? "border-[#FF3333]" : "border-white/10 hover:border-white/30"
-                    } bg-white`}
+                    className={`${styles.thumbBtn} ${i === active ? styles.thumbBtnActive : ""}`}
                     aria-label={`View image ${i + 1}`}
                   >
                     <Image
                       src={thumb}
                       alt={`${name}-${i + 1}`}
                       fill
-                      className="object-contain p-1"
+                      className={styles.thumbImage}
                       sizes="100px"
+                      unoptimized
                     />
                   </button>
                 )
@@ -63,40 +63,40 @@ export default function ProductGallery({ name, mainImage, gallery }: ProductGall
         </div>
       )}
 
-      <div className="md:col-span-10 self-start">
-        <div className="rounded-3xl bg-[#111111] p-2 md:p-3 h-full">
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-white">
+      {/* Main image */}
+      <div className={styles.mainCol}>
+        <div className={styles.mainWrap}>
+          <div className={styles.mainImageBox}>
             <Image
               key={activeSrc}
               src={activeSrc}
               alt={name}
               fill
-              className="object-contain"
+              className={styles.mainImage}
               sizes="(max-width: 1024px) 100vw, 66vw"
+              unoptimized
             />
           </div>
         </div>
       </div>
 
+      {/* Mobile thumbnail strip */}
       {images.length > 1 && (
-        <div className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-6 md:hidden">
+        <div className={styles.thumbMobileGrid}>
           {images.slice(0, 8).map((img, i) => {
             const thumb = urlFor(img).width(300).height(300).url()
-            const isActive = i === active
             return (
               <button
                 key={thumb + i}
                 onClick={() => setActive(i)}
-                className={`relative aspect-square overflow-hidden rounded-xl border ${
-                  isActive ? "border-[#FF3333]" : "border-white/10 hover:border-white/30"
-                } bg-white`}
+                className={`${styles.thumbBtn} ${i === active ? styles.thumbBtnActive : ""}`}
                 aria-label={`View image ${i + 1}`}
               >
                 <Image
                   src={thumb}
                   alt={`${name}-${i + 1}`}
                   fill
-                  className="object-contain p-1"
+                  className={styles.thumbImage}
                   sizes="80px"
                 />
               </button>

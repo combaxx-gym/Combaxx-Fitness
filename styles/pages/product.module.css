@@ -1,0 +1,126 @@
+/* ============================================
+   PRODUCT DETAIL PAGE  — Premium Dark Luxury
+   ============================================ */
+
+.page {
+  min-height: 100vh;
+  background-color: #111111;
+  color: #fff;
+  padding-top: 5rem;
+}
+
+@media (min-width: 768px) { .page { padding-top: 6rem; } }
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 6rem;
+}
+
+@media (min-width: 640px) { .container { padding-left: 1.5rem; padding-right: 1.5rem; } }
+@media (min-width: 768px) { .container { padding: 4rem 3rem 8rem; } }
+@media (min-width: 1280px) { .container { padding: 4rem 4rem 8rem; } }
+
+/* ── Breadcrumb ── */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: #6b7280;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.breadcrumbLink {
+  color: #6b7280;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumbLink:hover { color: #fff; }
+.breadcrumbSep { color: #374151; }
+.breadcrumbCurrent { color: rgba(255,255,255,0.6); }
+
+/* ── Hero Grid ── */
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  margin-bottom: 0;
+}
+
+@media (min-width: 1024px) {
+  .heroGrid {
+    grid-template-columns: 58fr 42fr;
+    gap: 4rem;
+    align-items: start;
+  }
+}
+
+@media (min-width: 1280px) {
+  .heroGrid {
+    grid-template-columns: 60fr 40fr;
+    gap: 5rem;
+  }
+}
+
+/* ── Section spacing helper ── */
+.sectionsWrapper {
+  margin-top: 5rem;
+}
+
+/* ── Legacy section titles (for extra/additional sections) ── */
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #fff;
+  margin: 0 0 1.5rem;
+  padding-bottom: 0.875rem;
+  border-bottom: 2px solid #FF3333;
+  display: inline-block;
+}
+
+@media (min-width: 768px) { .sectionTitle { font-size: 2rem; } }
+
+/* ── Additional content sections ── */
+.additionalSections {
+  padding: 5rem 0;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.additionalSection {}
+
+.sectionContent {
+  font-size: 1rem;
+  color: #9ca3af;
+  line-height: 1.8;
+  margin-top: 1.5rem;
+}
+
+/* ── Not found ── */
+.notFound {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+  color: #9ca3af;
+}
+
+.notFoundTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0;
+}

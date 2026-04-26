@@ -1,0 +1,14 @@
+/* ============================================
+   HOME PAGE
+   ============================================ */
+
+.page {
+  min-height: 100vh;
+  background-color: #161616;
+  color: #fff;
+}
+
+.page ::selection {
+  background-color: #FF3333;
+  color: #000;
+}

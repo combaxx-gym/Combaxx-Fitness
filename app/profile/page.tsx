@@ -1,9 +1,10 @@
-import { UserProfile } from "@clerk/nextjs";
+import { UserProfile } from "@clerk/nextjs"
+import styles from "@/styles/pages/profile.module.css"
 
 export default function ProfilePage() {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-[#161616] py-10">
+    <div className={styles.page}>
       <UserProfile />
     </div>
-  );
+  )
 }

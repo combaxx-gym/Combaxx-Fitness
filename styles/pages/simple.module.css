@@ -1,0 +1,91 @@
+/* ============================================
+   SIMPLE PAGE LAYOUT (About, Blog, Stories,
+   Careers, Wellness, Legal, Materials)
+   ============================================ */
+
+.page {
+  min-height: 100vh;
+  padding-top: 8rem;
+  padding-bottom: 4rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  background-color: #171717;
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+.title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #FF3333;
+}
+
+@media (min-width: 768px) {
+  .title { font-size: 3.75rem; }
+}
+
+.desc {
+  font-size: 1.25rem;
+  color: #d1d5db;
+}
+
+/* ── Blog grid ── */
+.blogGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px)  { .blogGrid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .blogGrid { grid-template-columns: repeat(3, 1fr); } }
+
+.blogCard {
+  background-color: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.blogCard:hover { background-color: rgba(255,255,255,0.1); }
+
+.blogCardThumb {
+  height: 12rem;
+  background-color: #374151;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.blogCardTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.blogCardDesc {
+  color: #9ca3af;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.blogCardBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #FF3333;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.875rem;
+  transition: color 0.3s ease;
+}
+
+.blogCardBtn:hover { color: #fff; }

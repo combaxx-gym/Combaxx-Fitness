@@ -1,0 +1,77 @@
+/* ============================================
+   GLOBAL CSS CUSTOM PROPERTIES
+   ============================================ */
+
+:root {
+  /* Colors */
+  --color-bg:        #161616;
+  --color-bg-alt:    #0f0f0f;
+  --color-black:     #000000;
+  --color-white:     #ffffff;
+  --color-accent:    #FF3333;
+  --color-gray-100:  #f3f4f6;
+  --color-gray-200:  #e5e7eb;
+  --color-gray-300:  #d1d5db;
+  --color-gray-400:  #9ca3af;
+  --color-gray-700:  #374151;
+  --color-gray-800:  #1f2937;
+
+  /* Typography */
+  --font-sans:       var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  --font-mono:       var(--font-geist-mono), monospace;
+
+  /* Font sizes — mobile-first scale */
+  --fs-xs:    0.75rem;   /* 12px */
+  --fs-sm:    0.875rem;  /* 14px */
+  --fs-base:  1rem;      /* 16px */
+  --fs-lg:    1.125rem;  /* 18px */
+  --fs-xl:    1.25rem;   /* 20px */
+  --fs-2xl:   1.5rem;    /* 24px */
+  --fs-3xl:   1.875rem;  /* 30px */
+  --fs-4xl:   2rem;      /* 32px */
+  --fs-5xl:   2.5rem;    /* 40px */
+  --fs-hero:  3.125rem;  /* 50px — desktop hero */
+
+  /* Heading sizes responsive */
+  --fs-heading-mobile:  1.75rem;  /* 28px */
+  --fs-heading-tablet:  2.5rem;   /* 40px */
+  --fs-heading-desktop: 3.125rem; /* 50px */
+
+  /* Spacing */
+  --spacing-xs:   0.5rem;
+  --spacing-sm:   1rem;
+  --spacing-md:   1.5rem;
+  --spacing-lg:   2rem;
+  --spacing-xl:   3rem;
+  --spacing-2xl:  4rem;
+  --spacing-3xl:  6rem;
+
+  /* Container */
+  --container-max: 1920px;
+  --container-px-mobile:  1rem;    /* 16px */
+  --container-px-tablet:  1.5rem;  /* 24px */
+  --container-px-desktop: 3rem;    /* 48px */
+
+  /* Border radius */
+  --radius-sm:   0.25rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   1rem;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-base:  all 0.3s ease;
+  --transition-fast:  all 0.15s ease;
+  --transition-slow:  all 0.5s ease;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.5);
+  --shadow-md:  0 4px 6px rgba(0,0,0,0.5);
+  --shadow-lg:  0 10px 15px rgba(0,0,0,0.5);
+}
+
+/* Breakpoint reference (use in @media queries):
+   Mobile:  320px  — default (no query)
+   Tablet:  768px  — @media (min-width: 768px)
+   Desktop: 1024px — @media (min-width: 1024px)
+   Wide:    1280px — @media (min-width: 1280px)
+*/

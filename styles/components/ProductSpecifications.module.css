@@ -1,0 +1,114 @@
+/* ============================================
+   PRODUCT SPECIFICATIONS
+   ============================================ */
+
+.section {
+  padding: 5rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.header {
+  margin-bottom: 3rem;
+}
+
+.badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #FF3333;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin: 0;
+}
+
+@media (min-width: 768px) { .title { font-size: 2.5rem; } }
+
+/* ── Tab Navigation ── */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #9ca3af;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  margin-bottom: -1px;
+}
+
+.tab:hover { color: #fff; }
+
+.tabActive {
+  color: #FF3333;
+  border-bottom-color: #FF3333;
+}
+
+/* ── Table ── */
+.table {
+  width: 100%;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 1rem;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.15s ease;
+}
+
+.row:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@media (min-width: 640px) {
+  .row {
+    grid-template-columns: 1fr 2fr;
+    padding: 1rem 0;
+  }
+}
+
+.specKey {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+}
+
+.specValue {
+  font-size: 0.9375rem;
+  color: #e5e7eb;
+  font-weight: 500;
+}
+
+/* ── Flat specs fallback ── */
+.flatTable {
+  width: 100%;
+}

@@ -1,0 +1,100 @@
+/* ============================================
+   SHAPING FUTURE COMPONENT
+   ============================================ */
+
+.section {
+  background-color: #000;
+  color: #fff;
+  padding: 4rem 0;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding: 5rem 0;
+  }
+}
+
+.inner {
+  max-width: 1920px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .inner {
+    padding-left: 3rem;
+    padding-right: 3rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4rem;
+  }
+}
+
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.heading {
+  font-size: 1.875rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+  .heading {
+    font-size: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .heading {
+    font-size: 3.125rem;
+  }
+}
+
+.desc {
+  color: #a3a3a3;
+  max-width: 28rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.btn {
+  display: inline-block;
+  border: 1px solid #fff;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: fit-content;
+  font-size: 0.875rem;
+}
+
+.btn:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.imageWrap {
+  width: 100%;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}

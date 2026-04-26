@@ -1,104 +1,315 @@
 "use client"
-import { useState, useEffect } from "react"
+
+import { useState, useEffect, useRef, useCallback } from "react"
 import Link from "next/link"
-import Image from "next/image" // Keeping this for the logo option
+import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
 import { Search, X } from "lucide-react"
+import { client } from "@/sanity/lib/client"
+import { urlFor } from "@/sanity/lib/image"
+import type { SanityImageSource } from "@sanity/image-url"
+import MegaMenu from "@/components/MegaMenu"
+import styles from "@/styles/components/Header.module.css"
+
+interface SearchResult {
+  _id: string
+  name: string
+  slug: { current: string }
+  image?: SanityImageSource
+  category?: { name?: string; slug?: { current?: string } }
+  categories?: Array<{ name?: string; slug?: { current?: string } }>
+}
+
+async function searchProducts(query: string): Promise<SearchResult[]> {
+  if (!query.trim() || query.trim().length < 2) return []
+  const pattern = `*${query.toLowerCase()}*`
+  return client.fetch(
+    `*[_type in ["product", "products"] && (
+      lower(name) match $pattern ||
+      lower(coalesce(title, "")) match $pattern
+    )] | order(_score desc) [0...7]{
+      _id,
+      "name": coalesce(name, title),
+      slug,
+      image,
+      category->{name, slug},
+      categories[]->{name, slug}
+    }`,
+    { pattern }
+  )
+}
+
+function HighlightMatch({ text, query }: { text: string; query: string }) {
+  if (!query.trim()) return <span>{text}</span>
+  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi")
+  const parts = text.split(regex)
+  return (
+    <span>
+      {parts.map((part, i) =>
+        regex.test(part)
+          ? <mark key={i} className={styles.highlight}>{part}</mark>
+          : <span key={i}>{part}</span>
+      )}
+    </span>
+  )
+}
 
 export default function Header() {
+  const router = useRouter()
   const [scrolled, setScrolled] = useState(false)
+  const [isMegaOpen, setIsMegaOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [results, setResults] = useState<SearchResult[]>([])
+  const [isSearching, setIsSearching] = useState(false)
+  const [showDropdown, setShowDropdown] = useState(false)
+
+  const searchWrapRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const megaLeaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
-    }
-    window.addEventListener("scroll", handleScroll)
+    const handleScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // Debounced search
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    if (searchQuery.trim().length < 2) {
+      setResults([])
+      setShowDropdown(false)
+      setIsSearching(false)
+      return
+    }
+    setIsSearching(true)
+    setShowDropdown(true)
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const data = await searchProducts(searchQuery)
+        setResults(data)
+      } catch {
+        setResults([])
+      } finally {
+        setIsSearching(false)
+      }
+    }, 300)
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current) }
+  }, [searchQuery])
+
+  // Click outside search → close dropdown
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchWrapRef.current && !searchWrapRef.current.contains(e.target as Node)) {
+        setShowDropdown(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
+  const openSearch = useCallback(() => {
+    setIsSearchOpen(true)
+    setIsMegaOpen(false)
+    setTimeout(() => inputRef.current?.focus(), 50)
+  }, [])
+
+  const closeSearch = useCallback(() => {
+    setIsSearchOpen(false)
+    setSearchQuery("")
+    setResults([])
+    setShowDropdown(false)
+  }, [])
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") closeSearch()
+    if (e.key === "Enter" && searchQuery.trim()) {
+      router.push(`/shop?q=${encodeURIComponent(searchQuery.trim())}`)
+      closeSearch()
+    }
+  }, [closeSearch, searchQuery, router])
+
+  const getProductUrl = (r: SearchResult) => {
+    const cat = r.category?.slug?.current || r.categories?.[0]?.slug?.current || "shop"
+    return `/${cat}/${r.slug.current}`
+  }
+
+  const getCategoryName = (r: SearchResult) =>
+    r.category?.name || r.categories?.[0]?.name || ""
+
+  // Mega menu hover logic with a small delay to prevent flicker
+  const handleProductsEnter = useCallback(() => {
+    if (megaLeaveTimer.current) clearTimeout(megaLeaveTimer.current)
+    setIsMegaOpen(true)
+    if (isSearchOpen) closeSearch()
+  }, [isSearchOpen, closeSearch])
+
+  const handleMegaLeave = useCallback(() => {
+    megaLeaveTimer.current = setTimeout(() => setIsMegaOpen(false), 150)
+  }, [])
+
+  const handleMegaEnter = useCallback(() => {
+    if (megaLeaveTimer.current) clearTimeout(megaLeaveTimer.current)
+  }, [])
+
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out ${
-        scrolled ? "py-6 shadow-xl backdrop-blur-md bg-black/10" : "py-10 bg-gradient-to-b from-black/90 to-transparent"
-      }`}
+    <header
+      className={`${styles.header} ${scrolled ? styles.headerScrolled : ""}`}
+      onMouseLeave={handleMegaLeave}
     >
-      <div className="max-w-[1920px] mx-auto px-6 md:px-12 flex items-center justify-between">
-        
-        {/* Logo Section */}
-        <div className="flex-shrink-0 z-50 ml-4 md:ml-6">
-            <Link href="/">
-               <Image 
-                 src="/images/COMBAXX FITNESS logo.png" 
-                 alt="COMBAXX FITNESS Logo" 
-                 width={150} 
-                 height={80} 
-                 className="site-logo"
-                 sizes="(min-width: 768px) 160px, 150px"
-                 priority
-               /> 
-            </Link>
+      <div className={styles.inner}>
+
+        {/* Logo */}
+        <div className={styles.logoWrap}>
+          <Link href="/">
+            <Image
+              src="/images/COMBAXX FITNESS logo.png"
+              alt="COMBAXX FITNESS Logo"
+              width={150}
+              height={80}
+              className="site-logo"
+              sizes="(min-width: 768px) 160px, 150px"
+              priority
+              unoptimized
+            />
+          </Link>
         </div>
 
-        {/* Center Navigation - The "Pill" Style from Screenshot */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-500">
-            <nav className={`hidden md:flex items-center gap-8 text-[12px] font-bold uppercase tracking-[0.15em] transition-all duration-500 ${
-                scrolled 
-                ? "bg-[#1A1A1A] text-white px-8 py-3 rounded-full border border-white/10 shadow-2xl" 
-                : "bg-white/10 backdrop-blur-sm text-white px-8 py-3 rounded-full border border-white/10"
-            }`}>
-            <Link href="/shop" className="hover:text-[#FF3333] transition-colors">Products</Link>
-            <Link href="/wellness" className="hover:text-[#FF3333] transition-colors">Wellness</Link>
-            <Link href="/materials-information" className="hover:text-[#FF3333] transition-colors">Materials Information</Link>
-            <Link href="/stories" className="hover:text-[#FF3333] transition-colors">Stories</Link>
-            <Link href="/contact" className="hover:text-[#FF3333] transition-colors">Contact</Link>
-            </nav>
-        </div>
-
-        {/* Right Section - User Profile & Search */}
-        <div className={`flex items-center gap-6 z-50 transition-all duration-500 ${
-             scrolled 
-             ? "bg-[#1A1A1A] px-6 py-2.5 rounded-full border border-white/10 shadow-2xl" 
-             : "bg-white/10 backdrop-blur-sm px-6 py-2.5 rounded-full border border-white/10"
-        }`}>
-            {/* Search Component */}
-            <div className="flex items-center border-r border-white/20 pr-6 mr-2">
-                {isSearchOpen ? (
-                    <div className="flex items-center gap-2 animate-in fade-in slide-in-from-right-4 duration-300">
-                        <input 
-                            type="text" 
-                            placeholder="Search..." 
-                            className="bg-transparent border-b border-white/30 text-white text-xs focus:outline-none w-32 placeholder:text-white/50"
-                            autoFocus
-                        />
-                        <button onClick={() => setIsSearchOpen(false)} className="text-white hover:text-[#FF3333] transition-colors">
-                            <X size={16} />
-                        </button>
-                    </div>
-                ) : (
-                    <button onClick={() => setIsSearchOpen(true)} className="text-white hover:text-[#FF3333] transition-colors">
-                        <Search size={18} />
-                    </button>
-                )}
+        {/* Center Navigation */}
+        <div className={styles.navWrap}>
+          <nav className={`${styles.nav} ${scrolled ? styles.navScrolled : ""}`}>
+            {/* Products with mega menu trigger */}
+            <div className={styles.megaTrigger} onMouseEnter={handleProductsEnter}>
+              <Link
+                href="/shop"
+                className={`${styles.navLink} ${isMegaOpen ? styles.navLinkActive : ""}`}
+                onClick={() => setIsMegaOpen(false)}
+              >
+                Products
+                <span className={`${styles.chevron} ${isMegaOpen ? styles.chevronOpen : ""}`}>▾</span>
+              </Link>
             </div>
 
-            <SignedOut>
-              <SignInButton mode="modal">
-                <button className="text-xs font-bold uppercase tracking-widest text-white hover:text-[#FF3333] transition-colors">
-                  Login
-                </button>
-              </SignInButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton 
-                appearance={{
-                  elements: {
-                    avatarBox: "w-8 h-8 ring-2 ring-white/20 hover:ring-[#FF3333] transition-all"
-                  }
-                }}
-              />
-            </SignedIn>
+            <Link href="/wellness" className={styles.navLink}>Wellness</Link>
+            <Link href="/materials-information" className={styles.navLink}>Materials Information</Link>
+            <Link href="/stories" className={styles.navLink}>Stories</Link>
+            <Link href="/contact" className={styles.navLink}>Contact</Link>
+          </nav>
         </div>
+
+        {/* Right Pill */}
+        <div className={`${styles.rightPill} ${scrolled ? styles.rightPillScrolled : ""}`}>
+          {/* Search */}
+          <div className={styles.searchWrap} ref={searchWrapRef}>
+            {isSearchOpen ? (
+              <div className={styles.searchInputWrap}>
+                <Search size={14} className={styles.searchIcon} />
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Search products..."
+                  className={styles.searchInput}
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  aria-label="Search products"
+                  aria-expanded={showDropdown}
+                  role="combobox"
+                  aria-autocomplete="list"
+                />
+                <button onClick={closeSearch} className={styles.iconBtn} aria-label="Close search">
+                  <X size={15} />
+                </button>
+
+                {/* Results Dropdown */}
+                {showDropdown && (
+                  <div className={styles.dropdown} role="listbox" aria-label="Search results">
+                    {isSearching ? (
+                      <div className={styles.dropdownLoading}>
+                        <span className={styles.spinner} />
+                        <span>Searching…</span>
+                      </div>
+                    ) : results.length > 0 ? (
+                      <>
+                        {results.map(r => (
+                          <Link
+                            key={r._id}
+                            href={getProductUrl(r)}
+                            className={styles.dropdownItem}
+                            onClick={closeSearch}
+                            role="option"
+                          >
+                            <div className={styles.dropdownImgWrap}>
+                              {r.image ? (
+                                <Image
+                                  src={urlFor(r.image).width(64).height(64).url()}
+                                  alt={r.name}
+                                  fill
+                                  className={styles.dropdownImg}
+                                  sizes="40px"
+                                  unoptimized
+                                />
+                              ) : (
+                                <div className={styles.dropdownImgFallback}>
+                                  <Search size={14} />
+                                </div>
+                              )}
+                            </div>
+                            <div className={styles.dropdownInfo}>
+                              <span className={styles.dropdownName}>
+                                <HighlightMatch text={r.name} query={searchQuery} />
+                              </span>
+                              {getCategoryName(r) && (
+                                <span className={styles.dropdownCat}>{getCategoryName(r)}</span>
+                              )}
+                            </div>
+                            <span className={styles.dropdownArrow}>→</span>
+                          </Link>
+                        ))}
+                        <Link
+                          href={`/shop?q=${encodeURIComponent(searchQuery.trim())}`}
+                          className={styles.dropdownFooter}
+                          onClick={closeSearch}
+                        >
+                          View all results for &ldquo;{searchQuery}&rdquo;
+                        </Link>
+                      </>
+                    ) : (
+                      <div className={styles.dropdownEmpty}>
+                        No products found for &ldquo;{searchQuery}&rdquo;
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button onClick={openSearch} className={styles.iconBtn} aria-label="Open search">
+                <Search size={18} />
+              </button>
+            )}
+          </div>
+
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className={styles.loginBtn}>Login</button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton
+              appearance={{
+                elements: { avatarBox: "w-8 h-8 ring-2 ring-white/20 hover:ring-[#FF3333] transition-all" },
+              }}
+            />
+          </SignedIn>
+        </div>
+      </div>
+
+      {/* Mega Menu — rendered inside header so position:absolute works */}
+      <div onMouseEnter={handleMegaEnter}>
+        <MegaMenu isOpen={isMegaOpen} onClose={() => setIsMegaOpen(false)} />
       </div>
     </header>
   )
