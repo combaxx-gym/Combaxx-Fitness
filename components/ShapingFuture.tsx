@@ -8,7 +8,7 @@ const ShapingFuture = () => {
       <div className={styles.inner}>
         <div className={styles.textBlock}>
           <h2 className={styles.heading}>
-            Shaping the future <br /> of performance
+            Shaping the future of performance
           </h2>
           <p className={styles.desc}>
             We are the first to create connected ecosystems in fitness, creating
@@ -17,12 +17,14 @@ const ShapingFuture = () => {
           <button className={styles.btn}>Discover our story</button>
         </div>
         <div className={styles.imageWrap}>
-          <Image
-            src="/images/hero-section-slide-2.webp"
-            alt="Man on a treadmill"
-            width={800}
-            height={600}
+          <video
+            src="/videos/2bd2404b.mp4"
             className={styles.image}
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster="/images/hero-section-slide-2.webp"
           />
         </div>
       </div>

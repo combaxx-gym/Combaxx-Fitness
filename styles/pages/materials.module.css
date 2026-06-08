@@ -11,9 +11,9 @@
 .container {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 3rem;
 }
-@media (min-width: 768px) { .container { padding: 0 3rem; } }
+@media (max-width: 767px) { .container { padding: 0 1.5rem; } }
 
 .sectionBadge {
   display: inline-block;
@@ -30,7 +30,7 @@
 }
 
 .sectionTitle {
-  font-size: 2rem;
+  font-size: 2.75rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.025em;
@@ -38,7 +38,7 @@
   margin: 0;
   line-height: 1.05;
 }
-@media (min-width: 768px) { .sectionTitle { font-size: 2.75rem; } }
+@media (max-width: 767px) { .sectionTitle { font-size: 2rem; } }
 
 /* ── HERO ── */
 .hero {
@@ -105,10 +105,10 @@
   z-index: 2;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 1.5rem 5rem;
+  padding: 0 3rem 6rem;
   width: 100%;
 }
-@media (min-width: 768px) { .heroInner { padding: 0 3rem 6rem; } }
+@media (max-width: 767px) { .heroInner { padding: 0 1.5rem 5rem; } }
 
 .breadcrumb {
   display: flex;
@@ -150,13 +150,13 @@
 }
 
 .heroDesc {
-  font-size: 1rem;
+  font-size: 1.0625rem;
   color: rgba(255,255,255,0.5);
   line-height: 1.7;
   max-width: 540px;
   margin: 0 0 2rem;
 }
-@media (min-width: 768px) { .heroDesc { font-size: 1.0625rem; } }
+@media (max-width: 767px) { .heroDesc { font-size: 1rem; } }
 
 .heroMicro {
   display: flex;
@@ -216,22 +216,22 @@
 
 .introGrid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 5rem;
+  align-items: start;
   margin-bottom: 4rem;
 }
-@media (min-width: 768px) {
+@media (max-width: 767px) {
   .introGrid {
-    grid-template-columns: 1fr 1.5fr;
-    gap: 5rem;
-    align-items: start;
+    grid-template-columns: 1fr;
+    gap: 3rem;
   }
 }
 
 .introLeft {}
 
 .introTitle {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.03em;
@@ -239,7 +239,7 @@
   margin: 0.75rem 0 0;
   line-height: 1.0;
 }
-@media (min-width: 768px) { .introTitle { font-size: 3rem; } }
+@media (max-width: 767px) { .introTitle { font-size: 2.5rem; } }
 
 .introRight {}
 
@@ -260,12 +260,12 @@
 
 .introBanner {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   border: 1px solid rgba(255,255,255,0.07);
   border-radius: 12px;
   overflow: hidden;
 }
-@media (min-width: 768px) { .introBanner { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 767px) { .introBanner { grid-template-columns: repeat(2, 1fr); } }
 
 .introBannerItem {
   padding: 2rem 1.5rem;
@@ -280,9 +280,9 @@
 .introBannerDivider {
   width: 1px;
   background: rgba(255,255,255,0.07);
-  display: none;
+  display: block;
 }
-@media (min-width: 768px) { .introBannerDivider { display: block; } }
+@media (max-width: 767px) { .introBannerDivider { display: none; } }
 
 .introBannerNum {
   font-size: 2rem;
@@ -363,13 +363,13 @@
 }
 
 .accordionName {
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #fff;
 }
-@media (min-width: 768px) { .accordionName { font-size: 1.125rem; } }
+@media (max-width: 767px) { .accordionName { font-size: 1rem; } }
 
 .accordionCategory {
   font-size: 0.65rem;
@@ -391,14 +391,14 @@
 
 .accordionPanelInner {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
+  grid-template-columns: 260px 1fr;
+  gap: 3rem;
   padding: 0 0 2.5rem;
 }
-@media (min-width: 768px) {
+@media (max-width: 767px) {
   .accordionPanelInner {
-    grid-template-columns: 260px 1fr;
-    gap: 3rem;
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
 }
 
@@ -570,11 +570,11 @@
 
 .certsGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.25rem;
 }
-@media (min-width: 640px) { .certsGrid { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 1024px) { .certsGrid { grid-template-columns: repeat(6, 1fr); gap: 1.25rem; } }
+@media (max-width: 1023px) { .certsGrid { grid-template-columns: repeat(3, 1fr); gap: 1rem; } }
+@media (max-width: 639px) { .certsGrid { grid-template-columns: repeat(2, 1fr); } }
 
 .certCard {
   padding: 2rem 1.25rem;
@@ -623,19 +623,19 @@
 
 .finishesInner {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 4rem;
+  grid-template-columns: 380px 1fr;
+  gap: 6rem;
+  align-items: start;
 }
-@media (min-width: 1024px) {
+@media (max-width: 1023px) {
   .finishesInner {
-    grid-template-columns: 380px 1fr;
-    gap: 6rem;
-    align-items: start;
+    grid-template-columns: 1fr;
+    gap: 4rem;
   }
 }
 
 .finishesTitle {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.03em;
@@ -643,7 +643,7 @@
   margin: 0.75rem 0 1.25rem;
   line-height: 1.0;
 }
-@media (min-width: 768px) { .finishesTitle { font-size: 3rem; } }
+@media (max-width: 767px) { .finishesTitle { font-size: 2.5rem; } }
 
 .finishesDesc {
   font-size: 0.9375rem;
@@ -738,7 +738,7 @@
 }
 
 .ctaTitle {
-  font-size: 1.75rem;
+  font-size: 2.25rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.02em;
@@ -747,7 +747,7 @@
   position: relative;
   z-index: 1;
 }
-@media (min-width: 768px) { .ctaTitle { font-size: 2.25rem; } }
+@media (max-width: 767px) { .ctaTitle { font-size: 1.75rem; } }
 
 .ctaDesc {
   font-size: 0.9375rem;

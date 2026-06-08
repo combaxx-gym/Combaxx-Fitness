@@ -14,6 +14,10 @@ export const dynamic = 'force-static'
 
 export {metadata, viewport} from 'next-sanity/studio'
 
-export default function StudioPage() {
-  return <NextStudio config={config} />
+  export default function StudioPage() {
+  return (
+    <div className="pt-[140px] md:pt-[160px] bg-[#161616] min-h-screen overflow-auto">
+      <NextStudio config={config} />
+    </div>
+  )
 }

@@ -12,9 +12,9 @@
 .container {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 3rem;
 }
-@media (min-width: 768px) { .container { padding: 0 3rem; } }
+@media (max-width: 767px) { .container { padding: 0 1.5rem; } }
 
 .sectionBadge {
   display: inline-block;
@@ -31,7 +31,7 @@
 }
 
 .sectionTitle {
-  font-size: 2rem;
+  font-size: 2.75rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.025em;
@@ -39,7 +39,7 @@
   margin: 0;
   line-height: 1.05;
 }
-@media (min-width: 768px) { .sectionTitle { font-size: 2.75rem; } }
+@media (max-width: 767px) { .sectionTitle { font-size: 2rem; } }
 
 /* ── HERO ── */
 .hero {
@@ -80,10 +80,10 @@
   z-index: 2;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 4rem 1.5rem 3rem;
+  padding: 4rem 3rem 3rem;
   width: 100%;
 }
-@media (min-width: 768px) { .heroInner { padding: 4rem 3rem 3rem; } }
+@media (max-width: 767px) { .heroInner { padding: 4rem 1.5rem 3rem; } }
 
 .heroMeta {
   display: flex;
@@ -128,13 +128,13 @@
 }
 
 .heroDesc {
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
   color: rgba(255,255,255,0.55);
   line-height: 1.7;
   max-width: 560px;
   margin: 0 0 2.5rem;
 }
-@media (min-width: 1024px) { .heroDesc { font-size: 1.125rem; } }
+@media (max-width: 1023px) { .heroDesc { font-size: 1.0625rem; } }
 
 .heroActions {
   display: flex;
@@ -175,11 +175,11 @@
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid rgba(255,255,255,0.07);
   margin-top: auto;
 }
-@media (min-width: 640px) { .statsBar { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 639px) { .statsBar { grid-template-columns: repeat(2, 1fr); } }
 
 .statItem {
   padding: 1.75rem 1.5rem;
@@ -191,13 +191,13 @@
 .statItem:last-child { border-right: none; }
 
 .statValue {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 900;
   letter-spacing: -0.04em;
   color: #fff;
   line-height: 1;
 }
-@media (min-width: 768px) { .statValue { font-size: 2.5rem; } }
+@media (max-width: 767px) { .statValue { font-size: 2rem; } }
 
 .statLabel {
   font-size: 0.65rem;
@@ -209,28 +209,28 @@
 
 /* ── PHILOSOPHY ── */
 .philosophySection {
-  padding: 6rem 0;
+  padding: 8rem 0;
   border-top: 1px solid rgba(255,255,255,0.06);
 }
-@media (min-width: 768px) { .philosophySection { padding: 8rem 0; } }
+@media (max-width: 767px) { .philosophySection { padding: 6rem 0; } }
 
 .philosophyInner {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 5rem;
+  align-items: start;
 }
-@media (min-width: 768px) {
+@media (max-width: 767px) {
   .philosophyInner {
-    grid-template-columns: 1fr 1.4fr;
-    gap: 5rem;
-    align-items: start;
+    grid-template-columns: 1fr;
+    gap: 3rem;
   }
 }
 
 .philosophyLeft {}
 
 .philosophyTitle {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.03em;
@@ -238,7 +238,7 @@
   margin: 0 0 1.5rem;
   line-height: 1.0;
 }
-@media (min-width: 768px) { .philosophyTitle { font-size: 3rem; } }
+@media (max-width: 767px) { .philosophyTitle { font-size: 2.5rem; } }
 
 .philosophyAccent {
   width: 48px;
@@ -318,26 +318,28 @@
 }
 
 .zonesTrack {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.25rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  padding: 0 1.5rem 1rem;
+  padding: 0 3rem;
 }
-.zonesTrack::-webkit-scrollbar { display: none; }
-@media (min-width: 768px) { .zonesTrack { padding: 0 3rem 1rem; } }
-@media (min-width: 1024px) {
+@media (max-width: 1023px) {
   .zonesTrack {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    overflow-x: visible;
-    padding: 0 3rem;
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding: 0 3rem 1rem;
+  }
+}
+@media (max-width: 767px) {
+  .zonesTrack {
+    padding: 0 1.5rem 1rem;
   }
 }
 
 .zoneCard {
-  flex: 0 0 280px;
   scroll-snap-align: start;
   background: rgba(255,255,255,0.025);
   border: 1px solid rgba(255,255,255,0.07);
@@ -352,7 +354,11 @@
   border-color: rgba(255,51,51,0.3);
   background: rgba(255,51,51,0.03);
 }
-@media (min-width: 1024px) { .zoneCard { flex: unset; } }
+@media (max-width: 1023px) {
+  .zoneCard {
+    flex: 0 0 280px;
+  }
+}
 
 .zoneCardTop {
   display: flex;
@@ -417,27 +423,27 @@
 
 /* ── SCIENCE ── */
 .scienceSection {
-  padding: 6rem 0;
+  padding: 8rem 0;
 }
-@media (min-width: 768px) { .scienceSection { padding: 8rem 0; } }
+@media (max-width: 767px) { .scienceSection { padding: 6rem 0; } }
 
 .scienceInner {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 4rem;
+  grid-template-columns: 380px 1fr;
+  gap: 6rem;
+  align-items: start;
 }
-@media (min-width: 1024px) {
+@media (max-width: 1023px) {
   .scienceInner {
-    grid-template-columns: 380px 1fr;
-    gap: 6rem;
-    align-items: start;
+    grid-template-columns: 1fr;
+    gap: 4rem;
   }
 }
 
 .scienceLeft {}
 
 .scienceTitle {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.03em;
@@ -445,7 +451,7 @@
   margin: 0.75rem 0 1.25rem;
   line-height: 1.0;
 }
-@media (min-width: 768px) { .scienceTitle { font-size: 3rem; } }
+@media (max-width: 767px) { .scienceTitle { font-size: 2.5rem; } }
 
 .scienceDesc {
   font-size: 0.9375rem;
@@ -472,10 +478,10 @@
 
 .scienceGrid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
 }
-@media (min-width: 640px) { .scienceGrid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 639px) { .scienceGrid { grid-template-columns: 1fr; } }
 
 .scienceCard {
   padding: 1.75rem;
@@ -518,17 +524,17 @@
 
 .mosaic {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1.6fr;
+  height: 70vh;
+  min-height: 500px;
   gap: 3px;
   margin-top: 2rem;
-  height: 60vh;
-  min-height: 400px;
 }
-@media (min-width: 768px) {
+@media (max-width: 767px) {
   .mosaic {
-    grid-template-columns: 1fr 1.6fr;
-    height: 70vh;
-    min-height: 500px;
+    grid-template-columns: 1fr;
+    height: 60vh;
+    min-height: 400px;
   }
 }
 
@@ -587,9 +593,9 @@
 .quotesWrap {
   max-width: 860px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 3rem;
 }
-@media (min-width: 768px) { .quotesWrap { padding: 0 3rem; } }
+@media (max-width: 767px) { .quotesWrap { padding: 0 1.5rem; } }
 
 .quotesInner {
   display: flex;
@@ -626,13 +632,13 @@
 }
 
 .quoteText {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 500;
   color: rgba(255,255,255,0.85);
   line-height: 1.7;
   margin: 0 0 2rem;
 }
-@media (min-width: 768px) { .quoteText { font-size: 1.25rem; } }
+@media (max-width: 767px) { .quoteText { font-size: 1.125rem; } }
 
 .quoteAuthorWrap {
   display: flex;
@@ -703,11 +709,11 @@
   background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
   border: 1px solid rgba(255,51,51,0.15);
   border-radius: 20px;
-  padding: 4rem 2rem;
+  padding: 5rem 4rem;
   text-align: center;
   overflow: hidden;
 }
-@media (min-width: 768px) { .ctaCard { padding: 5rem 4rem; } }
+@media (max-width: 767px) { .ctaCard { padding: 4rem 2rem; } }
 
 .ctaGlow {
   position: absolute;
@@ -721,7 +727,7 @@
 }
 
 .ctaTitle {
-  font-size: 2rem;
+  font-size: 2.75rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.025em;
@@ -729,7 +735,7 @@
   margin: 0 0 1rem;
   line-height: 1.1;
 }
-@media (min-width: 768px) { .ctaTitle { font-size: 2.75rem; } }
+@media (max-width: 767px) { .ctaTitle { font-size: 2rem; } }
 
 .ctaDesc {
   font-size: 1rem;

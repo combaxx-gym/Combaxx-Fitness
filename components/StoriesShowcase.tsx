@@ -20,7 +20,7 @@ export default function StoriesShowcase() {
         </div>
 
         <div className={styles.grid}>
-          {/* Featured card */}
+          {/* Box 1: Featured card (Large - spans 2 rows) */}
           <div className={styles.cardFeatured}>
             <Image
               src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1600&auto=format&fit=crop"
@@ -38,17 +38,50 @@ export default function StoriesShowcase() {
             </div>
           </div>
 
-          {/* Card 2 */}
-          <div className={styles.card}>
+          {/* Box 2: Middle Top */}
+          <div className={styles.cardSmall}>
             <Image
-              src="/images/hero-section-slide-1.webp"
-              alt="Coach adjusting athlete posture"
+              src="/images/Human stories 1.webp"
+              alt="Human Story 1"
               fill
               className={styles.cardImage}
-              unoptimized
             />
             <div className={styles.cardGradient} />
-            <div className={styles.cardText}>
+            <div className={styles.cardContent}>
+              <p className={styles.cardSubLabel}>Technique</p>
+              <p className={styles.cardTitle}>
+                Precision in every move defines your progress.
+              </p>
+            </div>
+          </div>
+
+          {/* Box 4: Right Top */}
+          <div className={styles.cardSmall}>
+            <Image
+              src="/images/Human stories 2.webp"
+              alt="Human Story 2"
+              fill
+              className={styles.cardImage}
+            />
+            <div className={styles.cardGradient} />
+            <div className={styles.cardContent}>
+              <p className={styles.cardSubLabel}>Recovery</p>
+              <p className={styles.cardTitle}>
+                Rest as hard as you train to reach your peak.
+              </p>
+            </div>
+          </div>
+
+          {/* Box 3: Middle Bottom */}
+          <div className={styles.cardSmall}>
+            <Image
+              src="/images/Human stories 3.webp"
+              alt="Human Story 3"
+              fill
+              className={styles.cardImage}
+            />
+            <div className={styles.cardGradient} />
+            <div className={styles.cardContent}>
               <p className={styles.cardSubLabel}>Coaching</p>
               <p className={styles.cardTitle}>
                 Building better movement patterns with small adjustments.
@@ -56,17 +89,16 @@ export default function StoriesShowcase() {
             </div>
           </div>
 
-          {/* Card 3 */}
-          <div className={styles.card}>
+          {/* Box 5: Right Bottom */}
+          <div className={styles.cardSmall}>
             <Image
-              src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1200&auto=format&fit=crop"
-              alt="Group training session"
+              src="/images/Human stories 4.webp"
+              alt="Human Story 4"
               fill
               className={styles.cardImage}
-              unoptimized
             />
             <div className={styles.cardGradient} />
-            <div className={styles.cardText}>
+            <div className={styles.cardContent}>
               <p className={styles.cardSubLabel}>Community</p>
               <p className={styles.cardTitle}>
                 Why training together pushes effort further.

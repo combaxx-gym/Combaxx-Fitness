@@ -162,7 +162,7 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
 
   return (
     <section className={styles.section}>
-      <div className={styles.container}>
+      <div className={styles.wideContainer}>
         <div className={styles.header}>
           <div className={styles.textBlock}>
             <p className={styles.eyebrow}>Elegantly designed. Fueled by technology.</p>
@@ -180,7 +180,9 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
             </Link>
           </div>
         </div>
+      </div>
 
+      <div className={styles.container}>
         <div className={styles.carouselOuter}>
           <button onClick={handlePrev} aria-label="Previous" className={`${styles.arrowBtn} ${styles.arrowLeft}`}>
             <ChevronLeft className="w-5 h-5" />

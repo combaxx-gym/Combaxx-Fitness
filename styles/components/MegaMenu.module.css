@@ -21,7 +21,7 @@
 /* Panel — sits right below the header */
 .panel {
   position: fixed;
-  top: 5rem;           /* mobile header height */
+  top: 6.5rem;           /* desktop header height */
   left: 0;
   right: 0;
   z-index: 150;
@@ -32,8 +32,8 @@
   animation: slideDown 0.24s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-@media (min-width: 1024px) {
-  .panel { top: 6.5rem; }
+@media (max-width: 1023px) {
+  .panel { top: 5rem; }
 }
 
 @keyframes slideDown {
@@ -45,10 +45,10 @@
 .inner {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 2rem 1.5rem 1.75rem;
+  padding: 2.5rem 3rem 2rem;
 }
 
-@media (min-width: 768px) { .inner { padding: 2.5rem 3rem 2rem; } }
+@media (max-width: 767px) { .inner { padding: 2rem 1.5rem 1.75rem; } }
 
 /* ── Top bar ── */
 .topBar {
@@ -116,19 +116,21 @@
 /* ── Categories grid ── */
 .categoriesGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1.25rem;
   margin-bottom: 2rem;
 }
 
-@media (min-width: 640px) {
-  .categoriesGrid { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 1023px) {
+  .categoriesGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
 }
 
-@media (min-width: 1024px) {
+@media (max-width: 639px) {
   .categoriesGrid {
-    grid-template-columns: repeat(7, 1fr);
-    gap: 1.25rem;
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 

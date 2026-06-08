@@ -5,7 +5,6 @@ import ShapingFuture from "@/components/ShapingFuture"
 import TechnologySlider from "@/components/TechnologySlider"
 import PerformanceWorld from "@/components/PerformanceWorld"
 import StoriesShowcase from "@/components/StoriesShowcase"
-import PartnersStrip from "@/components/PartnersStrip"
 import BusinessFaq from "@/components/BusinessFaq"
 import ProductsCarousel, { ProductsCarouselProduct } from "@/components/ProductsCarousel"
 import styles from "@/styles/pages/home.module.css"
@@ -61,7 +60,6 @@ export default async function Home() {
       <ShapingFuture />
       <PerformanceWorld />
       <StoriesShowcase />
-      <PartnersStrip />
       <ProductsCarousel products={products} />
       <BusinessFaq />
     </div>

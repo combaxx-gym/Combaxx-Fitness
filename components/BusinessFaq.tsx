@@ -32,38 +32,6 @@ export default function BusinessFaq() {
 
   return (
     <>
-      {/* Section 1: Partners Marquee */}
-      <section className={styles.partnersSection}>
-        <div className={styles.container}>
-          <div className={styles.partnersHeader}>
-            <h2 className={styles.partnersTitle}>
-              Achieving excellence alongside with
-            </h2>
-            <span className={styles.partnersLabel}>Our partnerships</span>
-          </div>
-          <div className={styles.logoTrack}>
-            <div className={styles.logoFadeLeft} />
-            <div className={styles.logoFadeRight} />
-            <div className={styles.logoScroller}>
-              <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/39/Scuderia_Ferrari_Logo.svg/320px-Scuderia_Ferrari_Logo.svg.png" alt="Ferrari" className={`${styles.logoImg} ${styles.logoImgLg}`} />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/McLaren_Logo.svg/320px-McLaren_Logo.svg.png" alt="McLaren" className={`${styles.logoImg} ${styles.logoImgSm}`} />
-              <img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/0b/FC_Internazionale_Milano_2014.svg/320px-FC_Internazionale_Milano_2014.svg.png" alt="Inter" className={`${styles.logoImg} ${styles.logoImgMd}`} />
-              <img src="https://upload.wikimedia.org/wikipedia/en/thumb/2/2c/Juventus_2020.svg/320px-Juventus_2020.svg.png" alt="Juventus" className={`${styles.logoImg} ${styles.logoImgSm}`} />
-              <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d0/Logo_of_AC_Milan.svg/320px-Logo_of_AC_Milan.svg.png" alt="AC Milan" className={`${styles.logoImg} ${styles.logoImgMd}`} />
-              <img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Brazil_national_football_team_logo.svg/320px-Brazil_national_football_team_logo.svg.png" alt="Brazil" className={`${styles.logoImg} ${styles.logoImgMd}`} />
-              <img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/03/Italy_national_football_team_logo_2023.svg/320px-Italy_national_football_team_logo_2023.svg.png" alt="Italy" className={`${styles.logoImg} ${styles.logoImgMd}`} />
-              <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/39/Scuderia_Ferrari_Logo.svg/320px-Scuderia_Ferrari_Logo.svg.png" alt="Ferrari" className={`${styles.logoImg} ${styles.logoImgLg}`} />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/McLaren_Logo.svg/320px-McLaren_Logo.svg.png" alt="McLaren" className={`${styles.logoImg} ${styles.logoImgSm}`} />
-              <img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/0b/FC_Internazionale_Milano_2014.svg/320px-FC_Internazionale_Milano_2014.svg.png" alt="Inter" className={`${styles.logoImg} ${styles.logoImgMd}`} />
-              <img src="https://upload.wikimedia.org/wikipedia/en/thumb/2/2c/Juventus_2020.svg/320px-Juventus_2020.svg.png" alt="Juventus" className={`${styles.logoImg} ${styles.logoImgSm}`} />
-              <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d0/Logo_of_AC_Milan.svg/320px-Logo_of_AC_Milan.svg.png" alt="AC Milan" className={`${styles.logoImg} ${styles.logoImgMd}`} />
-              <img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Brazil_national_football_team_logo.svg/320px-Brazil_national_football_team_logo.svg.png" alt="Brazil" className={`${styles.logoImg} ${styles.logoImgMd}`} />
-              <img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/03/Italy_national_football_team_logo_2023.svg/320px-Italy_national_football_team_logo_2023.svg.png" alt="Italy" className={`${styles.logoImg} ${styles.logoImgMd}`} />
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Section 2: Video Hero */}
       <section className={styles.videoSection}>
         <video
