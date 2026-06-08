@@ -101,26 +101,6 @@ export default function ProductHeroInfo({
 
       {description && <p className={styles.description}>{description}</p>}
 
-      {features.length > 0 && (
-        <div className={styles.featuresBlock}>
-          <h2 className={styles.featuresTitle}>Key Features</h2>
-          <ul className={styles.featuresList}>
-            {features.slice(0, 6).map((f, i) => (
-              <motion.li
-                key={i}
-                className={styles.featureItem}
-                initial={{ opacity: 0, x: -12 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.35, delay: 0.3 + i * 0.06 }}
-              >
-                <span className={styles.featureDot} aria-hidden="true" />
-                <span>{f}</span>
-              </motion.li>
-            ))}
-          </ul>
-        </div>
-      )}
-
       <div className={styles.actions}>
         <button
           onClick={handleAddToCart}

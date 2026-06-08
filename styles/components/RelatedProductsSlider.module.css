@@ -3,173 +3,191 @@
    ============================================ */
 
 .section {
-  padding: 5rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding-top: 4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 767px) {
+  .section { padding: 5rem 0; }
 }
 
 .header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 2.5rem;
-  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 4rem;
 }
 
-.titleGroup {}
+@media (max-width: 767px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+}
 
 .badge {
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 700;
   color: #FF3333;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  margin-bottom: 1rem;
   display: block;
-  margin-bottom: 0.75rem;
 }
 
 .title {
-  font-size: 2rem;
-  font-weight: 800;
+  font-size: 45px;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: #fff;
   margin: 0;
+  line-height: 1.1;
 }
 
-@media (min-width: 768px) { .title { font-size: 2.5rem; } }
+@media (max-width: 1023px) { .title { font-size: 2.5rem; } }
+@media (max-width: 767px) { .title { font-size: 2rem; } }
 
 .navBtns {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .navBtn {
-  width: 40px;
-  height: 40px;
+  width: 3.5rem;
+  height: 3.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 50%;
   color: #fff;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-.navBtn:hover {
-  background: rgba(255, 51, 51, 0.15);
+.navBtn:hover:not(:disabled) {
+  background: rgba(255, 51, 51, 0.1);
   border-color: #FF3333;
+  color: #FF3333;
+  transform: scale(1.05);
 }
 
 .navBtn:disabled {
-  opacity: 0.3;
+  opacity: 0.2;
   cursor: default;
 }
 
 .navIcon {
-  width: 16px;
-  height: 16px;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
-/* ── Track ── */
 .track {
   overflow: hidden;
 }
 
 .slides {
   display: flex;
-  gap: 1.25rem;
-  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  gap: 1.5rem;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 /* ── Card ── */
 .card {
   display: block;
   flex-shrink: 0;
-  width: calc(50% - 0.625rem);
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 10px;
-  overflow: hidden;
+  width: calc(25% - 1.125rem); /* Default 4 per view: (100% - 3*1.5rem)/4 */
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1rem;
+  overflow: hidden; /* Ensure content stays within rounded corners */
   text-decoration: none;
-  transition: border-color 0.3s ease, transform 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  isolation: isolate; /* Create new stacking context to prevent border-radius clipping */
 }
 
-@media (min-width: 640px) {
-  .card { width: calc(33.333% - 0.833rem); }
+@media (max-width: 1200px) {
+  .card { width: calc(25% - 1.125rem); } /* Keep 4 per view for slider logic */
 }
 
-@media (min-width: 1024px) {
-  .card { width: calc(25% - 0.9375rem); }
+@media (max-width: 900px) {
+  .card { width: calc(33.333% - 1rem); }
+}
+
+@media (max-width: 600px) {
+  .card { width: calc(50% - 0.75rem); }
 }
 
 .card:hover {
+  background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 51, 51, 0.4);
-  transform: translateY(-4px);
+  transform: translateY(-10px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
 }
 
 .imageWrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 1;
-  background: #111111;
+  aspect-ratio: 1 / 1; /* Changed from 4/5 to 1/1 to reduce height */
+  background: #fff; /* Contrast for product PNGs */
   overflow: hidden;
-}
-
-.image {
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-.card:hover .image { transform: scale(1.06); }
-
-.imageFallback {
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #1a1a1a;
+  padding: 1.5rem; /* Reduced padding */
 }
 
-.fallbackIcon {
-  width: 32px;
-  height: 32px;
-  color: rgba(255, 255, 255, 0.1);
+.image {
+  object-fit: contain;
+  transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
+
+.card:hover .image { transform: scale(1.1); }
 
 .body {
-  padding: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
 }
 
 .productName {
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   color: #fff;
   margin: 0;
-  line-height: 1.3;
+  line-height: 1.4;
+  transition: color 0.3s ease;
 }
+
+.card:hover .productName { color: #FF3333; }
 
 .viewLink {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  margin-top: 0.5rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #FF3333;
-  transition: gap 0.2s ease;
+  color: #9ca3af;
+  transition: all 0.3s ease;
 }
 
-.card:hover .viewLink { gap: 0.5rem; }
+.card:hover .viewLink { 
+  color: #fff;
+  gap: 0.75rem;
+}
 
 .arrowIcon {
-  width: 11px;
-  height: 11px;
+  width: 0.875rem;
+  height: 0.875rem;
 }

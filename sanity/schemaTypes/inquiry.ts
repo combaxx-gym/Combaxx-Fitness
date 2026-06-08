@@ -2,40 +2,44 @@ import { defineField, defineType } from 'sanity'
 
 export const inquiry = defineType({
   name: 'inquiry',
-  title: 'Product Inquiry',
+  title: 'Product Inquiries (Leads)',
   type: 'document',
   fields: [
     defineField({
-      name: 'name',
+      name: 'fullName',
       title: 'Full Name',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      readOnly: true,
     }),
     defineField({
       name: 'email',
       title: 'Email Address',
       type: 'string',
-      validation: (Rule) => Rule.required().email(),
+      readOnly: true,
     }),
     defineField({
       name: 'phone',
       title: 'Phone Number',
       type: 'string',
+      readOnly: true,
     }),
     defineField({
       name: 'company',
       title: 'Company / Organization',
       type: 'string',
+      readOnly: true,
     }),
     defineField({
       name: 'country',
       title: 'Country',
       type: 'string',
+      readOnly: true,
     }),
     defineField({
       name: 'message',
       title: 'Message',
       type: 'text',
+      readOnly: true,
     }),
     defineField({
       name: 'productName',
@@ -63,45 +67,30 @@ export const inquiry = defineType({
       readOnly: true,
     }),
     defineField({
-      name: 'submittedAt',
-      title: 'Submitted At',
-      type: 'datetime',
-      readOnly: true,
-    }),
-    defineField({
       name: 'status',
       title: 'Status',
       type: 'string',
       options: {
         list: [
           { title: 'New', value: 'new' },
-          { title: 'In Progress', value: 'in-progress' },
-          { title: 'Replied', value: 'replied' },
+          { title: 'Contacted', value: 'contacted' },
           { title: 'Closed', value: 'closed' },
         ],
-        layout: 'radio',
       },
       initialValue: 'new',
+    }),
+    defineField({
+      name: 'submittedAt',
+      title: 'Submitted At',
+      type: 'datetime',
+      readOnly: true,
+      initialValue: () => new Date().toISOString(),
     }),
   ],
   preview: {
     select: {
-      title: 'name',
+      title: 'fullName',
       subtitle: 'productName',
-      description: 'email',
-    },
-    prepare({ title, subtitle, description }) {
-      return {
-        title: title || 'Unknown',
-        subtitle: subtitle ? `Re: ${subtitle}` : description,
-      }
     },
   },
-  orderings: [
-    {
-      title: 'Newest First',
-      name: 'submittedAtDesc',
-      by: [{ field: 'submittedAt', direction: 'desc' }],
-    },
-  ],
 })

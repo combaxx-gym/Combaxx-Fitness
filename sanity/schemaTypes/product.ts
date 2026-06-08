@@ -99,6 +99,13 @@ export const product = defineType({
       ],
     }),
     defineField({
+      name: 'featuresImage',
+      title: 'Key Features Visual Image (PNG)',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Upload a large PNG image showing product features with callouts (for the second section)',
+    }),
+    defineField({
       name: 'specifications',
       title: 'Specifications (Categorized)',
       type: 'array',

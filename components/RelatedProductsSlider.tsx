@@ -97,7 +97,7 @@ export default function RelatedProductsSlider({ products, categorySlug }: Props)
       <div className={styles.track} ref={trackRef}>
         <div
           className={styles.slides}
-          style={{ transform: `translateX(calc(-${offset} * (100% / ${Math.min(products.length, CARDS_PER_VIEW)} + 1.25rem / ${Math.min(products.length, CARDS_PER_VIEW)})))` }}
+          style={{ transform: `translateX(calc(-${offset} * (100% / ${Math.min(products.length, CARDS_PER_VIEW)} + 1.5rem / ${Math.min(products.length, CARDS_PER_VIEW)})))` }}
         >
           {products.map(product => (
             <Link key={product._id} href={getProductUrl(product)} className={styles.card}>

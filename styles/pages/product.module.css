@@ -4,22 +4,36 @@
 
 .page {
   min-height: 100vh;
-  background-color: #111111;
+  background: radial-gradient(circle at 50% 50%, #16222e 0%, #000000 80%);
+  background-attachment: fixed;
   color: #fff;
-  padding-top: 5rem;
+  padding-top: 6rem;
 }
 
-@media (min-width: 768px) { .page { padding-top: 6rem; } }
+@media (max-width: 767px) {
+  .page {
+    padding-top: 5rem;
+    background: radial-gradient(circle at 50% 50%, #16222e 0%, #000000 100%);
+  }
+}
 
 .container {
-  max-width: 1440px;
+  max-width: 1920px;
   margin: 0 auto;
-  padding: 2.5rem 1rem 6rem;
+  padding: 4rem 4rem 8rem;
 }
 
-@media (min-width: 640px) { .container { padding-left: 1.5rem; padding-right: 1.5rem; } }
-@media (min-width: 768px) { .container { padding: 4rem 3rem 8rem; } }
-@media (min-width: 1280px) { .container { padding: 4rem 4rem 8rem; } }
+@media (max-width: 1279px) {
+  .container {
+    padding: 4rem 3rem 8rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .container {
+    padding: 2.5rem 1.5rem 6rem;
+  }
+}
 
 /* ── Breadcrumb ── */
 .breadcrumb {
@@ -47,23 +61,22 @@
 /* ── Hero Grid ── */
 .heroGrid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-  margin-bottom: 0;
+  grid-template-columns: 60fr 40fr;
+  gap: 5rem;
+  align-items: start;
 }
 
-@media (min-width: 1024px) {
+@media (max-width: 1279px) {
   .heroGrid {
     grid-template-columns: 58fr 42fr;
     gap: 4rem;
-    align-items: start;
   }
 }
 
-@media (min-width: 1280px) {
+@media (max-width: 1023px) {
   .heroGrid {
-    grid-template-columns: 60fr 40fr;
-    gap: 5rem;
+    grid-template-columns: 1fr;
+    gap: 3rem;
   }
 }
 
@@ -74,7 +87,7 @@
 
 /* ── Legacy section titles (for extra/additional sections) ── */
 .sectionTitle {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -85,7 +98,39 @@
   display: inline-block;
 }
 
-@media (min-width: 768px) { .sectionTitle { font-size: 2rem; } }
+@media (max-width: 767px) {
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+}
+
+/* ── Visual Features Image Section ── */
+.visualFeaturesSection {
+  margin-top: 5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.visualFeaturesImageWrap {
+  width: 100%;
+  max-width: 1600px;
+  position: relative;
+}
+
+.visualFeaturesImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+@media (max-width: 767px) {
+  .visualFeaturesSection {
+    margin-top: 3rem;
+  }
+}
 
 /* ── Additional content sections ── */
 .additionalSections {

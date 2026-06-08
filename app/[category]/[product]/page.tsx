@@ -36,6 +36,7 @@ interface Product {
   description?: string
   gallery?: SanityImageSource[]
   model3D?: { asset?: { url?: string } }
+  featuresImage?: SanityImageSource
   features?: string[]
   productFeatures?: Array<{ title: string; description: string; icon?: string }>
   specifications?: SpecCategory[]
@@ -73,6 +74,7 @@ const PRODUCT_FIELDS = `
   description,
   gallery[]{..., asset->},
   model3D{asset->{url}},
+  featuresImage{..., asset->},
   features[],
   productFeatures[]{title, description, icon},
   specifications[]{category, items[]{key, value}},
@@ -247,6 +249,19 @@ export default async function ProductPage(
               specsPdfUrl={specsPdfUrl}
             />
           </section>
+
+          {/* ── Visual Key Features Image (Second Section) ── */}
+          {product.featuresImage && (
+            <section className={styles.visualFeaturesSection}>
+              <div className={styles.visualFeaturesImageWrap}>
+                <img
+                  src={urlFor(product.featuresImage).url()}
+                  alt={`${product.name} Key Features`}
+                  className={styles.visualFeaturesImage}
+                />
+              </div>
+            </section>
+          )}
 
           {/* ── Detailed Feature Cards ── */}
           {hasFeatureCards && (

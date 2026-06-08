@@ -6,8 +6,14 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { name, email, phone, company, country, message, productName, productSku, productSlug, productId } = body
 
-    if (!name || !email || !message) {
-      return NextResponse.json({ error: 'Name, email, and message are required.' }, { status: 400 })
+    if (!name?.trim()) {
+      return NextResponse.json({ error: 'Please enter your Full Name.' }, { status: 400 })
+    }
+    if (!email?.trim()) {
+      return NextResponse.json({ error: 'Please enter your Email Address.' }, { status: 400 })
+    }
+    if (!message?.trim()) {
+      return NextResponse.json({ error: 'Please enter a Message describing your inquiry.' }, { status: 400 })
     }
 
     if (!process.env.SANITY_WRITE_TOKEN) {
@@ -20,7 +26,7 @@ export async function POST(request: NextRequest) {
 
     const doc = {
       _type: 'inquiry' as const,
-      name,
+      fullName: name,
       email,
       phone: phone || '',
       company: company || '',
@@ -37,8 +43,11 @@ export async function POST(request: NextRequest) {
     await writeClient.create(doc)
 
     return NextResponse.json({ success: true, message: 'Inquiry submitted successfully.' })
-  } catch (err) {
+  } catch (err: any) {
     console.error('Inquiry submission error:', err)
-    return NextResponse.json({ error: 'Failed to submit inquiry. Please try again.' }, { status: 500 })
+    
+    // Detailed error for debugging
+    const errorMessage = err?.message || 'Failed to submit inquiry. Please try again.'
+    return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }
