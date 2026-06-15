@@ -104,7 +104,7 @@ export default function RelatedProductsSlider({ products, categorySlug }: Props)
               <div className={styles.imageWrapper}>
                 {product.image ? (
                   <Image
-                    src={urlFor(product.image).width(400).height(400).url()}
+                    src={urlFor(product.image).url()}
                     alt={product.name}
                     fill
                     className={styles.image}

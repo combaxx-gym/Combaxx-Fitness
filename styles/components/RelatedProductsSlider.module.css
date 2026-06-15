@@ -4,11 +4,12 @@
 
 .section {
   padding-top: 4rem;
+  padding-bottom: 6rem;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 @media (max-width: 767px) {
-  .section { padding: 5rem 0; }
+  .section { padding: 5rem 0 7rem; }
 }
 
 .header {
@@ -102,15 +103,15 @@
 .card {
   display: block;
   flex-shrink: 0;
-  width: calc(25% - 1.125rem); /* Default 4 per view: (100% - 3*1.5rem)/4 */
-  background: rgba(255, 255, 255, 0.02);
+  width: calc(25% - 1.125rem);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 1rem;
-  overflow: hidden; /* Ensure content stays within rounded corners */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.25rem;
+  overflow: hidden;
   text-decoration: none;
   transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-  isolation: isolate; /* Create new stacking context to prevent border-radius clipping */
+  isolation: isolate;
 }
 
 @media (max-width: 1200px) {
@@ -135,16 +136,21 @@
 .imageWrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1; /* Changed from 4/5 to 1/1 to reduce height */
-  background: #fff; /* Contrast for product PNGs */
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  border-radius: 0.75rem;
+  margin: 0.75rem;
+  width: calc(100% - 1.5rem);
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem; /* Reduced padding */
+  padding: 1rem;
 }
 
 .image {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
@@ -152,18 +158,18 @@
 .card:hover .image { transform: scale(1.1); }
 
 .body {
-  padding: 1.5rem;
-  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  padding: 1.25rem 1.5rem 1.75rem;
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .productName {
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 0.95rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   color: #fff;
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.3;
   transition: color 0.3s ease;
 }
 
