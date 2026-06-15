@@ -7,6 +7,7 @@ import PerformanceWorld from "@/components/PerformanceWorld"
 import StoriesShowcase from "@/components/StoriesShowcase"
 import BusinessFaq from "@/components/BusinessFaq"
 import ProductsCarousel, { ProductsCarouselProduct } from "@/components/ProductsCarousel"
+import CTA from "@/components/CTA"
 import styles from "@/styles/pages/home.module.css"
 
 async function getProducts(): Promise<ProductsCarouselProduct[]> {
@@ -62,6 +63,7 @@ export default async function Home() {
       <StoriesShowcase />
       <ProductsCarousel products={products} />
       <BusinessFaq />
+      <CTA />
     </div>
   )
 }

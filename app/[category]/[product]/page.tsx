@@ -17,6 +17,7 @@ import ProductFaqs from '@/components/ProductFaqs'
 import ProductDownloads from '@/components/ProductDownloads'
 import InquiryForm from '@/components/InquiryForm'
 import RelatedProductsSlider from '@/components/RelatedProductsSlider'
+import CTA from '@/components/CTA'
 
 import styles from '@/styles/pages/product.module.css'
 
@@ -326,6 +327,14 @@ export default async function ProductPage(
               categorySlug={primaryCatSlug || undefined}
             />
           )}
+
+          {/* ── CTA ── */}
+          <CTA 
+            title={`Interested in ${product.name}?`}
+            description={`Get in touch with our B2B team for bulk pricing, custom configurations, and professional installation services for this ${product.name}.`}
+            primaryButtonText="Request Quote"
+            secondaryButtonText="Contact Us"
+          />
 
         </div>
       </main>

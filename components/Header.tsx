@@ -148,7 +148,7 @@ export default function Header() {
   }, [isSearchOpen, closeSearch])
 
   const handleMegaLeave = useCallback(() => {
-    megaLeaveTimer.current = setTimeout(() => setIsMegaOpen(false), 150)
+    megaLeaveTimer.current = setTimeout(() => setIsMegaOpen(false), 100)
   }, [])
 
   const handleMegaEnter = useCallback(() => {

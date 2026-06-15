@@ -5,6 +5,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import type { SanityImageSource } from '@sanity/image-url'
 import CategoryFaqAccordion from '@/components/CategoryFaqAccordion'
+import CTA from '@/components/CTA'
 import styles from '@/styles/pages/category.module.css'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -26,6 +27,7 @@ interface Product {
   title?: string
   slug: { current: string }
   image: SanityImageSource
+  description?: string
   category?: { name?: string; slug?: { current?: string } }
   categories?: Array<{ name?: string; slug?: { current?: string } }>
 }
@@ -43,7 +45,7 @@ async function getCategoryData(slug: string) {
     ),
     client.fetch<Product[]>(
       `*[_type == "product" && references(*[_type == "category" && slug.current == $slug]._id)]{
-        _id, name, title, slug, image,
+        _id, name, title, slug, image, description,
         category->{name, slug},
         categories[]->{name, slug}
       }`,
@@ -173,7 +175,7 @@ export default async function CategoryPage(props: { params: Promise<{ category: 
                     <Link href={`/${catSlug}/${p.slug.current}`} className={styles.productImageLink}>
                       <div className={styles.productImageWrap}>
                         <Image
-                          src={urlFor(p.image).width(600).height(450).url()}
+                          src={urlFor(p.image).url()}
                           alt={name}
                           fill
                           className={styles.productImage}
@@ -183,17 +185,22 @@ export default async function CategoryPage(props: { params: Promise<{ category: 
                       </div>
                     </Link>
                     <div className={styles.productCardFooter}>
-                      <div className={styles.productCardText}>
-                        <p className={styles.productCardCategory}>{catName}</p>
-                        <p className={styles.productCardName}>{name}</p>
+                      <div className={styles.productCardTop}>
+                        <div className={styles.productCardText}>
+                          <p className={styles.productCardCategory}>{catName}</p>
+                          <p className={styles.productCardName}>{name}</p>
+                          {p.description && (
+                            <p className={styles.productCardDesc}>{p.description}</p>
+                          )}
+                        </div>
+                        <Link
+                          href={`/${catSlug}/${p.slug.current}`}
+                          className={styles.productCardArrow}
+                          aria-label={`View ${name}`}
+                        >
+                          ›
+                        </Link>
                       </div>
-                      <Link
-                        href={`/${catSlug}/${p.slug.current}`}
-                        className={styles.productCardArrow}
-                        aria-label={`View ${name}`}
-                      >
-                        ›
-                      </Link>
                     </div>
                   </article>
                 )
@@ -233,24 +240,10 @@ export default async function CategoryPage(props: { params: Promise<{ category: 
         )}
 
         {/* ── CTA Banner ── */}
-        <section className={styles.ctaSection} aria-label="Call to action">
-          <div className={styles.ctaCard}>
-            <div className={styles.ctaText}>
-              <h2 className={styles.ctaTitle}>Ready to Equip Your Facility?</h2>
-              <p className={styles.ctaDesc}>
-                Contact our B2B team for bulk pricing, custom configurations, and professional installation services tailored to your gym or fitness center.
-              </p>
-            </div>
-            <div className={styles.ctaBtns}>
-              <Link href="/contact" className={styles.ctaBtn}>
-                Request a Quote
-              </Link>
-              <Link href="/contact" className={`${styles.ctaBtn} ${styles.ctaBtnOutline}`}>
-                Contact Us
-              </Link>
-            </div>
-          </div>
-        </section>
+        <CTA 
+          title={`Ready to Equip Your ${title} Facility?`}
+          description={`Contact our B2B team for bulk pricing, custom configurations, and professional installation services tailored to your gym or fitness center.`}
+        />
 
       </div>
     </div>
