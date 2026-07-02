@@ -350,11 +350,11 @@
 /* Visual top */
 .storyCardVisual {
   position: relative;
-  height: 180px;
+  height: 280px;
   overflow: hidden;
   flex-shrink: 0;
 }
-.storyCardLarge .storyCardVisual { height: 220px; }
+.storyCardLarge .storyCardVisual { height: 280px; }
 
 .storyCardBg {
   position: absolute;

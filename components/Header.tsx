@@ -158,7 +158,6 @@ export default function Header() {
   return (
     <header
       className={`${styles.header} ${scrolled ? styles.headerScrolled : ""}`}
-      onMouseLeave={handleMegaLeave}
     >
       <div className={styles.inner}>
 
@@ -186,14 +185,13 @@ export default function Header() {
               <Link
                 href="/shop"
                 className={`${styles.navLink} ${isMegaOpen ? styles.navLinkActive : ""}`}
-                onClick={() => setIsMegaOpen(false)}
               >
                 Products
                 <span className={`${styles.chevron} ${isMegaOpen ? styles.chevronOpen : ""}`}>▾</span>
               </Link>
             </div>
 
-            <Link href="/wellness" className={styles.navLink}>Wellness</Link>
+
             <Link href="/materials-information" className={styles.navLink}>Materials Information</Link>
             <Link href="/stories" className={styles.navLink}>Stories</Link>
             <Link href="/contact" className={styles.navLink}>Contact</Link>
@@ -308,8 +306,13 @@ export default function Header() {
       </div>
 
       {/* Mega Menu — rendered inside header so position:absolute works */}
-      <div onMouseEnter={handleMegaEnter}>
-        <MegaMenu isOpen={isMegaOpen} onClose={() => setIsMegaOpen(false)} />
+      <div onMouseEnter={handleMegaEnter} onMouseLeave={handleMegaLeave}>
+        <MegaMenu 
+          isOpen={isMegaOpen} 
+          onClose={() => setIsMegaOpen(false)} 
+          onMouseEnter={handleMegaEnter} 
+          onMouseLeave={handleMegaLeave} 
+        />
       </div>
     </header>
   )

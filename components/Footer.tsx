@@ -83,7 +83,7 @@ export default function Footer() {
               <h5 className={styles.linkColTitle}>Explore</h5>
               <ul className={styles.linkList}>
                 <li><Link href="/shop" className={styles.linkItem}>Products</Link></li>
-                <li><Link href="/wellness" className={styles.linkItem}>Wellness</Link></li>
+
                 <li><Link href="/materials-information" className={styles.linkItem}>Materials Information</Link></li>
                 <li><Link href="/stories" className={styles.linkItem}>Stories</Link></li>
                 <li><Link href="/contact" className={styles.linkItem}>Contact</Link></li>

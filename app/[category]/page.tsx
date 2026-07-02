@@ -197,8 +197,8 @@ export default async function CategoryPage(props: { params: Promise<{ category: 
                           href={`/${catSlug}/${p.slug.current}`}
                           className={styles.productCardArrow}
                           aria-label={`View ${name}`}
-                        >
-                          ›
+                         >
+                          →
                         </Link>
                       </div>
                     </div>

@@ -18,28 +18,28 @@ export default function PerformanceWorld() {
         <div className={styles.featureGrid}>
           <div className={styles.featureItem}>
             <div className={styles.featureIcon}>
-              <Dumbbell className="h-5 w-5 text-[#F0D348]" />
+              <Dumbbell className="h-5 w-5 text-[#FF3333]" />
             </div>
             <p className={styles.featureLabel}>Strength sessions</p>
             <p className={styles.featureDesc}>Engineered for heavy daily use.</p>
           </div>
           <div className={styles.featureItem}>
             <div className={styles.featureIcon}>
-              <HeartPulse className="h-5 w-5 text-[#F0D348]" />
+              <HeartPulse className="h-5 w-5 text-[#FF3333]" />
             </div>
             <p className={styles.featureLabel}>Cardio science</p>
             <p className={styles.featureDesc}>Biomechanics tuned for real athletes.</p>
           </div>
           <div className={styles.featureItem}>
             <div className={styles.featureIcon}>
-              <ShieldCheck className="h-5 w-5 text-[#F0D348]" />
+              <ShieldCheck className="h-5 w-5 text-[#FF3333]" />
             </div>
             <p className={styles.featureLabel}>Built to last</p>
             <p className={styles.featureDesc}>Industrial-grade components and finishes.</p>
           </div>
           <div className={styles.featureItem}>
             <div className={styles.featureIcon}>
-              <Globe2 className="h-5 w-5 text-[#F0D348]" />
+              <Globe2 className="h-5 w-5 text-[#FF3333]" />
             </div>
             <p className={styles.featureLabel}>Connected</p>
             <p className={styles.featureDesc}>Ready for clubs, hotels and hybrid spaces.</p>
