@@ -89,7 +89,7 @@ export default function ProductImageGallery({ name, mainImage, gallery = [], mod
             aria-label={`View image ${i + 1}`}
           >
             <Image
-              src={urlFor(img).width(120).height(120).url()}
+              src={urlFor(img).url()}
               alt={`${name} view ${i + 1}`}
               fill
               className={styles.thumbImg}
@@ -134,16 +134,16 @@ export default function ProductImageGallery({ name, mainImage, gallery = [], mod
               className={styles.zoomContainer}
             >
               <Image
-                src={urlFor(allImages[activeIndex]).width(900).height(900).quality(90).url()}
+                src={urlFor(allImages[activeIndex]).url()}
                 alt={name}
                 fill
                 className={styles.mainImage}
-                priority={activeIndex === 0}
+                priority={activeIndex === 0}    
                 sizes="(max-width: 768px) 100vw, 55vw"
                 unoptimized
               />
             </motion.div>
-          )}
+          )} 
         </AnimatePresence>
 
         {/* Nav Arrows */}

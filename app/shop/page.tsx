@@ -1,13 +1,14 @@
-import { client } from "@/sanity/lib/client"
-import { urlFor } from "@/sanity/lib/image"
-import Image from "next/image"
-import Link from "next/link"
-import type { SanityImageSource } from "@sanity/image-url"
-import { redirect } from "next/navigation"
-import styles from "@/styles/pages/shop.module.css"
+import { client } from '@/sanity/lib/client'
+import { urlFor } from '@/sanity/lib/image'
+import Image from 'next/image'
+import Link from 'next/link'
+import type { Metadata } from 'next'
+import type { SanityImageSource } from '@sanity/image-url'
+import CTA from '@/components/CTA'
+import styles from '@/styles/pages/category.module.css'
 
-type Cat = { _id: string; name?: string; slug?: { current?: string } }
-type Product = {
+// ─── Types ────────────────────────────────────────────────────────────────────
+interface Product {
   _id: string
   name?: string
   title?: string
@@ -18,115 +19,159 @@ type Product = {
   categories?: Array<{ name?: string; slug?: { current?: string } }>
 }
 
-async function getCategories(): Promise<Cat[]> {
-  const cats = await client.fetch(
-    `*[_type=="category"]|order(name asc){_id,name,slug}`
-  )
-  return cats as Cat[]
-}
-
-async function getProductsByCategory(slug?: string): Promise<Product[]> {
-  if (!slug) {
-    const all = await client.fetch(
-      `*[_type=="product"]{
-        _id,
-        name, title, slug, image, description,
-        category->{name,slug},
-        categories[]->{name,slug}
-      }`
-    )
-    return all as Product[]
-  }
+// ─── Data fetching ────────────────────────────────────────────────────────────
+async function getProducts(): Promise<Product[]> {
   const products = await client.fetch(
-    `*[_type=="product" && references(*[_type=="category" && slug.current==$slug]._id)]{
-      _id,
-      name, title, slug, image, description,
-      category->{name,slug},
-      categories[]->{name,slug}
-    }`,
-    { slug }
+    `*[_type == "product"]{
+      _id, name, title, slug, image, description,
+      category->{name, slug},
+      categories[]->{name, slug}
+    }`
   )
-  return products as Product[]
+  return products || []
 }
 
-export default async function ShopPage({ searchParams }: { searchParams?: Promise<{ category?: string }> }) {
-  const sp = (await (searchParams || Promise.resolve({}))) as { category?: string }
-  const selected = sp.category
-  if (selected) {
-    redirect(`/${selected}`)
-  }
-  const [categories, products] = await Promise.all([
-    getCategories(),
-    getProductsByCategory(undefined),
-  ])
+// ─── Metadata ─────────────────────────────────────────────────────────────────
+export const metadata: Metadata = {
+  title: 'Shop All Gym Equipment',
+  description: 'Explore our complete range of premium commercial gym equipment. Strength, cardio, benches, dumbbells, and more for professional fitness facilities.',
+}
 
-  const title = "Shop"
+// ─── Static features ──────────────────────────────────────────────────────────
+const WHY_FEATURES = [
+  { num: '01', title: 'Commercial Grade', desc: 'Built to withstand the rigorous demands of professional fitness facilities worldwide.' },
+  { num: '02', title: 'ISO Certified', desc: 'All products meet international quality and safety standards for commercial equipment.' },
+  { num: '03', title: '5-Year Warranty', desc: 'Industry-leading warranty on frames, components, and structural elements.' },
+  { num: '04', title: 'Expert Support', desc: 'Dedicated technical and after-sales support available for every product line.' },
+]
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+export default async function ShopPage() {
+  const products = await getProducts()
+  const title = 'Shop All Products'
 
   return (
     <div className={styles.page}>
-      <div className={styles.container}>
-        <h1 className={styles.pageTitle}>{title}</h1>
-        <p className={styles.pageDesc}>
-          Explore all of our latest gym equipment and product collections.
-        </p>
+      {/* ── Hero ── */}
+      <section className={styles.hero} aria-label="All products">
+        <div className={styles.heroContent}>
+          <div className={styles.heroLeft}>
+            {/* Breadcrumb */}
+            <nav className={styles.heroBreadcrumb} aria-label="Breadcrumb">
+              <Link href="/" className={styles.heroBreadLink}>Home</Link>
+              <span className={styles.heroBreadSep}>/</span>
+              <span>{title}</span>
+            </nav>
 
-        <div className={styles.filterBar}>
-          <Link
-            href="/shop"
-            className={`${styles.filterChip} ${!selected ? styles.filterChipActive : ""}`}
-          >
-            All
-          </Link>
-          {categories.map(c => (
-            <Link
-              key={c._id}
-              href={`/${c.slug?.current}`}
-              className={styles.filterChip}
-            >
-              {c.name}
-            </Link>
-          ))}
-        </div>
+            <span className={styles.heroBadge}>All Products</span>
 
-        {products.length === 0 ? (
-          <div className={styles.emptyState}>No products found.</div>
-        ) : (
-          <div className={styles.productGrid}>
-            {products.map(p => {
-              const catSlug = p.category?.slug?.current || p.categories?.[0]?.slug?.current || "shop"
-              return (
-                <div key={p._id} className={styles.productCard}>
-                  <Link href={`/${catSlug}/${p.slug.current}`} className={styles.productCardLink}>
-                    <div className={styles.productImageWrap}>
-                      <Image
-                        src={urlFor(p.image).width(1200).height(900).url()}
-                        alt={p.name || p.title || "Product"}
-                        fill
-                        className={styles.productImage}
-                        unoptimized
-                      />
-                    </div>
-                  </Link>
-                  <div className={styles.productCardFooter}>
-                    <div>
-                      <p className={styles.productCardCategory}>
-                        {p.category?.name || p.categories?.[0]?.name || "Product"}
-                      </p>
-                      <p className={styles.productCardName}>{p.name || p.title}</p>
-                    </div>
-                    <Link
-                      href={`/${catSlug}/${p.slug.current}`}
-                      className={styles.productCardArrow}
-                      aria-label="View product"
-                    >
-                      <span>›</span>
-                    </Link>
-                  </div>
-                </div>
-              )
-            })}
+            <h1 className={styles.heroTitle}>{title}</h1>
+            <p className={styles.heroDesc}>
+              Explore our complete range of premium commercial gym equipment, built for serious training and professional fitness facilities.
+            </p>
+
+            <div className={styles.heroStats}>
+              <span className={styles.heroStat}>
+                <span className={styles.heroStatDot} />
+                {products.length} Product{products.length !== 1 ? 's' : ''}
+              </span>
+              <span className={styles.heroStat}>
+                <span className={styles.heroStatDot} />
+                Commercial Grade
+              </span>
+              <span className={styles.heroStat}>
+                <span className={styles.heroStatDot} />
+                Built to Last
+              </span>
+            </div>
           </div>
-        )}
+
+          <div className={styles.heroRight}>
+            <a href="#products" className={styles.heroScrollBtn}>
+              View Products ↓
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Main Content ── */}
+      <div className={styles.main}>
+        {/* ── Products Grid ── */}
+        <section id="products" className={styles.productsSection} aria-labelledby="products-heading">
+          <div className={styles.sectionHead}>
+            <span className={styles.sectionBadge}>Our Range</span>
+            <h2 className={styles.sectionTitle} id="products-heading">All Products</h2>
+          </div>
+
+          {products.length === 0 ? (
+            <div className={styles.emptyState}>No products found.</div>
+          ) : (
+            <div className={styles.productGrid}>
+              {products.map(p => {
+                const name = p.name || p.title || 'Product'
+                const catSlug = p.category?.slug?.current || p.categories?.[0]?.slug?.current || 'shop'
+                const catName = p.category?.name || p.categories?.[0]?.name || 'Product'
+                return (
+                  <article key={p._id} className={styles.productCard}>
+                    <Link href={`/${catSlug}/${p.slug.current}`} className={styles.productImageLink}>
+                      <div className={styles.productImageWrap}>
+                        <Image
+                          src={urlFor(p.image).url()}
+                          alt={name}
+                          fill
+                          className={styles.productImage}
+                          sizes="(max-width: 480px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                          unoptimized
+                        />
+                      </div>
+                    </Link>
+                    <div className={styles.productCardFooter}>
+                      <div className={styles.productCardTop}>
+                        <div className={styles.productCardText}>
+                          <p className={styles.productCardCategory}>{catName}</p>
+                          <p className={styles.productCardName}>{name}</p>
+                          {p.description && (
+                            <p className={styles.productCardDesc}>{p.description}</p>
+                          )}
+                        </div>
+                        <Link
+                          href={`/${catSlug}/${p.slug.current}`}
+                          className={styles.productCardArrow}
+                          aria-label={`View ${name}`}
+                         >
+                          →
+                        </Link>
+                      </div>
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          )}
+        </section>
+
+        {/* ── Why section ── */}
+        <section className={styles.whySection} aria-labelledby="why-heading">
+          <div className={styles.sectionHead}>
+            <span className={styles.sectionBadge}>Why Choose Us</span>
+            <h2 className={styles.sectionTitle} id="why-heading">Built for Professionals</h2>
+          </div>
+          <div className={styles.whyGrid}>
+            {WHY_FEATURES.map(f => (
+              <div key={f.num} className={styles.whyCard}>
+                <div className={styles.whyNumber}>{f.num}</div>
+                <h3 className={styles.whyCardTitle}>{f.title}</h3>
+                <p className={styles.whyCardDesc}>{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── CTA Banner ── */}
+        <CTA 
+          title="Ready to Equip Your Facility?"
+          description="Contact our B2B team for bulk pricing, custom configurations, and professional installation services tailored to your gym or fitness center."
+        />
       </div>
     </div>
   )

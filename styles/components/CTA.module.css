@@ -175,21 +175,36 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 1rem 2.25rem;
+  gap: 1.25rem;
+  padding: 1.1rem 2.75rem;
   background: #FF3333;
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-size: 0.875rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  border: 2px solid #000;
+  border-radius: 9999px;
+  color: #000;
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  word-spacing: 0.15em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.25s ease;
   white-space: nowrap;
   box-shadow: 0 4px 15px rgba(255, 51, 51, 0.25);
+}
+
+.ctaBtnArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: #000;
+  border-radius: 9999px;
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1;
+  font-weight: 900;
 }
 
 .ctaBtn:hover {

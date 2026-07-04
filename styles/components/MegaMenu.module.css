@@ -5,7 +5,7 @@
 /* Panel - Full Width */
 .panel {
   position: fixed;
-  top: 6.25rem;
+  top: 5.75rem;
   left: 0;
   right: 0;
   z-index: 150;
@@ -15,7 +15,7 @@
   margin: 0 2rem;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
   animation: slideDown 0.2s ease-out;
-  max-height: 80vh;
+  max-height: 87vh;
   overflow-y: auto;
   max-width: 1920px;
   margin: 0 auto;
@@ -46,7 +46,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0;
-  padding: 2.5rem 0;
+  padding: 2rem 0;
 }
 
 @media (max-width: 1200px) {
@@ -223,7 +223,8 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.85rem;
+  padding-inline: 0.85rem;
+  padding-block: 0.5rem;
   border-radius: 0.5rem;
   text-decoration: none;
   transition: all 0.2s ease;
@@ -250,7 +251,7 @@
 
 .categoryImage {
   object-fit: contain;
-  padding: 0.75rem;
+  padding: 0.1rem;
 }
 
 .categoryInfo {
@@ -396,7 +397,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 2rem;
-  padding: 1.75rem 2.5rem;
+  padding: 1.3rem 2.5rem;
   border-top: 1px solid rgba(255,255,255,0.08);
   background: linear-gradient(90deg, rgba(0,0,0,0.25) 0%, rgba(80,80,80,0.1) 100%);
   border-radius: 0 0 1rem 1rem;

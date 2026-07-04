@@ -41,7 +41,6 @@ export default function BusinessFaq() {
           loop
           playsInline
           autoPlay
-          poster="/images/COMBAXX FITNESS logo.png"
         />
         <div className={styles.videoGradient} />
         <div className={styles.videoContent}>
@@ -56,7 +55,7 @@ export default function BusinessFaq() {
                 Since 1983, we&apos;ve been empowering health and wellness facilities with top‑notch technology.
                 Revolutionize your business and boost customer engagement with our integrated ecosystem.
               </p>
-              <Link href="/business" className={styles.videoCta}>
+              <Link href="/shop" className={styles.videoCta}>
                 <span className={styles.videoCtaText}>Browse business solutions</span>
                 <span className={styles.videoCtaIcon}>
                   <ChevronRight className="h-4 w-4" />

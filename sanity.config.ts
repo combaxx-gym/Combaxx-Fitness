@@ -21,7 +21,7 @@ const structure = (S: StructureBuilder) =>
         .child(S.documentTypeList('product').title('All Products'),
       ),
       S.divider(),
-      S.listItem()
+      S.listItem() 
         .title('Products by Category')
         .child(
           S.documentTypeList('category')
