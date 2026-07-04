@@ -340,13 +340,6 @@ export default async function ProductPage(
             productSlug={product.slug.current}
           />
 
-          {/* ── Product Reviews ── */}
-          <ProductReviews
-            productId={product._id}
-            productName={product.name}
-            initialReviews={reviews}
-          />
-
           {/* ── Related Products ── */}
           {relatedProducts.length > 0 && (
             <RelatedProductsSlider
@@ -361,6 +354,13 @@ export default async function ProductPage(
             description={`Get in touch with our B2B team for bulk pricing, custom configurations, and professional installation services for this ${product.name}.`}
             primaryButtonText="Request Quote"
             secondaryButtonText="Contact Us"
+          />
+
+          {/* ── Product Reviews ── */}
+          <ProductReviews
+            productId={product._id}
+            productName={product.name}
+            initialReviews={reviews}
           />
 
         </div>

@@ -19,7 +19,7 @@ interface ProductReviewsProps {
 }
 
 export default function ProductReviews({ productId, productName, initialReviews = [] }: ProductReviewsProps) {
-  const [reviews, setReviews] = useState<Review[]>(initialReviews)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [rating, setRating] = useState(0)
@@ -53,10 +53,16 @@ export default function ProductReviews({ productId, productName, initialReviews 
       if (data.success) {
         setMessage(data.message)
         setMessageType('success')
-        setName('')
-        setEmail('')
-        setRating(0)
-        setReviewText('')
+        // Reset after successful submission, close modal after short delay
+        setTimeout(() => {
+          setIsModalOpen(false)
+          setName('')
+          setEmail('')
+          setRating(0)
+          setReviewText('')
+          setMessage('')
+          setMessageType('')
+        }, 2000)
       } else {
         setMessage(data.error)
         setMessageType('error')
@@ -70,18 +76,64 @@ export default function ProductReviews({ productId, productName, initialReviews 
     }
   }
 
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setName('')
+    setEmail('')
+    setRating(0)
+    setReviewText('')
+    setMessage('')
+    setMessageType('')
+  }
+
   return (
     <section className={styles.section} aria-labelledby="reviews-heading">
       <div className={styles.container}>
         <div className={styles.header}>
           <span className={styles.badge}>Customer Reviews</span>
-          <h2 className={styles.title} id="reviews-heading">What Our Customers Say</h2>
+          <div className={styles.headerContent}>
+            <h2 className={styles.title} id="reviews-heading">{initialReviews.length} Review{initialReviews.length !== 1 ? 's' : ''}</h2>
+            <button onClick={() => setIsModalOpen(true)} className={styles.writeBtn}>
+              Write a Review
+            </button>
+          </div>
         </div>
 
-        <div className={styles.content}>
-          {/* Review Form */}
-          <div className={styles.formWrap}>
-            <h3 className={styles.formTitle}>Write a Review</h3>
+        {/* Review List */}
+        <div className={styles.listWrap}>
+          {initialReviews.length === 0 ? (
+            <div className={styles.empty}>
+              No reviews yet. Be the first to review this product!
+            </div>
+          ) : (
+            <div className={styles.list}>
+              {initialReviews.map((review) => (
+                <div key={review._id} className={styles.card}>
+                  <div className={styles.cardHeader}>
+                    <div className={styles.cardName}>{review.name}</div>
+                    <div className={styles.cardRating}>
+                      {[1,2,3,4,5].map((star) => (
+                        <span key={star} className={`${styles.cardStar} ${star <= review.rating ? styles.cardStarActive : ''}`}>★</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className={styles.cardDate}>{new Date(review.submittedAt).toLocaleDateString()}</div>
+                  <p className={styles.cardText}>{review.reviewText}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Popup Modal */}
+      {isModalOpen && (
+        <div className={styles.modalOverlay} onClick={closeModal}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3 className={styles.formTitle}>Write a Review</h3>
+              <button onClick={closeModal} className={styles.closeBtn}>✕</button>
+            </div>
             {message && (
               <div className={`${styles.message} ${messageType === 'success' ? styles.success : styles.error}`}>
                 {message}
@@ -143,40 +195,16 @@ export default function ProductReviews({ productId, productName, initialReviews 
                 />
               </div>
 
-              <button type="submit" disabled={isSubmitting} className={styles.submitBtn}>
-                {isSubmitting ? 'Submitting...' : 'Submit Review'}
-              </button>
+              <div className={styles.modalActions}>
+                <button type="button" onClick={closeModal} className={styles.cancelBtn}>Cancel</button>
+                <button type="submit" disabled={isSubmitting} className={styles.submitBtn}>
+                  {isSubmitting ? 'Submitting...' : 'Submit Review'}
+                </button>
+              </div>
             </form>
           </div>
-
-          {/* Review List */}
-          <div className={styles.listWrap}>
-            <h3 className={styles.listTitle}>{reviews.length} Approved Review{reviews.length !== 1 ? 's' : ''}</h3>
-            {reviews.length === 0 ? (
-              <div className={styles.empty}>
-                No reviews yet. Be the first to review this product!
-              </div>
-            ) : (
-              <div className={styles.list}>
-                {reviews.map((review) => (
-                  <div key={review._id} className={styles.card}>
-                    <div className={styles.cardHeader}>
-                      <div className={styles.cardName}>{review.name}</div>
-                      <div className={styles.cardRating}>
-                        {[1,2,3,4,5].map((star) => (
-                          <span key={star} className={`${styles.cardStar} ${star <= review.rating ? styles.cardStarActive : ''}`}>★</span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className={styles.cardDate}>{new Date(review.submittedAt).toLocaleDateString()}</div>
-                    <p className={styles.cardText}>{review.reviewText}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
-      </div>
+      )}
     </section>
   )
 }
