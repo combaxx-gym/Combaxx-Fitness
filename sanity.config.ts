@@ -6,22 +6,48 @@
 
 import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
-import {structureTool} from 'sanity/structure'
-
-// Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
+import {structureTool, StructureBuilder} from 'sanity/structure'
 import {apiVersion, dataset, projectId} from './sanity/env'
 import {schema} from './sanity/schemaTypes'
+
+// Define custom structure
+const structure = (S: StructureBuilder) =>
+  S.list()
+    .title('Content')
+    .items([
+      S.listItem()
+        .title('All Products')
+        .schemaType('product')
+        .child(S.documentTypeList('product').title('All Products'),
+      ),
+      S.divider(),
+      S.listItem()
+        .title('Products by Category')
+        .child(
+          S.documentTypeList('category')
+            .title('Categories')
+            .child((categoryId) =>
+              S.documentList()
+                .title('Products')
+                .schemaType('product')
+                .filter('_type == "product" && $categoryId in categories[]._ref')
+                .params({ categoryId })
+            ),
+        ),
+      S.divider(),
+      // Add other document types
+      S.documentTypeListItem('category').title('Categories'),
+      S.documentTypeListItem('subCategory').title('Sub Categories'),
+      S.documentTypeListItem('inquiry').title('Inquiries'),
+    ]);
 
 export default defineConfig({
   basePath: '/studio',
   projectId: projectId || '',
   dataset: dataset || '',
-  // Add and edit the content schema in the './sanity/schemaTypes' folder
   schema,
   plugins: [
-    structureTool(),
-    // Vision is a tool that lets you query your content with GROQ in the studio
-    // https://www.sanity.io/docs/the-vision-plugin
-    visionTool({defaultApiVersion: apiVersion}),
+    structureTool({ structure }),
+    visionTool({ defaultApiVersion: apiVersion }),
   ],
 })
