@@ -172,25 +172,24 @@
 }
 
 .ctaBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.25rem;
-  padding: 1.1rem 2.75rem;
-  background: #FF3333;
-  border: 2px solid #000;
-  border-radius: 9999px;
-  color: #000;
-  font-size: 0.85rem;
-  font-weight: 900;
-  letter-spacing: 0.2em;
-  word-spacing: 0.15em;
-  text-transform: uppercase;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  white-space: nowrap;
-  box-shadow: 0 4px 15px rgba(255, 51, 51, 0.25);
+    color: #000;
+    letter-spacing: normal;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    background: #f33;
+    border: 2px solid #000;
+    border-radius: 9999px;
+    justify-content: center;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 0.8rem 2rem;
+    font-size: 20px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all .25s;
+    display: inline-flex;
+    box-shadow: 0 4px 15px #ff333340;
 }
 
 .ctaBtnArrow {

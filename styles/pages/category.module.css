@@ -118,7 +118,7 @@
   font-size: 5rem;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: -0.04em;
+  /* letter-spacing: -0.04em; */
   color: #fff;
   line-height: 0.95;
   margin: 0 0 1.25rem;

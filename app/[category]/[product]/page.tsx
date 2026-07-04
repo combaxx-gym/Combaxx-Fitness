@@ -18,6 +18,7 @@ import ProductDownloads from '@/components/ProductDownloads'
 import InquiryForm from '@/components/InquiryForm'
 import RelatedProductsSlider from '@/components/RelatedProductsSlider'
 import CTA from '@/components/CTA'
+import ProductReviews from '@/components/ProductReviews'
 
 import styles from '@/styles/pages/product.module.css'
 
@@ -27,6 +28,15 @@ import styles from '@/styles/pages/product.module.css'
 
 interface SpecItem { key: string; value: string }
 interface SpecCategory { category: string; items: SpecItem[] }
+
+interface Review {
+  _id: string
+  name: string
+  rating: number
+  reviewText: string
+  approved: boolean
+  submittedAt: string
+}
 
 interface Product {
   _id: string
@@ -142,6 +152,15 @@ async function getRelatedProducts(currentId: string, categorySlug?: string): Pro
   )
 }
 
+async function getApprovedReviews(productId: string): Promise<Review[]> {
+  return await client.fetch(
+    `*[_type == "review" && product._ref == $productId && approved == true] | order(submittedAt desc){
+      _id, name, rating, reviewText, approved, submittedAt
+    }`,
+    { productId }
+  )
+}
+
 /* ─────────────────────────────────────────
    Metadata
 ───────────────────────────────────────── */
@@ -186,6 +205,7 @@ export default async function ProductPage(
 
   const categoryName = product.category?.name || product.categories?.[0]?.name
   const relatedProducts = await getRelatedProducts(product._id, primaryCatSlug || undefined)
+  const reviews = await getApprovedReviews(product._id)
 
   const model3DUrl = product.model3D?.asset?.url
   const specsPdfUrl = product.specsPdf?.asset?.url
@@ -318,6 +338,13 @@ export default async function ProductPage(
             productName={product.name}
             productSku={product.sku}
             productSlug={product.slug.current}
+          />
+
+          {/* ── Product Reviews ── */}
+          <ProductReviews
+            productId={product._id}
+            productName={product.name}
+            initialReviews={reviews}
           />
 
           {/* ── Related Products ── */}
