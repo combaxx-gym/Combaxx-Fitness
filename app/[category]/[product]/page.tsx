@@ -268,6 +268,7 @@ export default async function ProductPage(
               description={product.description}
               features={product.features || []}
               specsPdfUrl={specsPdfUrl}
+              reviews={reviews}
             />
           </section>
 

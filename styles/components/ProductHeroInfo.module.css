@@ -54,6 +54,65 @@
   border-radius: 2px;
 }
 
+/* Rating styles */
+.ratingRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.stars {
+  display: flex;
+  gap: 0.125rem;
+}
+
+.star {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.2);
+  line-height: 1;
+}
+
+.starActive {
+  color: #ffc107;
+}
+
+.ratingValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.reviewCount {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+/* Write a Review Button */
+.writeReviewBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: 1px solid rgba(255, 51, 51, 0.5);
+  color: #FF3333;
+  font-size: 20px;
+  font-weight: 700;
+  /* letter-spacing: 0.05em; */
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  margin-bottom: 0.5rem;
+}
+
+.writeReviewBtn:hover {
+  background: rgba(255, 51, 51, 0.1);
+  border-color: #FF3333;
+}
+
 .description {
   font-size: 1rem;
   color: #d1d5db;
@@ -139,22 +198,21 @@
 }
 
 .btnQuote {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.625rem;
-  padding: 1rem 1.75rem;
-  background: #FF3333;
-  border: 1.5px solid #FF3333;
-  border-radius: 4px;
-  color: #fff;
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.25s ease;
-  width: 100%;
+      color: #fff;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: #f33;
+    border: 1.5px solid #f33;
+    border-radius: .5rem;
+    justify-content: center;
+    align-items: center;
+    gap: .625rem;
+    width: 100%;
+    padding: 0.8rem 1.75rem;
+    font-size: 20px;
+    font-weight: 600;
+    transition: background .25s;
+    display: flex;
 }
 
 .btnQuote:hover { background: #e62929; border-color: #e62929; }
@@ -181,15 +239,16 @@
 .btnPdf:hover { color: #fff; }
 
 .btnIcon {
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   flex-shrink: 0;
 }
 
 /* ── Divider ── */
 .divider {
-  width: 48px;
-  height: 2px;
-  background: #FF3333;
-  margin: 2rem 0;
+    background: #f33;
+    width: 120px;
+    height: 4px;
+    border-radius: 30px;
+    margin-bottom: 1.2rem;
 }

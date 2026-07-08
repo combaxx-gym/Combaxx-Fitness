@@ -1,14 +1,13 @@
 /* Product Reviews Component Styles */
 
 .section {
-  padding: 4rem 0;
-  background: #0a0a0a;
+  padding-top: 6rem;
+  /* background: #0a0a0a; */
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
+    margin: 0 auto;
+    max-width: 100%;
 }
 
 .header {

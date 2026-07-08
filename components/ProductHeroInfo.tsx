@@ -1,8 +1,18 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import styles from '@/styles/components/ProductHeroInfo.module.css'
+import reviewStyles from '@/styles/components/ProductReviews.module.css'
+
+interface Review {
+  _id: string
+  name: string
+  rating: number
+  reviewText: string
+  approved: boolean
+  submittedAt: string
+}
 
 interface Props {
   productId: string
@@ -13,23 +23,7 @@ interface Props {
   description?: string
   features?: string[]
   specsPdfUrl?: string
-}
-
-function CartIcon() {
-  return (
-    <svg className={styles.btnIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
-      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-    </svg>
-  )
-}
-
-function CheckIcon() {
-  return (
-    <svg className={styles.btnIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  )
+  reviews: Review[]
 }
 
 function MailIcon() {
@@ -51,78 +45,235 @@ function FileIcon() {
 }
 
 export default function ProductHeroInfo({
-  productId, productName, productSku, productSlug, categoryName, description, features = [], specsPdfUrl,
+  productId, productName, productSku, productSlug, categoryName, description, features = [], specsPdfUrl, reviews,
 }: Props) {
-  const [added, setAdded] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [rating, setRating] = useState(0)
+  const [reviewText, setReviewText] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [message, setMessage] = useState('')
+  const [messageType, setMessageType] = useState<'success' | 'error' | ''>('')
 
-  useEffect(() => {
-    try {
-      const cart: { _id: string }[] = JSON.parse(localStorage.getItem('quoteCart') || '[]')
-      setAdded(cart.some(i => i._id === productId))
-    } catch { /* ignore */ }
-  }, [productId])
-
-  const handleAddToCart = useCallback(() => {
-    try {
-      const cart: unknown[] = JSON.parse(localStorage.getItem('quoteCart') || '[]')
-      const exists = (cart as { _id: string }[]).some(i => i._id === productId)
-      if (!exists) {
-        cart.push({ _id: productId, name: productName, slug: productSlug, sku: productSku })
-        localStorage.setItem('quoteCart', JSON.stringify(cart))
-        window.dispatchEvent(new Event('quoteCartUpdated'))
-      }
-      setAdded(true)
-    } catch { /* ignore */ }
-  }, [productId, productName, productSlug, productSku])
+  // Calculate average rating
+  const averageRating = reviews.length > 0 
+    ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length 
+    : 0
+  
+  // Round to 1 decimal place
+  const roundedRating = Math.round(averageRating * 10) / 10
 
   const handleScrollToForm = useCallback(() => {
     document.getElementById('inquiry-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [])
 
+  // Function to scroll to reviews section
+  const handleScrollToReviews = useCallback(() => {
+    const reviewsSection = document.querySelector('#reviews-heading')?.closest('section')
+    if (reviewsSection) {
+      reviewsSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [])
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setMessage('')
+    setMessageType('')
+
+    try {
+      const res = await fetch('/api/review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          rating,
+          reviewText,
+          productId,
+          productName,
+        }),
+      })
+
+      const data = await res.json()
+      
+      if (data.success) {
+        setMessage(data.message)
+        setMessageType('success')
+        // Reset after successful submission, close modal after short delay
+        setTimeout(() => {
+          setIsModalOpen(false)
+          setName('')
+          setEmail('')
+          setRating(0)
+          setReviewText('')
+          setMessage('')
+          setMessageType('')
+        }, 2000)
+      } else {
+        setMessage(data.error)
+        setMessageType('error')
+      }
+    } catch (err) {
+      console.error('Error submitting review:', err)
+      setMessage('Something went wrong! Please try again.')
+      setMessageType('error')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [name, email, rating, reviewText, productId, productName])
+
+  const closeModal = useCallback(() => {
+    setIsModalOpen(false)
+    setName('')
+    setEmail('')
+    setRating(0)
+    setReviewText('')
+    setMessage('')
+    setMessageType('')
+  }, [])
+
   return (
-    <motion.div
-      className={styles.panel}
-      initial={{ opacity: 0, x: 24 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5, delay: 0.15, ease: 'easeOut' }}
-    >
-      {categoryName && <div className={styles.categoryLabel}>{categoryName}</div>}
+    <>
+      <motion.div
+        className={styles.panel}
+        initial={{ opacity: 0, x: 24 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay: 0.15, ease: 'easeOut' }}
+      >
+        {categoryName && <div className={styles.categoryLabel}>{categoryName}</div>}
 
-      <h1 className={styles.productName}>{productName}</h1>
+        {productSku && (
+          <div className={styles.skuRow}>
+            <span className={styles.skuLabel}>SKU</span>
+            <span className={styles.skuValue}>{productSku}</span>
+          </div>
+        )}
 
-      {productSku && (
-        <div className={styles.skuRow}>
-          <span className={styles.skuLabel}>SKU</span>
-          <span className={styles.skuValue}>{productSku}</span>
+        {/* Rating Display */}
+        {reviews.length > 0 && (
+          <div className={styles.ratingRow} onClick={handleScrollToReviews} style={{ cursor: 'pointer' }}>
+            <div className={styles.stars}>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span 
+                  key={star} 
+                  className={`${styles.star} ${star <= Math.round(roundedRating) ? styles.starActive : ''}`}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+            <span className={styles.ratingValue}>{roundedRating}</span>
+            <span className={styles.reviewCount}>({reviews.length} review{reviews.length !== 1 ? 's' : ''})</span>
+          </div>
+        )}
+
+        <h1 className={styles.productName}>{productName}</h1>
+
+        <div className={styles.divider} aria-hidden="true" />
+
+        {description && <p className={styles.description}>{description}</p>}
+
+        {/* Write a Review Button */}
+        <button onClick={() => setIsModalOpen(true)} className={styles.writeReviewBtn}>
+           Write a Review
+        </button>
+
+        <div className={styles.actions}>
+          <button onClick={handleScrollToForm} className={styles.btnQuote}>
+            <MailIcon />
+            Request Quote
+          </button>
+
+          {specsPdfUrl && (
+            <a href={specsPdfUrl} target="_blank" rel="noopener noreferrer" className={styles.btnPdf} download>
+              <FileIcon />
+              Download PDF Brochure
+            </a>
+          )}
+        </div>
+      </motion.div>
+
+      {/* Popup Modal */}
+      {isModalOpen && (
+        <div className={reviewStyles.modalOverlay} onClick={closeModal}>
+          <div className={reviewStyles.modal} onClick={(e) => e.stopPropagation()}>
+            <div className={reviewStyles.modalHeader}>
+              <h3 className={reviewStyles.formTitle}>Write a Review</h3>
+              <button onClick={closeModal} className={reviewStyles.closeBtn}>✕</button>
+            </div>
+            {message && (
+              <div className={`${reviewStyles.message} ${messageType === 'success' ? reviewStyles.success : reviewStyles.error}`}>
+                {message}
+              </div>
+            )}
+            <form onSubmit={handleSubmit} className={reviewStyles.form}>
+              <div className={reviewStyles.formGroup}>
+                <label htmlFor="hero-name" className={reviewStyles.label}>Your Name</label>
+                <input
+                  id="hero-name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className={reviewStyles.input}
+                  placeholder="John Doe"
+                  required
+                />
+              </div>
+
+              <div className={reviewStyles.formGroup}>
+                <label htmlFor="hero-email" className={reviewStyles.label}>Email</label>
+                <input
+                  id="hero-email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={reviewStyles.input}
+                  placeholder="john@example.com"
+                  required
+                />
+              </div>
+
+              <div className={reviewStyles.formGroup}>
+                <label className={reviewStyles.label}>Rating</label>
+                <div className={reviewStyles.rating}>
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setRating(star)}
+                      className={`${reviewStyles.star} ${rating >= star ? reviewStyles.active : ''}`}
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className={reviewStyles.formGroup}>
+                <label htmlFor="hero-review" className={reviewStyles.label}>Your Review</label>
+                <textarea
+                  id="hero-review"
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                  className={reviewStyles.textarea}
+                  placeholder="Tell us what you think..."
+                  required
+                  rows={4}
+                />
+              </div>
+
+              <div className={reviewStyles.modalActions}>
+                <button type="button" onClick={closeModal} className={reviewStyles.cancelBtn}>Cancel</button>
+                <button type="submit" disabled={isSubmitting} className={reviewStyles.submitBtn}>
+                  {isSubmitting ? 'Submitting...' : 'Submit Review'}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
-
-      <div className={styles.divider} aria-hidden="true" />
-
-      {description && <p className={styles.description}>{description}</p>}
-
-      <div className={styles.actions}>
-        <button
-          onClick={handleAddToCart}
-          className={`${styles.btnCart} ${added ? styles.btnCartAdded : ''}`}
-          aria-label={added ? 'Added to quote cart' : 'Add to quote cart'}
-        >
-          {added ? <CheckIcon /> : <CartIcon />}
-          {added ? 'Added to Quote Cart' : 'Add to Quote Cart'}
-        </button>
-
-        <button onClick={handleScrollToForm} className={styles.btnQuote}>
-          <MailIcon />
-          Request Quote
-        </button>
-
-        {specsPdfUrl && (
-          <a href={specsPdfUrl} target="_blank" rel="noopener noreferrer" className={styles.btnPdf} download>
-            <FileIcon />
-            Download PDF Brochure
-          </a>
-        )}
-      </div>
-    </motion.div>
+    </>
   )
 }

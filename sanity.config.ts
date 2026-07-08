@@ -39,6 +39,7 @@ const structure = (S: StructureBuilder) =>
       S.documentTypeListItem('category').title('Categories'),
       S.documentTypeListItem('subCategory').title('Sub Categories'),
       S.documentTypeListItem('inquiry').title('Inquiries'),
+      S.documentTypeListItem('review').title('Product Reviews'),
     ]);
 
 export default defineConfig({

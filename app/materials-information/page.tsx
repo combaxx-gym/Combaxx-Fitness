@@ -37,7 +37,7 @@ const MATERIALS = [
     id: 'coating',
     num: '03',
     name: 'Powder Coating',
-    category: 'Surface Finish',
+    category: 'Surface Finish', 
     color: '#FF3333',
     hex: '#FF3333',
     properties: ['Electrostatic application', '60–80 micron thickness', 'Salt spray test: 500h', 'RAL custom colors available'],
