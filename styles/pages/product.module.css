@@ -62,7 +62,7 @@
 .heroGrid {
   display: grid;
   grid-template-columns: 60fr 40fr;
-  gap: 5rem;
+  gap: 4rem;
   align-items: start;
 }
 

@@ -27,13 +27,23 @@
 }
 
 @media (min-width: 640px) { .productName { font-size: 2.5rem; } }
-@media (min-width: 1280px) { .productName { font-size: 3rem; } }
+/* @media (min-width: 1000px) { 
+  .btnCart{
+    font-size: 14px;
+  } 
+} */
+@media (min-width: 1280px) { 
+  .productName { font-size: 3rem; }
+  .btnCart, .btnQuote, .btnPdf, .writeReviewBtn {
+    font-size: 14px !important;
+  } 
+}
 
 .skuRow {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.8rem;
 }
 
 .skuLabel {
@@ -226,7 +236,7 @@
 }
 
 .btnCartAdded {
-     color: #fff;
+    color: #fff;
     background: #00541fcc;
     border-color: #898989;
     padding-inline: 20px;

@@ -60,5 +60,12 @@ export const category = defineType({
         },
       ],
     }),
+    defineField({
+      name: 'products',
+      title: 'Products',
+      type: 'array',
+      description: 'Select products that belong to this category',
+      of: [{ type: 'reference', to: [{ type: 'product' }] }],
+    }),
   ],
 })
