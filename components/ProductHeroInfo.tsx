@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import styles from '@/styles/components/ProductHeroInfo.module.css'
 import reviewStyles from '@/styles/components/ProductReviews.module.css'
@@ -26,6 +26,23 @@ interface Props {
   reviews: Review[]
 }
 
+function CartIcon() {
+  return (
+    <svg className={styles.btnIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+    </svg>
+  )
+}
+
+function CheckIcon() {
+  return (
+    <svg className={styles.btnIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">       
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  )
+}
+
 function MailIcon() {
   return (
     <svg className={styles.btnIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -38,7 +55,7 @@ function MailIcon() {
 function FileIcon() {
   return (
     <svg className={styles.btnIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />   
       <polyline points="14 2 14 8 20 8" />
     </svg>
   )
@@ -47,6 +64,7 @@ function FileIcon() {
 export default function ProductHeroInfo({
   productId, productName, productSku, productSlug, categoryName, description, features = [], specsPdfUrl, reviews,
 }: Props) {
+  const [added, setAdded] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -63,6 +81,26 @@ export default function ProductHeroInfo({
   
   // Round to 1 decimal place
   const roundedRating = Math.round(averageRating * 10) / 10
+
+  useEffect(() => {
+    try {
+      const cart: { _id: string }[] = JSON.parse(localStorage.getItem('quoteCart') || '[]')
+      setAdded(cart.some(i => i._id === productId))
+    } catch { /* ignore */ }
+  }, [productId])
+
+  const handleAddToCart = useCallback(() => {
+    try {
+      const cart: unknown[] = JSON.parse(localStorage.getItem('quoteCart') || '[]')
+      const exists = (cart as { _id: string }[]).some(i => i._id === productId) 
+      if (!exists) {
+        cart.push({ _id: productId, name: productName, slug: productSlug, sku: productSku })
+        localStorage.setItem('quoteCart', JSON.stringify(cart))
+        window.dispatchEvent(new Event('quoteCartUpdated'))
+      }
+      setAdded(true)
+    } catch { /* ignore */ }
+  }, [productId, productName, productSlug, productSku])
 
   const handleScrollToForm = useCallback(() => {
     document.getElementById('inquiry-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -175,13 +213,17 @@ export default function ProductHeroInfo({
 
         {description && <p className={styles.description}>{description}</p>}
 
-        {/* Write a Review Button */}
-        <button onClick={() => setIsModalOpen(true)} className={styles.writeReviewBtn}>
-           Write a Review
-        </button>
-
         <div className={styles.actions}>
-          <button onClick={handleScrollToForm} className={styles.btnQuote}>
+          <button
+            onClick={handleAddToCart}
+            className={`${styles.btnCart} ${added ? styles.btnCartAdded : ''}`}   
+            aria-label={added ? 'Added to quote cart' : 'Add to quote cart'}      
+          >
+            {added ? <CheckIcon /> : <CartIcon />}
+            {added ? 'Added to Quote Cart' : 'Add to Quote Cart'}
+          </button>
+
+          <button onClick={handleScrollToForm} className={styles.btnQuote}>       
             <MailIcon />
             Request Quote
           </button>
@@ -192,6 +234,11 @@ export default function ProductHeroInfo({
               Download PDF Brochure
             </a>
           )}
+
+          {/* Write a Review Button */}
+          <button onClick={() => setIsModalOpen(true)} className={styles.writeReviewBtn}>
+            ✍️ Write a Review
+          </button>
         </div>
       </motion.div>
 
