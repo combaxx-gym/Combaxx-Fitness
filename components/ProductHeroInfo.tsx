@@ -214,19 +214,21 @@ export default function ProductHeroInfo({
         {description && <p className={styles.description}>{description}</p>}
 
         <div className={styles.actions}>
-          <button
-            onClick={handleAddToCart}
-            className={`${styles.btnCart} ${added ? styles.btnCartAdded : ''}`}   
-            aria-label={added ? 'Added to quote cart' : 'Add to quote cart'}      
-          >
-            {added ? <CheckIcon /> : <CartIcon />}
-            {added ? 'Added to Quote Cart' : 'Add to Quote Cart'}
-          </button>
+          <div className={styles.buttonRow}>
+            <button
+              onClick={handleAddToCart}
+              className={`${styles.btnCart} ${added ? styles.btnCartAdded : ''}`}   
+              aria-label={added ? 'Added to quote cart' : 'Add to quote cart'}      
+            >
+              {added ? <CheckIcon /> : <CartIcon />}
+              {added ? 'Added to Quote Cart' : 'Add to Quote Cart'}
+            </button>
 
-          <button onClick={handleScrollToForm} className={styles.btnQuote}>       
-            <MailIcon />
-            Request Quote
-          </button>
+            <button onClick={handleScrollToForm} className={styles.btnQuote}>       
+              <MailIcon />
+              Request Quote
+            </button>
+          </div>
 
           {specsPdfUrl && (
             <a href={specsPdfUrl} target="_blank" rel="noopener noreferrer" className={styles.btnPdf} download>
