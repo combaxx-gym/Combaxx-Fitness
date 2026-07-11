@@ -139,6 +139,23 @@
   backdrop-filter: blur(4px);
 }
 
+@media (max-width: 767px) {
+  .rightPill {
+    padding: 0.5rem 1rem;
+    gap: 1rem;
+  }
+  .searchWrap {
+    padding-right: 1rem;
+    margin-right: 0.25rem;
+  }
+  .searchInput {
+    width: 6rem;
+  }
+  .searchInput:focus {
+    width: 8rem;
+  }
+}
+
 .rightPillScrolled {
   background-color: #1A1A1A;
   box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
