@@ -20,13 +20,26 @@ interface Product {
 }
 
 // ─── Data fetching ────────────────────────────────────────────────────────────
-async function getProducts(): Promise<Product[]> {
+async function getProducts(searchQuery?: string): Promise<Product[]> {
+  let query = '*[_type == "product"]'
+  const params: Record<string, unknown> = {}
+  
+  if (searchQuery && searchQuery.trim().length >= 2) {
+    const pattern = `*${searchQuery.toLowerCase()}*`
+    query = `*[_type == "product" && (
+      lower(name) match $pattern ||
+      lower(coalesce(title, "")) match $pattern
+    )] | order(_score desc)`
+    params.pattern = pattern
+  }
+  
   const products = await client.fetch(
-    `*[_type == "product"]{
+    `${query}{
       _id, name, title, slug, image, description,
       category->{name, slug},
       categories[]->{name, slug}
-    }`
+    }`,
+    params
   )
   return products || []
 }
@@ -46,9 +59,13 @@ const WHY_FEATURES = [
 ]
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
-export default async function ShopPage() {
-  const products = await getProducts()
-  const title = 'Shop All Products'
+export default async function ShopPage(props: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const searchParams = await props.searchParams
+  const q = searchParams?.q as string | undefined
+  const products = await getProducts(q)
+  const title = q ? `Search Results for "${q}"` : 'Shop All Products'
 
   return (
     <div className={styles.page}>
@@ -99,8 +116,8 @@ export default async function ShopPage() {
         {/* ── Products Grid ── */}
         <section id="products" className={styles.productsSection} aria-labelledby="products-heading">
           <div className={styles.sectionHead}>
-            <span className={styles.sectionBadge}>Our Range</span>
-            <h2 className={styles.sectionTitle} id="products-heading">All Products</h2>
+            <span className={styles.sectionBadge}>{q ? 'Search Results' : 'Our Range'}</span>
+            <h2 className={styles.sectionTitle} id="products-heading">{q ? `Results for "${q}"` : 'All Products'}</h2>
           </div>
 
           {products.length === 0 ? (
