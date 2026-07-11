@@ -230,17 +230,19 @@ export default function ProductHeroInfo({
             </button>
           </div>
 
+          
+
+          {/* Write a Review Button */}
+          <button onClick={() => setIsModalOpen(true)} className={styles.writeReviewBtn}>
+            Write a Review
+          </button>
+
           {specsPdfUrl && (
             <a href={specsPdfUrl} target="_blank" rel="noopener noreferrer" className={styles.btnPdf} download>
               <FileIcon />
               Download PDF Brochure
             </a>
           )}
-
-          {/* Write a Review Button */}
-          <button onClick={() => setIsModalOpen(true)} className={styles.writeReviewBtn}>
-            ✍️ Write a Review
-          </button>
         </div>
       </motion.div>
 

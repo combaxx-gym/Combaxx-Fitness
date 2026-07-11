@@ -277,7 +277,7 @@
 
 .categoryArrow {
   color: rgba(255,255,255,0.35);
-  font-size: 1.2rem;
+  font-size: 35px;
   transition: all 0.2s ease;
 }
 
@@ -381,7 +381,7 @@
 
 .quickLinkArrow {
   color: rgba(255,255,255,0.35);
-  font-size: 1.2rem;
+  font-size: 35px;
   transition: all 0.2s ease;
   align-self: center;
 }

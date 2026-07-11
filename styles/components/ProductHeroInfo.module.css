@@ -98,8 +98,8 @@
   background: transparent;
   border: 1.5px solid rgba(255, 255, 255, 0.5);
   color: #fff;
-  font-size: 0.875rem;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
@@ -174,23 +174,23 @@
 }
 
 .btnCart {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.625rem;
-  padding: 1rem 1.75rem;
-  background: #f33;
-  border: 1.5px solid #f33;
-  border-radius: .5rem;
   color: #fff;
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.25s ease;
-  width: 100%;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: #f33;
+    border: 1.5px solid #f33;
+    border-radius: .5rem;
+    justify-content: center;
+    align-items: center;
+    gap: .625rem;
+    width: 100%;
+    padding: 1rem 1.75rem;
+    font-size: 18px;
+    font-weight: 600;
+    transition: background .25s;
+    display: flex;
 }
+
 
 .btnCart:hover {
   background: #e62929;
@@ -198,14 +198,15 @@
 }
 
 .btnCartAdded {
-  background: #22c55e;
-  border-color: #22c55e;
-  color: #fff;
+     color: #fff;
+    background: #00541fcc;
+    border-color: #898989;
+    padding-inline: 20px;
 }
 
 .btnCartAdded:hover {
-  background: #16a34a;
-  border-color: #16a34a;
+  background: #00541ffd;
+  border-color: #898989;
 }
 
 .btnQuote {
@@ -220,7 +221,7 @@
   gap: .625rem;
   width: 100%;
   padding: 1rem 1.75rem;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   transition: background .25s;
   display: flex;
@@ -229,22 +230,22 @@
 .btnQuote:hover { background: #e62929; border-color: #e62929; }
 
 .btnPdf {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.625rem;
-  padding: 0.75rem 1.75rem;
-  background: transparent;
-  border: none;
-  color: #9ca3af;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  text-decoration: none;
-  transition: color 0.2s ease;
-  width: 100%;
+    color: #9ca3af;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: none;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    gap: .625rem;
+    width: 100%;
+    padding: .75rem 1.75rem;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color .2s;
+    display: flex;
 }
 
 .btnPdf:hover { color: #fff; }
