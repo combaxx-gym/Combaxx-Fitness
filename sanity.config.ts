@@ -30,7 +30,12 @@ const structure = (S: StructureBuilder) =>
               S.documentList()
                 .title('Products')
                 .schemaType('product')
-                .filter('_type == "product" && $categoryId in categories[]._ref')
+                .filter(
+                  '_type == "product" && (' +
+                  '$categoryId in categories[]._ref || ' +
+                  'references(*[_type == "category" && _id == $categoryId].products[]._ref)' +
+                  ')'
+                )
                 .params({ categoryId })
             ),
         ),
