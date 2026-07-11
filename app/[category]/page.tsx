@@ -19,6 +19,7 @@ interface Category {
   tagline?: string
   description?: string
   faqs?: Array<{ question: string; answer: string }>
+  products?: Array<Product>
 }
 
 interface Product {
@@ -35,24 +36,39 @@ interface Product {
 // ─── Data fetching ────────────────────────────────────────────────────────────
 
 async function getCategoryData(slug: string) {
-  const [cat, products] = await Promise.all([
-    client.fetch<Category | null>(
-      `*[_type == "category" && slug.current == $slug][0]{
-        _id, name, slug, image, heroImage, tagline, description,
-        faqs[]{question, answer}
-      }`,
-      { slug }
-    ),
-    client.fetch<Product[]>(
-      `*[_type == "product" && references(*[_type == "category" && slug.current == $slug]._id)]{
+  const cat = await client.fetch<Category | null>(
+    `*[_type == "category" && slug.current == $slug][0]{
+      _id, name, slug, image, heroImage, tagline, description,
+      faqs[]{question, answer},
+      products[]->{
         _id, name, title, slug, image, description,
         category->{name, slug},
         categories[]->{name, slug}
-      }`,
-      { slug }
-    ),
-  ])
-  return { cat, products: products || [] }
+      }
+    }`,
+    { slug }
+  )
+
+  const productsFromProductSide = await client.fetch<Product[]>(
+    `*[_type == "product" && references(*[_type == "category" && slug.current == $slug]._id)]{
+      _id, name, title, slug, image, description,
+      category->{name, slug},
+      categories[]->{name, slug}
+    }`,
+    { slug }
+  )
+
+  // Combine products from both sides and remove duplicates by _id
+  const allProducts = [
+    ...(cat?.products || []),
+    ...(productsFromProductSide || [])
+  ]
+
+  const uniqueProducts = allProducts.filter((product, index, self) =>
+    index === self.findIndex((p) => p._id === product._id)
+  )
+
+  return { cat, products: uniqueProducts || [] }
 }
 
 // ─── Metadata ─────────────────────────────────────────────────────────────────
