@@ -213,13 +213,12 @@
 }
 
 .videoTitle {
-  font-size: 3.5rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  color: #fff;
-  line-height: 1.05;
-  margin-bottom: 1.5rem;
+    text-transform: capitalize;
+    max-width: 64rem;
+    margin-bottom: 1.5rem;
+    font-size: 45px;
+    font-weight: 600;
+    line-height: 1.1;
 }
 
 @media (max-width: 1023px) {
@@ -321,21 +320,23 @@
 }
 
 .faqIntroTitle {
-  font-size: 3.125rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  max-width: 64rem;
+    text-transform: capitalize;
+    margin-bottom: 1.5rem;
+    font-size: 45px;
+    font-weight: 600;
+    line-height: 1.1;
+    max-width: 64rem;
 }
 
 @media (max-width: 1023px) {
   .faqIntroTitle {
-    font-size: 2.25rem;
+    font-size: 35px;
   }
 }
 
 @media (max-width: 767px) {
   .faqIntroTitle {
-    font-size: 1.5rem;
+    font-size: 25px;
     max-width: none;
   }
 }
@@ -343,8 +344,9 @@
 .faqIntroDesc {
   margin-top: 1.5rem;
   color: #d1d5db;
-  font-size: 0.95rem;
-  line-height: 1.7;
+  font-size: 18px;
+  line-height: 1.4;
+  width: 90%;
 }
 
 .faqGrid {
@@ -390,6 +392,11 @@
   list-style: none;
   align-items: center;
   justify-content: space-between;
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: 100%;
+  text-align: left;
 }
 
 .faqSummary::-webkit-details-marker {
@@ -400,6 +407,7 @@
   font-size: 1.75rem;
   font-weight: 600;
   line-height: 1.4;
+  color: white;
 }
 
 @media (max-width: 767px) {
@@ -417,8 +425,8 @@
   margin-left: 1rem;
 }
 
-details[open] .faqIcon {
-  transform: rotate(45deg);
+.faqSummary:hover .faqIcon {
+  color: white;
 }
 
 .faqAnswer {

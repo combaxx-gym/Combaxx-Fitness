@@ -8,31 +8,31 @@ import styles from "@/styles/components/HeroCarousel.module.css"
 const SLIDES = [
   {
     id: 1,
-    video: "/videos/743f8627-519af9c4.mp4",
+    video: "/videos/main-banner-video-first.mp4",
     poster: "/images/hero-section-slide-1.webp",
-    title: "SKILLRUN",
+    title: "RIGS & RACKS",
     description:
-      "Fast-paced running. Intense climbs and descents. Instant speed and gradient changes. Skillrun is designed for performance running.",
+      "Heavy lifting. Functional performance. Infinite possibilities. Engineered for uncompromising strength, modular versatility, and professional-grade performance.",
     cta: "Discover More",
     link: "/shop",
   },
   {
     id: 2,
-    video: "/videos/9560d960.mp4",
+    video: "/videos/main-banner-video-second-slide.mp4",
     poster: "/images/hero-section-slide-2.webp",
-    title: "POWER STRENGTH",
+    title: "WEIGHT BENCHES",
     description:
-      "Unleash your full potential with our industrial-grade strength equipment. Built for heavy lifting and maximum durability.",
+      "Engineered for exceptional stability, ergonomic support, and commercial-grade durability. Designed to maximize comfort, confidence, and performance through every lift.",
     cta: "Explore Strength",
     link: "/shop",
   },
   {
     id: 3,
-    video: "/videos/9af5361d.mp4",
+    video: "/videos/Shaping the future of performance.mp4",
     poster: "/images/hero-section-slide-3.webp",
-    title: "CARDIO ELITE",
+    title: "Storage Systems",
     description:
-      "Experience the next level of cardio. Advanced biomechanics meet sleek design to keep you moving further and faster.",
+      "Engineered to keep training spaces organized, efficient, and clutter-free. Modular storage solutions built for commercial durability and maximum space utilization.",
     cta: "View Cardio",
     link: "/shop",
   },

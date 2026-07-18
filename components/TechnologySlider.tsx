@@ -170,8 +170,7 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
               Precision engineered equipment, tuned for human performance.
             </h2>
             <p className={styles.desc}>
-              Glide through a curated line-up of treadmills, bikes and strength systems built to
-              feel smooth, solid and responsive at speed.
+              Explore a curated range of strength systems, racks, benches and functional training equipment engineered for exceptional performance, durability and versatility.
             </p>
           </div>
           <div className={styles.ctaWrap}>

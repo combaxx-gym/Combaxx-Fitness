@@ -18,7 +18,7 @@ const ShapingFuture = () => {
         </div>
         <div className={styles.imageWrap}>
           <video
-            src="/videos/2bd2404b.mp4"
+            src="/videos/Shaping the future of performance.mp4"
             className={styles.image}
             autoPlay
             loop
