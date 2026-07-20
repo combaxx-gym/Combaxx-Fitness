@@ -14,34 +14,73 @@ import styles from '@/styles/components/MegaMenu.module.css'
 const STATIC_CATEGORIES = [
   {
     _id: 'cat-1',
-    name: 'Ironcore series',
+    name: 'Strength Equipment',
+    slug: { current: 'strength-equipment' },
+    tagline: 'Rigs, Racks, Benches & More.',
+    image: '/images/Ironcore series.webp',
+  },
+  {
+    _id: 'cat-2',
+    name: 'Cardio Equipment',
+    slug: { current: 'cardio-equipment' },
+    tagline: 'Treadmills, Bikes & Ellipticals.',
+    image: '/images/ANCHOR Series.webp',
+  },
+  {
+    _id: 'cat-3',
+    name: 'Functional Training',
+    slug: { current: 'functional-training' },
+    tagline: 'Train For Real-World Performance.',
+    image: '/images/STRATA Series.webp',
+  },
+  {
+    _id: 'cat-4',
+    name: 'Storage Solutions',
+    slug: { current: 'storage-solutions' },
+    tagline: 'Organize Your Gym Efficiently.',
+    image: '/images/PRECISION Series.webp',
+  },
+  {
+    _id: 'cat-5',
+    name: 'Gym Accessories',
+    slug: { current: 'gym-accessories' },
+    tagline: 'Essential Tools For Every Workout.',
+    image: '/images/Titan Series.webp',
+  },
+]
+
+// Static Series (separate from categories)
+const STATIC_SERIES = [
+  {
+    _id: 'series-1',
+    name: 'Ironcore Series',
     slug: { current: 'ironcore-series' },
     tagline: 'Built for Elite Strength. Engineered to Endure.',
     image: '/images/Ironcore series.webp',
   },
   {
-    _id: 'cat-2',
+    _id: 'series-2',
     name: 'Anchor Series',
     slug: { current: 'anchor-series' },
     tagline: 'Organize Strength. Maximize Performance.',
     image: '/images/ANCHOR Series.webp',
   },
   {
-    _id: 'cat-3',
+    _id: 'series-3',
     name: 'Strata Series',
     slug: { current: 'strata-series' },
     tagline: 'Train Strong. Lift Without Limits.',
     image: '/images/STRATA Series.webp',
   },
   {
-    _id: 'cat-4',
+    _id: 'series-4',
     name: 'Precision Series',
     slug: { current: 'precision-series' },
     tagline: 'Precision in Every Rep.',
     image: '/images/PRECISION Series.webp',
   },
   {
-    _id: 'cat-5',
+    _id: 'series-5',
     name: 'Titan Series',
     slug: { current: 'titan-series' },
     tagline: 'Precision Grip. Maximum Performance.',
@@ -67,6 +106,7 @@ interface Props {
 
 export default function MegaMenu({ isOpen, onClose, onMouseEnter, onMouseLeave }: Props) {
   const [categories, setCategories] = useState<Category[]>(STATIC_CATEGORIES)
+  const [series, setSeries] = useState<Category[]>(STATIC_SERIES)
   const [loading, setLoading] = useState(false)
   const [mounted, setMounted] = useState(false)
 
@@ -167,90 +207,40 @@ export default function MegaMenu({ isOpen, onClose, onMouseEnter, onMouseLeave }
                 </div>
               </div>
 
-              {/* Right Section - Quick Links */}
-              <div className={styles.quickLinksSection}>
-                <h3 className={styles.sectionTitle}>EXPLORE COMBAXX</h3>
-                <div className={styles.quickLinksList}>
-                  <Link href="/" className={styles.quickLink} onClick={onClose}>
-                    <div className={styles.quickLinkIcon}>
-                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 12L12 3L21 12V21H14V16H10V21H3V12Z" stroke="currentColor" strokeWidth="1.5" />
-                      </svg>
-                    </div>
-                    <div className={styles.quickLinkInfo}>
-                      <span className={styles.quickLinkTitle}>Home</span>
-                      <span className={styles.quickLinkDesc}>Back to main page</span>
-                    </div>
-                    <span className={styles.quickLinkArrow}>›</span>
-                  </Link>
-                  <Link href="/shop" className={styles.quickLink} onClick={onClose}>
-                    <div className={styles.quickLinkIcon}>
-                      <Image
-                        src="/images/all-products.svg"
-                        alt="Icon"
-                        width={24}
-                        height={24}
-                        unoptimized
-                        style={{ filter: 'brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(7483%) hue-rotate(357deg) brightness(98%) contrast(118%)' }}
-                      />
-                    </div>
-                    <div className={styles.quickLinkInfo}>
-                      <span className={styles.quickLinkTitle}>All Products</span>
-                      <span className={styles.quickLinkDesc}>Browse our complete range of premium equipment.</span>
-                    </div>
-                    <span className={styles.quickLinkArrow}>›</span>
-                  </Link>
-                  <Link href="/stories" className={styles.quickLink} onClick={onClose}>
-                    <div className={styles.quickLinkIcon}>
-                      <Image
-                        src="/images/Story.svg"
-                        alt="Stories"
-                        width={24}
-                        height={24}
-                        unoptimized
-                        style={{ filter: 'brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(7483%) hue-rotate(357deg) brightness(98%) contrast(118%)' }}
-                      />
-                    </div>
-                    <div className={styles.quickLinkInfo}>
-                      <span className={styles.quickLinkTitle}>Stories</span>
-                      <span className={styles.quickLinkDesc}>Real stories from real people. Real results.</span>
-                    </div>
-                    <span className={styles.quickLinkArrow}>›</span>
-                  </Link>
-                  <Link href="/materials-information" className={styles.quickLink} onClick={onClose}>
-                    <div className={styles.quickLinkIcon}>
-                      <Image
-                        src="/images/materials-information.svg"
-                        alt="Icon"
-                        width={24}
-                        height={24}
-                        unoptimized
-                        style={{ filter: 'brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(7483%) hue-rotate(357deg) brightness(98%) contrast(118%)' }}
-                      />
-                    </div>
-                    <div className={styles.quickLinkInfo}>
-                      <span className={styles.quickLinkTitle}>Materials Info</span>
-                      <span className={styles.quickLinkDesc}>Learn about the materials we use.</span>
-                    </div>
-                    <span className={styles.quickLinkArrow}>›</span>
-                  </Link>
-                  <Link href="/contact" className={styles.quickLink} onClick={onClose}>
-                    <div className={styles.quickLinkIcon}>
-                      <Image
-                        src="/images/contact.svg"
-                        alt="Icon"
-                        width={24}
-                        height={24}
-                        unoptimized
-                        style={{ filter: 'brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(7483%) hue-rotate(357deg) brightness(98%) contrast(118%)' }}
-                      />
-                    </div>
-                    <div className={styles.quickLinkInfo}>
-                      <span className={styles.quickLinkTitle}>Contact</span>
-                      <span className={styles.quickLinkDesc}>Get in touch with our team.</span>
-                    </div>
-                    <span className={styles.quickLinkArrow}>›</span>
-                  </Link>
+              {/* Right Section - Series */}
+              <div className={styles.categoriesSection}>
+                <h3 className={styles.sectionTitle}>EXPLORE SERIES</h3>
+                <div className={styles.categoriesList}>
+                  {series.slice(0, 5).map(serie => (
+                    <Link
+                      key={serie._id}
+                      href={`/${serie.slug.current}`}
+                      className={styles.categoryCard}
+                      onClick={onClose}
+                    >
+                      {serie.image ? (
+                        <div className={styles.categoryImageWrap}>
+                          <Image
+                            src={typeof serie.image === 'string' ? serie.image : urlFor(serie.image).url()}
+                            alt={serie.name}
+                            fill
+                            className={styles.categoryImage}
+                            sizes="(max-width: 768px) 60px, 80px"
+                            unoptimized
+                          />
+                        </div>
+                      ) : (
+                        <div className={styles.categoryImageWrap} />
+                      )}
+                      <div className={styles.categoryInfo}>
+                        <h4 className={styles.categoryName}>{serie.name}</h4>
+                        {serie.tagline && (
+                          <p className={styles.categoryTagline}>{serie.tagline}</p>
+                        )}
+                      </div>
+                      <span className={styles.categoryArrow}>›</span>
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>
