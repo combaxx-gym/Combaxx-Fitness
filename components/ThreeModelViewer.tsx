@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef, useState, Component, ReactNode } from 'react'
+import React, { useCallback, useEffect, useRef, useState, Component, ReactNode } from 'react'
 import styles from '@/styles/components/ThreeModelViewer.module.css'
 
 type LoadState =
@@ -84,21 +84,6 @@ export default function ThreeModelViewer({ url }: { url: string }) {
   const mountRef = useRef<HTMLDivElement>(null)
   const mvReadyPromise = useRef<Promise<any> | null>(null)
 
-  const resetAll = () => {
-    setUseProxy(false)
-    setLoadState({ stage: 'idle' })
-  }
-
-  const retryDirect = () => {
-    setUseProxy(false)
-    setLoadState({ stage: 'idle' })
-  }
-
-  const tryProxy = () => {
-    setUseProxy(true)
-    setLoadState({ stage: 'idle' })
-  }
-
   useEffect(() => {
     let cancelled = false
     if (!url) return
@@ -172,19 +157,7 @@ export default function ThreeModelViewer({ url }: { url: string }) {
     return () => {
       cancelled = true
     }
-  }, [url])
-
-  useEffect(() => {
-    if (loadState.stage === 'idle') return
-    if (loadState.stage !== 'ready') return
-    if (!useProxy) {
-      // small delay to allow SSR hydration
-      const t = window.setTimeout(() => {
-        setUseProxy(false)
-      }, 10)
-      return () => window.clearTimeout(t)
-    }
-  }, [loadState.stage, useProxy])
+  }, [url, useProxy])
 
   if (!url) return <Fallback />
 
@@ -194,9 +167,9 @@ export default function ThreeModelViewer({ url }: { url: string }) {
 
   const effectiveSrc = useProxy ? getProxyUrl(url) : url
 
-  const handleLoad = () => setLoadState({ stage: 'loaded' })
+  const handleLoad = useCallback(() => setLoadState({ stage: 'loaded' }), [])
 
-  const handleError = (event: any) => {
+  const handleError = useCallback((event: any) => {
     console.warn('[MV] load error', event)
     const detail = (event?.detail?.type as string) || ''
     let msg: string
@@ -204,7 +177,6 @@ export default function ThreeModelViewer({ url }: { url: string }) {
     if (detail.includes('fetch')) {
       msg =
         'Could not download the 3D file. Click Retry to route through our secure server.'
-      // Auto-try proxy once
       if (!useProxy) {
         console.info('[MV] Auto-falling back to same-origin proxy')
         setUseProxy(true)
@@ -226,7 +198,22 @@ export default function ThreeModelViewer({ url }: { url: string }) {
       error: msg,
       usingProxy: useProxy,
     })
-  }
+  }, [useProxy])
+
+  const resetAll = useCallback(() => {
+    setUseProxy(false)
+    setLoadState({ stage: 'idle' })
+  }, [])
+
+  const retryDirect = useCallback(() => {
+    setUseProxy(false)
+    setLoadState({ stage: 'idle' })
+  }, [])
+
+  const tryProxy = useCallback(() => {
+    setUseProxy(true)
+    setLoadState({ stage: 'idle' })
+  }, [])
 
   return (
     <ViewerErrorBoundary

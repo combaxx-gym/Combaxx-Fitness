@@ -171,6 +171,7 @@ export default function Header() {
               height={80}
               className="site-logo"
               sizes="(min-width: 768px) 160px, 150px"
+              style={{ width: undefined, height: 'auto' }}
               priority
               unoptimized
             />

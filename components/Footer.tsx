@@ -51,6 +51,7 @@ export default function Footer() {
               width={200}
               height={120}
               className={styles.logoImg}
+              style={{ width: 'auto', height: undefined }}
               unoptimized
             />
           </Link>
