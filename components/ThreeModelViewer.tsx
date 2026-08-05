@@ -1,7 +1,11 @@
-'use client'
-
 import React, { useCallback, useEffect, useRef, useState, Component, ReactNode } from 'react'
-import styles from '@/styles/components/ThreeModelViewer.module.css'
+import styles from '../styles/components/ThreeModelViewer.module.css'
+
+const MODEL_VIEWER_SCRIPT_ID = 'mv-script-cb3b82'
+const MODEL_VIEWER_SRC =
+  'https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js'
+const PROXY_ENDPOINT = '/api/proxy-model'
+const LOAD_TIMEOUT_MS = 40000
 
 type LoadState =
   | { stage: 'idle' }
@@ -10,154 +14,296 @@ type LoadState =
   | { stage: 'loaded' }
   | { stage: 'error'; error: string; usingProxy: boolean }
 
-class ViewerErrorBoundary extends Component<
-  { children: ReactNode; fallback: (retry: () => void, msg?: string) => ReactNode },
-  { hasError: boolean; errorMsg: string }
-> {
-  constructor(props: any) {
-    super(props)
-    this.state = { hasError: false, errorMsg: '' }
-  }
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, errorMsg: error?.message || '' }
-  }
-  componentDidCatch(err: Error) {
-    console.error('[MV] ViewerErrorBoundary caught:', err)
-  }
-  reset = () => this.setState({ hasError: false, errorMsg: '' })
-  render() {
-    if (this.state.hasError) {
-      return this.props.fallback(this.reset, this.state.errorMsg) as any
-    }
-    return this.props.children
-  }
-}
-
-const MODEL_VIEWER_CDN =
-  'https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js'
-
 function getProxyUrl(src: string) {
-  const u = new URL('/api/proxy-model', typeof window === 'undefined' ? 'http://localhost' : window.location.origin)
-  u.searchParams.set('src', src)
-  return u.toString()
+  const sep = PROXY_ENDPOINT.includes('?') ? '&' : '?'
+  return `${PROXY_ENDPOINT}${sep}src=${encodeURIComponent(src)}`
 }
 
 function Fallback() {
   return (
-    <div className={styles.loadingWrapper}>
-      <div className={styles.spinner} />
-      <span className={styles.loadingText}>Loading 3D Model</span>
+    <div className={styles.fallback}>
+      <div className={styles.fallbackBox}>
+        <div className={styles.fallbackIcon}>📦</div>
+        <div className={styles.fallbackTitle}>3D model not available</div>
+        <div className={styles.fallbackText}>
+          Check the product images or contact us for high-resolution visuals.
+        </div>
+      </div>
     </div>
   )
 }
 
 function ErrorBox({
-  msg,
-  retry,
-  title = '3D View Unavailable',
+  error,
+  usingProxy,
+  onRetryDirect,
+  onTryProxy,
+  onReset,
 }: {
-  msg?: string
-  retry: () => void
-  title?: string
+  error: string
+  usingProxy: boolean
+  onRetryDirect: () => void
+  onTryProxy: () => void
+  onReset: () => void
 }) {
   return (
     <div className={styles.errorBox}>
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FF3333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-        <line x1="12" y1="9" x2="12" y2="13" />
-        <line x1="12" y1="17" x2="12.01" y2="17" />
-      </svg>
-      <span className={styles.errorTitle}>{title}</span>
-      {msg && (
-        <span className={styles.errorMsg}>
-          {msg.length > 110 ? msg.slice(0, 110) + '…' : msg}
-        </span>
+      <div className={styles.errorIcon}>⚠️</div>
+      <div className={styles.errorTitle}>3D View Unavailable</div>
+      <div className={styles.errorText}>{error}</div>
+      <div className={styles.errorActions}>
+        <button
+          type="button"
+          className={styles.retryBtn}
+          onClick={usingProxy ? onRetryDirect : onTryProxy}
+        >
+          🔄 {usingProxy ? 'Retry (Direct CDN)' : 'Retry via Secure Proxy'}
+        </button>
+        <button type="button" className={styles.retryBtnAlt} onClick={onReset}>
+          Reset
+        </button>
+      </div>
+      {usingProxy && (
+        <div className={styles.errorHint}>
+          💡 If proxy also fails, please re-upload the 3D file in Sanity as a single
+          bundled <code>.glb</code> file with embedded textures.
+        </div>
       )}
-      <button onClick={retry} className={styles.retryBtn}>Retry</button>
     </div>
   )
 }
 
+class ViewerErrorBoundary extends Component<
+  { children: ReactNode },
+  { hasError: boolean; error: Error | null }
+> {
+  state = { hasError: false, error: null as Error | null }
+  static getDerivedStateFromError(err: Error) {
+    return { hasError: true, error: err }
+  }
+  componentDidCatch(error: Error, info: any) {
+    console.error('[MV] ErrorBoundary caught:', error, info)
+  }
+  reset = () => this.setState({ hasError: false, error: null })
+  render() {
+    if (this.state.hasError) {
+      const msg =
+        this.state.error?.message ||
+        'Unexpected error while rendering the 3D view.'
+      return (
+        <div className={styles.container}>
+          <ErrorBox
+            error={msg}
+            usingProxy={false}
+            onRetryDirect={this.reset}
+            onTryProxy={this.reset}
+            onReset={this.reset}
+          />
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
+
+function ensureModelViewerScript(): Promise<void> {
+  // Window-level promise dedup
+  const w = globalThis as unknown as {
+    __mvReady?: Promise<void>
+  }
+  if (w.__mvReady) return w.__mvReady
+  if (customElements.get('model-viewer')) {
+    w.__mvReady = Promise.resolve()
+    return w.__mvReady
+  }
+  const existing = document.getElementById(MODEL_VIEWER_SCRIPT_ID) as
+    | HTMLScriptElement
+    | null
+  if (existing) {
+    w.__mvReady = new Promise<void>((resolve, reject) => {
+      existing.addEventListener('load', () => resolve())
+      existing.addEventListener('error', () =>
+        reject(new Error('model-viewer script failed to load'))
+      )
+    })
+    return w.__mvReady
+  }
+  const s = document.createElement('script')
+  s.id = MODEL_VIEWER_SCRIPT_ID
+  s.type = 'module'
+  s.src = MODEL_VIEWER_SRC
+  s.async = true
+  s.crossOrigin = 'anonymous'
+  document.head.appendChild(s)
+  w.__mvReady = new Promise<void>((resolve, reject) => {
+    s.addEventListener('load', () => resolve())
+    s.addEventListener('error', () =>
+      reject(new Error('Could not load 3D viewer library. Please try again.'))
+    )
+  })
+  return w.__mvReady
+}
+
 export default function ThreeModelViewer({ url }: { url: string }) {
   const [loadState, setLoadState] = useState<LoadState>({ stage: 'idle' })
-  const [useProxy, setUseProxy] = useState(false)
-  const mountRef = useRef<HTMLDivElement>(null)
-  const mvReadyPromise = useRef<Promise<any> | null>(null)
+  const [useProxy, setUseProxy] = useState(true)
+  const mvRef = useRef<HTMLElement | null>(null)
+  const watchdogTimer = useRef<number | null>(null)
+  const listenersAttached = useRef(false)
+  const currentSrcRef = useRef<string>('')
+  const errorFiredOnceForSrc = useRef(false)
 
+  const clearWatchdog = useCallback(() => {
+    if (watchdogTimer.current !== null) {
+      clearTimeout(watchdogTimer.current)
+      watchdogTimer.current = null
+    }
+  }, [])
+
+  const armWatchdog = useCallback(() => {
+    clearWatchdog()
+    errorFiredOnceForSrc.current = false
+    watchdogTimer.current = window.setTimeout(() => {
+      console.warn('[MV] Watchdog fired — model did not load within timeout')
+      setLoadState((prev) => {
+        if (prev.stage === 'loaded' || prev.stage === 'error') return prev
+        return {
+          stage: 'error',
+          error:
+            '3D model is taking too long to load. The file may be too large or the network is slow. Try again.',
+          usingProxy: useProxy,
+        }
+      })
+    }, LOAD_TIMEOUT_MS)
+  }, [clearWatchdog, useProxy])
+
+  // Ensure script loads and ready
   useEffect(() => {
     let cancelled = false
-    if (!url) return
-
-    const loadScript = async () => {
-      if (typeof window === 'undefined') return
-
-      if (window.customElements && window.customElements.get('model-viewer')) {
-        if (!cancelled) setLoadState(s => s.stage === 'script-loading' ? { stage: 'ready' } : s)
-        return
-      }
-
-      const existing = document.querySelector<HTMLScriptElement>(
-        `script[data-model-viewer-src]`
-      )
-
-      if (existing) {
-        existing.addEventListener(
-          'load',
-          () => {
-            if (!cancelled) setLoadState({ stage: 'ready' })
-          },
-          { once: true }
-        )
-        existing.addEventListener(
-          'error',
-          () => {
-            if (!cancelled) {
-              setLoadState({
-                stage: 'error',
-                error: 'Could not load 3D viewer engine.',
-                usingProxy: useProxy,
-              })
-            }
-          },
-          { once: true }
-        )
+    ;(async () => {
+      try {
         setLoadState({ stage: 'script-loading' })
-        return
-      }
-
-      if (!mvReadyPromise.current) {
-        mvReadyPromise.current = new Promise((resolve, reject) => {
-          const s = document.createElement('script')
-          s.type = 'module'
-          s.src = MODEL_VIEWER_CDN
-          s.dataset.modelViewerSrc = MODEL_VIEWER_CDN
-          s.onerror = () => reject(new Error('model-viewer script failed'))
-          s.onload = () => resolve(true)
-          document.head.appendChild(s)
+        await ensureModelViewerScript()
+        if (cancelled) return
+        setLoadState({ stage: 'ready' })
+      } catch (err: any) {
+        if (cancelled) return
+        setLoadState({
+          stage: 'error',
+          error: err?.message || 'Failed to load 3D viewer library.',
+          usingProxy: useProxy,
         })
       }
-
-      setLoadState({ stage: 'script-loading' })
-      try {
-        await mvReadyPromise.current
-        if (!cancelled) setLoadState({ stage: 'ready' })
-      } catch (e: any) {
-        if (!cancelled) {
-          setLoadState({
-            stage: 'error',
-            error: e?.message || 'Failed to load 3D viewer engine.',
-            usingProxy: useProxy,
-          })
-        }
-      }
-    }
-
-    loadScript()
-
+    })()
     return () => {
       cancelled = true
     }
   }, [url, useProxy])
+
+  // Mount element refs + attach native DOM listeners (not React props)
+  useEffect(() => {
+    if (loadState.stage !== 'ready') return
+    const el = mvRef.current
+    if (!el) return
+    if (listenersAttached.current) return
+
+    listenersAttached.current = true
+
+    const onProgress = (e: Event) => {
+      const detail = (e as CustomEvent).detail || {
+        totalTime: 0,
+        loaded: 0,
+        total: 0,
+      }
+      if (detail.total && detail.loaded && detail.total > 0) {
+        const pct = Math.min(99, Math.round((detail.loaded / detail.total) * 100))
+        setLoadState((prev) =>
+          prev.stage === 'ready' ? { stage: 'ready' } : prev
+        )
+      }
+    }
+
+    const onLoad = () => {
+      clearWatchdog()
+      errorFiredOnceForSrc.current = false
+      setLoadState({ stage: 'loaded' })
+    }
+
+    const onError = (e: Event) => {
+      clearWatchdog()
+      // Avoid double-fire: model-viewer sometimes dispatches multiple error events
+      const thisSrc = currentSrcRef.current
+      if (errorFiredOnceForSrc.current) return
+      errorFiredOnceForSrc.current = true
+
+      const detail = (e as CustomEvent)?.detail
+      console.warn('[MV] error event:', detail)
+      const raw = String(detail?.type || detail?.statusText || detail?.message || '')
+
+      let msg: string
+      const failedDirectFirst = raw.includes('fetch') || raw.includes('network')
+
+      if (failedDirectFirst) {
+        msg =
+          'Could not download the 3D file. Try switching between Direct and Proxy mode.'
+      } else if (
+        raw.includes('format') ||
+        raw.includes('parser') ||
+        raw.includes('decode') ||
+        raw.includes('invalid')
+      ) {
+        msg =
+          'The 3D file could not be read. Please re-upload as a single .glb with embedded textures.'
+      } else if (raw.includes('webgl')) {
+        msg =
+          'WebGL is unavailable in your browser. Please use Chrome, Edge or Safari desktop.'
+      } else {
+        msg = '3D model failed to load. Please try again or contact support.'
+      }
+
+      setLoadState({
+        stage: 'error',
+        error: msg,
+        usingProxy: useProxy,
+      })
+    }
+
+    el.addEventListener('progress', onProgress as EventListener)
+    el.addEventListener('load', onLoad as EventListener)
+    el.addEventListener('error', onError as EventListener)
+
+    // Kick off watchdog when listeners are ready
+    armWatchdog()
+
+    return () => {
+      listenersAttached.current = false
+      el.removeEventListener('progress', onProgress as EventListener)
+      el.removeEventListener('load', onLoad as EventListener)
+      el.removeEventListener('error', onError as EventListener)
+      clearWatchdog()
+    }
+  }, [loadState.stage, clearWatchdog, armWatchdog, useProxy])
+
+  // When URL or proxy mode changes -> update src ref + re-arm watchdog
+  useEffect(() => {
+    if (loadState.stage !== 'ready') return
+    const el = mvRef.current
+    if (!el) return
+    const effectiveSrc = useProxy ? getProxyUrl(url) : url
+    currentSrcRef.current = effectiveSrc
+    errorFiredOnceForSrc.current = false
+
+    // Force model-viewer to re-evaluate src even if equal via attribute set
+    el.setAttribute('src', effectiveSrc)
+    // Some versions of model-viewer need an explicit reset when switching src dynamically
+    try {
+      ;(el as any).dismissPoster?.()
+    } catch {
+      /* ignore */
+    }
+
+    armWatchdog()
+  }, [url, useProxy, loadState.stage, armWatchdog])
 
   if (!url) return <Fallback />
 
@@ -167,121 +313,101 @@ export default function ThreeModelViewer({ url }: { url: string }) {
 
   const effectiveSrc = useProxy ? getProxyUrl(url) : url
 
-  const handleLoad = useCallback(() => setLoadState({ stage: 'loaded' }), [])
-
-  const handleError = useCallback((event: any) => {
-    console.warn('[MV] load error', event)
-    const detail = (event?.detail?.type as string) || ''
-    let msg: string
-
-    if (detail.includes('fetch')) {
-      msg =
-        'Could not download the 3D file. Click Retry to route through our secure server.'
-      if (!useProxy) {
-        console.info('[MV] Auto-falling back to same-origin proxy')
-        setUseProxy(true)
-        setLoadState({ stage: 'ready' })
-        return
-      }
-    } else if (detail.includes('format') || detail.includes('parser')) {
-      msg =
-        'The 3D file format could not be read. Please re-upload as a single .glb file.'
-    } else if (detail.includes('webgl')) {
-      msg =
-        'WebGL is not available or disabled in your browser. Please try Chrome/Safari desktop.'
-    } else {
-      msg = '3D model failed to load. Please try again or contact support.'
-    }
-
-    setLoadState({
-      stage: 'error',
-      error: msg,
-      usingProxy: useProxy,
-    })
-  }, [useProxy])
-
   const resetAll = useCallback(() => {
-    setUseProxy(false)
-    setLoadState({ stage: 'idle' })
-  }, [])
-
-  const retryDirect = useCallback(() => {
-    setUseProxy(false)
-    setLoadState({ stage: 'idle' })
-  }, [])
-
-  const tryProxy = useCallback(() => {
+    clearWatchdog()
     setUseProxy(true)
     setLoadState({ stage: 'idle' })
-  }, [])
+    errorFiredOnceForSrc.current = false
+  }, [clearWatchdog])
+
+  const retryDirect = useCallback(() => {
+    clearWatchdog()
+    setUseProxy(false)
+    setLoadState({ stage: 'idle' })
+    errorFiredOnceForSrc.current = false
+  }, [clearWatchdog])
+
+  const tryProxy = useCallback(() => {
+    clearWatchdog()
+    setUseProxy(true)
+    setLoadState({ stage: 'idle' })
+    errorFiredOnceForSrc.current = false
+  }, [clearWatchdog])
 
   return (
-    <ViewerErrorBoundary
-      key={`boundary-${useProxy ? 'proxy' : 'direct'}`}
-      fallback={(retry, bMsg) => (
-        <div className={styles.container}>
-          <ErrorBox
-            msg={bMsg || '3D viewer crashed unexpectedly.'}
-            retry={() => {
-              retry()
-              resetAll()
-            }}
-          />
-        </div>
-      )}
-    >
-      <div className={styles.container} ref={mountRef}>
-        {isScriptLoading && <Fallback />}
-
-        {(loadState.stage === 'ready' || loadState.stage === 'loaded' || showError) && (
-          <>
-            {React.createElement(
-              'model-viewer' as any,
-              {
-                key: `mv-${useProxy ? 'proxy' : 'direct'}`,
-                class: styles.modelViewer,
-                src: effectiveSrc,
-                alt: '3D product model',
-                'camera-controls': true,
-                'auto-rotate': true,
-                'auto-rotate-delay': 300,
-                'rotation-per-second': '30deg',
-                'disable-zoom': false,
-                'min-camera-orbit': 'auto auto 1m',
-                'max-camera-orbit': 'auto auto 40m',
-                'shadow-intensity': '0.9',
-                'shadow-softness': '1',
-                exposure: '1',
-                'environment-image': 'neutral',
-                'interaction-prompt': 'none',
-                'interaction-prompt-style': 'basic',
-                loading: 'eager',
-                crossorigin: '',
-                onLoad: handleLoad,
-                onError: handleError,
-                style: isModelLoading
-                  ? {
-                      width: '100%',
-                      height: '100%',
-                      opacity: 0.0001,
-                      position: 'absolute',
-                      inset: 0,
-                    }
-                  : { width: '100%', height: '100%' },
-              } as any
-            )}
-            {isModelLoading && !showError && <Fallback />}
-          </>
+    <ViewerErrorBoundary key={`${useProxy ? 'p' : 'd'}-${url}`}>
+      <div className={styles.container}>
+        {(isScriptLoading || isModelLoading) && !showError && (
+          <div className={styles.loadingOverlay} aria-live="polite">
+            <div className={styles.spinner} role="status" />
+            <div className={styles.loadingText}>
+              {isScriptLoading
+                ? 'Preparing 3D Viewer…'
+                : 'Loading 3D Model…'}
+            </div>
+            <div className={styles.loadingHint}>
+              Drag to rotate · Scroll to zoom
+            </div>
+            <div className={styles.loadingSub}>
+              Mode: {useProxy ? 'Secure Proxy (Recommended)' : 'Direct CDN'}
+            </div>
+          </div>
         )}
 
         {showError && (
           <ErrorBox
-            msg={(loadState as any).error}
-            retry={useProxy ? retryDirect : tryProxy}
+            error={(loadState as Extract<LoadState, { stage: 'error' }>).error}
+            usingProxy={
+              (loadState as Extract<LoadState, { stage: 'error' }>).usingProxy
+            }
+            onRetryDirect={retryDirect}
+            onTryProxy={tryProxy}
+            onReset={resetAll}
           />
         )}
 
-        <div className={styles.hint}>Drag to rotate · Scroll to zoom</div>
+        {loadState.stage === 'loaded' && (
+          <div className={styles.hintBar}>
+            <span className={styles.hintDot} />
+            <span className={styles.hintText}>
+              Drag to rotate · Scroll to zoom · Right-click to pan
+            </span>
+            <span className={styles.hintBadge}>
+              {useProxy ? 'Secure Proxy' : 'Direct CDN'}
+            </span>
+          </div>
+        )}
+
+        {/*
+          CRITICAL: We DO NOT use React onError / onLoad props here.
+          Web Components (custom elements) do not reliably fire through React's
+          synthetic event system. Instead we attach via addEventListener in useEffect
+          above using `mvRef`.
+        */}
+        {/* eslint-disable @next/next/no-img-element, react/no-unknown-property */}
+        {React.createElement('model-viewer' as any, {
+          ref: mvRef,
+          src: effectiveSrc,
+          alt: '3D product model',
+          'auto-rotate': true,
+          'auto-rotate-delay': 600,
+          'rotation-per-second': '30deg',
+          'camera-controls': true,
+          'touch-action': 'pan-y',
+          'disable-zoom': false,
+          'interaction-prompt': 'none',
+          'shadow-intensity': '0.9',
+          'shadow-softness': '0.6',
+          exposure: '1.0',
+          'environment-image': 'neutral',
+          'max-camera-orbit': 'auto 90deg auto',
+          'min-camera-orbit': 'auto -90deg auto',
+          'min-camera-distance': '1m',
+          'max-camera-distance': '40m',
+          ar: false,
+          class: styles.modelViewer,
+          style: { display: 'block', width: '100%', height: '100%' },
+        })}
       </div>
     </ViewerErrorBoundary>
   )
