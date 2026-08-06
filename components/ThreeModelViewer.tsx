@@ -345,12 +345,6 @@ export default function ThreeModelViewer({ url }: { url: string }) {
                 ? 'Preparing 3D Viewer…'
                 : 'Loading 3D Model…'}
             </div>
-            <div className={styles.loadingHint}>
-              Drag to rotate · Scroll to zoom
-            </div>
-            <div className={styles.loadingSub}>
-              Mode: {useProxy ? 'Secure Proxy (Recommended)' : 'Direct CDN'}
-            </div>
           </div>
         )}
 
@@ -364,18 +358,6 @@ export default function ThreeModelViewer({ url }: { url: string }) {
             onTryProxy={tryProxy}
             onReset={resetAll}
           />
-        )}
-
-        {loadState.stage === 'loaded' && (
-          <div className={styles.hintBar}>
-            <span className={styles.hintDot} />
-            <span className={styles.hintText}>
-              Drag to rotate · Scroll to zoom · Right-click to pan
-            </span>
-            <span className={styles.hintBadge}>
-              {useProxy ? 'Secure Proxy' : 'Direct CDN'}
-            </span>
-          </div>
         )}
 
         {/*
