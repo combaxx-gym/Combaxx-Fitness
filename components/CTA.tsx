@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import styles from '@/styles/components/CTA.module.css'
 
 interface CtaProps {
+  badge?: string
   title?: string
   description?: string
   primaryButtonText?: string
@@ -14,6 +15,7 @@ interface CtaProps {
 }
 
 export default function CTA({
+  badge = "Let's Build Together",
   title = "Ready to Equip Your Facility?",
   description = "Contact our B2B team for bulk pricing, custom configurations, and professional installation services tailored to your gym or fitness center.",
   primaryButtonText = "Request a Quote",
@@ -38,7 +40,7 @@ export default function CTA({
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <span className={styles.ctaBadge}>Let's Build Together</span>
+              <span className={styles.ctaBadge}>{badge}</span>
               <h2 className={styles.ctaTitle}>{title}</h2>
               <p className={styles.ctaDesc}>{description}</p>
             </motion.div>

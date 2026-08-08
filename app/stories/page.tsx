@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import StoriesGrid from '@/components/StoriesGrid'
 import StoriesQuoteSlider from '@/components/StoriesQuoteSlider'
+import CTA from '@/components/CTA'
 import styles from '@/styles/pages/stories.module.css'
 
 export const metadata: Metadata = {
@@ -253,27 +254,15 @@ export default function StoriesPage() {
 
       {/* ── CTA ── */}
       <section className={styles.ctaSection}>
-        <div className={styles.container}>
-          <div className={styles.ctaInner}>
-            <div className={styles.ctaLeft}>
-              <span className={styles.sectionBadge}>Share Your Story</span>
-              <h2 className={styles.ctaTitle}>
-                Is Your Facility<br />Ready for Its Story?
-              </h2>
-              <p className={styles.ctaDesc}>
-                If you&apos;ve built something exceptional with our equipment, we want to document it. Reach out and let&apos;s tell your story.
-              </p>
-            </div>
-            <div className={styles.ctaRight}>
-              <Link href="/contact" className={styles.ctaBtnRed}>
-                Get in Touch
-              </Link>
-              <Link href="/shop" className={styles.ctaBtnOutline}>
-                Browse Equipment
-              </Link>
-            </div>
-          </div>
-        </div>
+        <CTA
+          badge="Share Your Story"
+          title="Is Your Facility Ready for Its Story?"
+          description="If you've built something exceptional with our equipment, we want to document it. Reach out and let's tell your story."
+          primaryButtonText="Get in Touch"
+          primaryButtonLink="/contact"
+          secondaryButtonText="Browse Equipment"
+          secondaryButtonLink="/shop"
+        />
       </section>
 
     </div>
