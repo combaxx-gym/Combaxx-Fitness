@@ -52,6 +52,73 @@
 }
 @media (max-width: 767px) { .sectionTitle { font-size: 2rem; } }
 
+/* ===== SKELETON SHIMMER ===== */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.03) 75%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+  border-radius: 8px;
+  pointer-events: none;
+}
+.skeletonBadgeSm { width: 90px; height: 20px; border-radius: 999px; }
+.skeletonTitle { width: 90%; max-width: 780px; height: 3rem; margin-bottom: 0.5rem; border-radius: 6px; }
+.skeletonText { width: 100%; height: 1rem; margin-bottom: 0.5rem; border-radius: 4px; opacity: 0.85; }
+.skeletonTextHalf { width: 55%; }
+.skeletonText70 { width: 70%; }
+.skeletonImage { width: 100%; height: 100%; border-radius: 0; }
+
+/* Featured placeholder overlay text */
+.featPlaceholderInfo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  z-index: 3;
+  color: rgba(255,255,255,0.35);
+}
+.featPlaceholderBadge {
+  display: inline-flex;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 3px;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  color: rgba(255,255,255,0.3);
+}
+.featPlaceholderHint {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.28);
+  max-width: 48ch;
+  margin-top: 1rem;
+  line-height: 1.7;
+}
+.featPlaceholderHint strong { color: rgba(255,51,51,0.55); font-weight: 700; }
+
+/* Grid placeholder empty hint */
+.gridPlaceholderHint {
+  padding: 1rem 0 0.5rem;
+  text-align: center;
+  color: rgba(255,255,255,0.3);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+}
+.gridPlaceholderHint strong { color: rgba(255,51,51,0.55); font-weight: 700; }
+
+/* Section head text wrapper (for alignment with right-side hint) */
+.sectionHeadText { display: inline-block; }
+.sectionHead { display: block; }
+
 /* ── HERO ── */
 .hero {
   position: relative;
@@ -62,6 +129,7 @@
   padding-top: 7rem;
   overflow: hidden;
 }
+@media (max-width: 767px) { .hero { min-height: 85vh; } }
 
 .heroBg {
   position: absolute;
@@ -69,41 +137,42 @@
   z-index: 0;
 }
 
-.heroOverlay {
+/* CORRECT LAYERING (bottom → top): image → pattern → overlay */
+.heroBgImage {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 70% 60% at 20% 40%, rgba(255,51,51,0.05) 0%, transparent 70%),
-    linear-gradient(to bottom, #0d0d0d 0%, #111111 100%);
+  z-index: 1;                              /* ← FIXED from z-index:-1 (was invisible!) */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.45;                          /* ← bumped up slightly for clarity */
+  filter: saturate(0.7) brightness(0.6) contrast(1.1);
 }
-
 .heroPattern {
   position: absolute;
   inset: 0;
+  z-index: 2;
   background-image:
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, black 30%, transparent 100%);
 }
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    radial-gradient(ellipse 65% 55% at 15% 35%, rgba(255,51,51,0.08) 0%, transparent 72%),
+    linear-gradient(180deg, rgba(13,13,13,0.85) 0%, rgba(17,17,17,0.75) 60%, rgba(17,17,17,1) 100%);
+}
 
+/* heroInner — ONLY vertical bottom padding (NO horizontal padding, NO max-width, NO margin auto! Page-level ROOT container provides ALL canonical horizontal padding + 1920px max-width) */
 .heroInner {
   position: relative;
-  z-index: 2;
-  max-width: 1920px;
-  margin: 0 auto;
-  padding: 4rem 1rem 3rem;
+  z-index: 5;
+  padding-bottom: 6rem;
   width: 100%;
-}
-@media (min-width: 768px) {
-  .heroInner {
-    padding: 4rem 1.5rem 3rem;
-  }
-}
-@media (min-width: 1024px) {
-  .heroInner {
-    padding: 4rem 3rem 3rem;
-  }
 }
 
 .heroMeta {
@@ -147,25 +216,24 @@
   margin: 0 0 3rem;
 }
 
-/* Featured story card */
+/* ── FEATURED SECTION (now separate below hero) ── */
+.featuredSection {
+  padding: 6rem 0 4rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Featured story card (now inside container so no self-padding) */
 .featuredCard {
   position: relative;
   z-index: 2;
-  max-width: 1920px;
-  margin: 0 auto;
-  padding: 0 1rem 5rem;
+  display: block;
   width: 100%;
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+  border-radius: 16px;
 }
-@media (min-width: 768px) {
-  .featuredCard {
-    padding: 0 1.5rem 5rem;
-  }
-}
-@media (min-width: 1024px) {
-  .featuredCard {
-    padding: 0 3rem 5rem;
-  }
-}
+.featuredCard:focus-visible { outline: 2px solid #FF3333; outline-offset: 2px; }
 
 .featuredCardBg {
   position: absolute;
@@ -717,3 +785,58 @@
 .ctaSection {
   padding: 6rem 0;
 }
+
+/* ── New: Sanity Image + Link Wrapper Classes ── */
+.featuredCardImage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  border-radius: 16px;
+}
+.featuredCardImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.22;
+  filter: saturate(0.6) brightness(0.5) contrast(1.05);
+}
+/* featuredCardBg already has pointer-events none, inner card z=relative so still on top */
+
+/* Grid card entire link wrapper — use existing card layout */
+.storyCardLink {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+}
+.storyCardLink:focus-visible {
+  outline: 2px solid #FF3333;
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+.storyCardImg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.55;
+  transition: transform 0.5s ease, opacity 0.3s ease;
+}
+/* On card hover, bump image scale slightly */
+.storyCard:hover .storyCardImg {
+  transform: scale(1.04);
+  opacity: 0.75;
+}
+/* Keep storyCardBg (dark gradient) and pattern on top of image for text contrast */
+.storyCardBg { z-index: 1; }
+.storyCardPattern { z-index: 2; }
+.storyCardAccentLine { z-index: 3; }
+.storyCardContent { position: relative; z-index: 4; }
+

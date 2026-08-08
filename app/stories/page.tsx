@@ -4,6 +4,9 @@ import StoriesGrid from '@/components/StoriesGrid'
 import StoriesQuoteSlider from '@/components/StoriesQuoteSlider'
 import CTA from '@/components/CTA'
 import styles from '@/styles/pages/stories.module.css'
+import { client } from '@/sanity/lib/client'
+import { urlFor } from '@/sanity/lib/image'
+import type { StoryArchiveItem } from '@/types/story'
 
 export const metadata: Metadata = {
   title: 'Stories | Commercial Gym Equipment',
@@ -11,129 +14,6 @@ export const metadata: Metadata = {
 }
 
 export const STORY_CATEGORIES = ['All', 'Athletes', 'Facilities', 'Innovation', 'Lifestyle', 'Community']
-
-export const STORIES = [
-  {
-    id: '1',
-    slug: '#',
-    category: 'Facilities',
-    tag: 'Case Study',
-    title: 'How Apex Fitness Built a 3,000 sqm Flagship',
-    excerpt: 'Starting from an empty warehouse, Apex Fitness partnered with us for a complete turnkey fit-out — equipment, layout, branding, and beyond.',
-    author: 'James R.',
-    role: 'CEO, Apex Fitness',
-    date: 'March 2025',
-    readTime: '6 min read',
-    featured: true,
-    size: 'hero',
-    accent: '#FF3333',
-  },
-  {
-    id: '2',
-    slug: '#',
-    category: 'Athletes',
-    tag: 'Profile',
-    title: 'Training Like a Pro: Inside the Equipment Room',
-    excerpt: 'Elite sprinter Mia Chen reveals the machines that drive her 5am sessions and how commercial-grade equipment changed her training.',
-    author: 'Mia Chen',
-    role: 'Professional Athlete',
-    date: 'February 2025',
-    readTime: '4 min read',
-    featured: false,
-    size: 'large',
-    accent: '#ffffff',
-  },
-  {
-    id: '3',
-    slug: '#',
-    category: 'Innovation',
-    tag: 'Technology',
-    title: 'The Engineering Behind 500,000-Cycle Testing',
-    excerpt: 'Our QA lab runs every machine through half a million movement cycles before it ships. Here&apos;s what we found.',
-    author: 'Engineering Team',
-    role: 'R&D Division',
-    date: 'January 2025',
-    readTime: '8 min read',
-    featured: false,
-    size: 'normal',
-    accent: '#FF3333',
-  },
-  {
-    id: '4',
-    slug: '#',
-    category: 'Lifestyle',
-    tag: 'Wellness',
-    title: 'Recovery Is Performance — Build Your Zone',
-    excerpt: 'The most overlooked section in any gym. Recovery zones are now the fastest-growing segment in commercial fitness.',
-    author: 'Dr. Sara K.',
-    role: 'Sports Physiotherapist',
-    date: 'January 2025',
-    readTime: '5 min read',
-    featured: false,
-    size: 'normal',
-    accent: '#9ca3af',
-  },
-  {
-    id: '5',
-    slug: '#',
-    category: 'Community',
-    tag: 'Impact',
-    title: 'Equipping 10 Community Gyms Across Pakistan',
-    excerpt: 'A partnership with the national sports federation brought commercial-grade equipment to 10 underserved community fitness centres.',
-    author: 'Editorial',
-    role: 'Combaxx Team',
-    date: 'December 2024',
-    readTime: '5 min read',
-    featured: false,
-    size: 'large',
-    accent: '#FF3333',
-  },
-  {
-    id: '6',
-    slug: '#',
-    category: 'Facilities',
-    tag: 'Design',
-    title: 'Hotel Wellness: The Meridian Spa Transformation',
-    excerpt: 'A 5-star hotel spa that went from dated to award-winning in 8 weeks. The complete equipment and design story.',
-    author: 'Marco L.',
-    role: 'GM, The Meridian',
-    date: 'November 2024',
-    readTime: '6 min read',
-    featured: false,
-    size: 'normal',
-    accent: '#c8a96e',
-  },
-  {
-    id: '7',
-    slug: '#',
-    category: 'Innovation',
-    tag: 'Product',
-    title: 'Why Cable Ratio Matters More Than Weight Stack',
-    excerpt: 'The engineering truth behind cable machines: it&apos;s not about how heavy the stack is — it&apos;s about how accurately the cable ratio delivers resistance.',
-    author: 'Engineering Team',
-    role: 'R&D Division',
-    date: 'October 2024',
-    readTime: '7 min read',
-    featured: false,
-    size: 'normal',
-    accent: '#ffffff',
-  },
-  {
-    id: '8',
-    slug: '#',
-    category: 'Athletes',
-    tag: 'Strength',
-    title: 'Powerlifting Platforms for Commercial Gyms',
-    excerpt: 'A deep dive into competition-specification powerlifting setup — what serious lifters demand and what gyms actually need to deliver it.',
-    author: 'Ali Hassan',
-    role: 'National Powerlifting Coach',
-    date: 'October 2024',
-    readTime: '5 min read',
-    featured: false,
-    size: 'normal',
-    accent: '#FF3333',
-  },
-]
 
 const PULL_QUOTES = [
   {
@@ -156,81 +36,218 @@ const PULL_QUOTES = [
   },
 ]
 
-const FEATURED = STORIES[0]
+async function getStories(): Promise<StoryArchiveItem[]> {
+  try {
+    return await client.fetch(
+      `*[_type == "story"] | order(featured desc, date desc, _createdAt desc){
+        _id,
+        title,
+        slug,
+        category,
+        tag,
+        date,
+        excerpt,
+        featured,
+        featuredImage
+      }`
+    )
+  } catch (e) {
+    console.error('[stories] Failed to fetch stories from Sanity:', e)
+    return []
+  }
+}
 
-export default function StoriesPage() {
+export default async function StoriesPage() {
+  const allStories = await getStories()
+  const hasStories = allStories.length > 0
+  const featured = allStories.find(s => s.featured) || allStories[0] || null
+  const rest = featured ? allStories.filter(s => s._id !== featured._id) : []
+
+  const featuredImgSrc = featured?.featuredImage ? urlFor(featured.featuredImage).width(1600).quality(80).url() : null
+  const heroImgSrc = featuredImgSrc
+
+  // Format grid-compatible items already in JSX rendered server side with image URLs so client component doesn't need Sanity import
+  let gridItems = rest.map((s, idx) => {
+    const size = idx % 5 === 0 ? 'large' : 'normal'
+    const accent = s.category === 'Facilities' || s.category === 'Community' ? '#FF3333' : s.category === 'Innovation' ? '#ffffff' : '#9ca3af'
+    return {
+      id: s._id,
+      slug: s.slug.current,
+      category: s.category,
+      tag: s.tag || s.category,
+      title: s.title,
+      excerpt: s.excerpt || '',
+      author: 'Combaxx Team',
+      role: 'Editorial',
+      date: s.date || '2025',
+      readTime: '5 min read',
+      featured: false,
+      size,
+      accent,
+      imageUrl: s.featuredImage ? urlFor(s.featuredImage).width(900).quality(80).url() : null,
+      isPlaceholder: false,
+    }
+  })
+
+  // If 0 Sanity stories → show skeleton placeholders (same as blog page pattern)
+  if (!hasStories) {
+    const PLACEHOLDER_CATS: StoryArchiveItem['category'][] = ['Facilities', 'Athletes', 'Innovation', 'Lifestyle', 'Community', 'Facilities']
+    gridItems = PLACEHOLDER_CATS.map((cat, i) => ({
+      id: `placeholder-story-${i}`,
+      slug: '',
+      category: cat,
+      tag: cat,
+      title: '',
+      excerpt: '',
+      author: '',
+      role: '',
+      date: '',
+      readTime: '',
+      featured: false,
+      size: (i === 0 || i === 5) ? 'large' : 'normal',
+      accent: (cat === 'Facilities' || cat === 'Community') ? '#FF3333' : '#9ca3af',
+      imageUrl: null,
+      isPlaceholder: true,
+    })) as typeof gridItems
+  }
+
   return (
     <div className={styles.page}>
+      {/* ===== MAIN SITE-WIDE CANONICAL CONTAINER — ALL SECTIONS LIVE INSIDE THIS ONE CONTAINER ===== */}
+      <div className={styles.container}>
 
-      {/* ── HERO — FEATURED STORY ── */}
-      <section className={styles.hero}>
-        <div className={styles.heroBg}>
-          <div className={styles.heroOverlay} />
-          <div className={styles.heroPattern} />
-        </div>
-        <div className={styles.heroInner}>
-          <div className={styles.heroMeta}>
-            <span className={styles.heroBadge}>Stories</span>
-            <span className={styles.heroFeaturedLabel}>Featured Story</span>
+        {/* ── HERO ── ONLY TEXT (no featured card) → min-height 100vh, push content to bottom */}
+        <section className={styles.hero}>
+          <div className={styles.heroBg}>
+            {heroImgSrc && (
+              <img src={heroImgSrc} alt="" aria-hidden="true" className={styles.heroBgImage} />
+            )}
+            <div className={styles.heroPattern} />
+            <div className={styles.heroOverlay} />
           </div>
-          <h1 className={styles.heroTitle}>The People &amp;<br />Places We Equip</h1>
-          <p className={styles.heroDesc}>
-            Real projects. Real athletes. Real transformation. These are the stories behind the equipment.
-          </p>
-        </div>
-
-        {/* Featured card */}
-        <div className={styles.featuredCard}>
-          <div className={styles.featuredCardBg} />
-          <div className={styles.featuredCardInner}>
-            <div className={styles.featuredCardMeta}>
-              <span className={styles.featuredTag}>{FEATURED.tag}</span>
-              <span className={styles.featuredCategory}>{FEATURED.category}</span>
-              <span className={styles.featuredDate}>{FEATURED.date}</span>
+          <div className={styles.heroInner}>
+            <div className={styles.heroMeta}>
+              <span className={styles.heroBadge}>Stories</span>
+              <span className={styles.heroFeaturedLabel}>Featured Story</span>
             </div>
-            <h2 className={styles.featuredTitle}>{FEATURED.title}</h2>
-            <p className={styles.featuredExcerpt}>{FEATURED.excerpt}</p>
-            <div className={styles.featuredFooter}>
-              <div className={styles.featuredAuthor}>
-                <div className={styles.featuredAvatar}>{FEATURED.author[0]}</div>
-                <div>
-                  <div className={styles.featuredAuthorName}>{FEATURED.author}</div>
-                  <div className={styles.featuredAuthorRole}>{FEATURED.role}</div>
+            <h1 className={styles.heroTitle}>The People &amp;<br />Places We Equip</h1>
+            <p className={styles.heroDesc}>
+              Real projects. Real athletes. Real transformation. These are the stories behind the equipment.
+            </p>
+          </div>
+        </section>
+
+        {/* ── FEATURED STORY — SEPARATE SECTION BELOW HERO ── */}
+        <section className={styles.featuredSection}>
+          <div className={styles.sectionHead}>
+            <div className={styles.sectionHeadText}>
+              <span className={styles.sectionBadge}>Featured Story</span>
+              <h2 className={styles.sectionTitle}>Editor&rsquo;s Showcase</h2>
+            </div>
+          </div>
+          {featured ? (
+            <Link href={`/stories/${featured.slug.current}`} className={styles.featuredCard} aria-label={`Read ${featured.title}`}>
+              {featuredImgSrc && (
+                <div className={styles.featuredCardImage}>
+                  <img src={featuredImgSrc} alt="" aria-hidden="true" />
+                </div>
+              )}
+              <div className={styles.featuredCardBg} />
+              <div className={styles.featuredCardInner}>
+                <div className={styles.featuredCardMeta}>
+                  <span className={styles.featuredTag}>{featured.tag || 'Case Study'}</span>
+                  <span className={styles.featuredCategory}>{featured.category}</span>
+                  {featured.date && <span className={styles.featuredDate}>{featured.date}</span>}
+                </div>
+                <h2 className={styles.featuredTitle}>{featured.title}</h2>
+                <p className={styles.featuredExcerpt}>{featured.excerpt}</p>
+                <div className={styles.featuredFooter}>
+                  <div className={styles.featuredAuthor}>
+                    <div className={styles.featuredAvatar}>C</div>
+                    <div>
+                      <div className={styles.featuredAuthorName}>Combaxx Editorial</div>
+                      <div className={styles.featuredAuthorRole}>Stories Team</div>
+                    </div>
+                  </div>
+                  <span className={styles.featuredReadBtn}>
+                    Read Story →
+                  </span>
                 </div>
               </div>
-              <Link href={FEATURED.slug} className={styles.featuredReadBtn}>
-                Read Story →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+            </Link>
+          ) : (
+            <article className={styles.featuredCard} style={{ cursor: 'default' }}>
+              <div className={styles.featuredCardImage}>
+                <div className={`${styles.skeleton} ${styles.skeletonImage}`} />
+                <div className={styles.featPlaceholderInfo}>
+                  <span className={styles.featPlaceholderBadge}>Featured Coming Soon</span>
+                  <h3 className={styles.skeletonTitle} style={{ marginBottom: '1rem', maxWidth: '620px' }} />
+                  <div className={styles.skeletonText} style={{ maxWidth: 620, margin: '0 auto 0.5rem' }} />
+                  <div className={`${styles.skeletonText} ${styles.skeletonTextHalf}`} style={{ maxWidth: 420, margin: '0 auto' }} />
+                  <p className={styles.featPlaceholderHint}>
+                    💡 Mark any story as <strong>&ldquo;Featured&rdquo;</strong> in Sanity Studio to pin it here.
+                    Go to <strong>/studio → Stories / Case Studies</strong>.
+                  </p>
+                </div>
+              </div>
+              <div className={styles.featuredCardBg} />
+              <div className={styles.featuredCardInner}>
+                <div className={styles.featuredCardMeta}>
+                  <div className={`${styles.skeleton} ${styles.skeletonBadgeSm}`} style={{ width: 88 }} />
+                  <div className={`${styles.skeleton} ${styles.skeletonBadgeSm}`} style={{ width: 110 }} />
+                  <div className={`${styles.skeleton} ${styles.skeletonBadgeSm}`} style={{ width: 80, marginLeft: 'auto' }} />
+                </div>
+                <div className={`${styles.skeleton} ${styles.skeletonTitle}`} style={{ height: '2.5rem', marginBottom: '1rem' }} />
+                <div className={styles.skeletonText} />
+                <div className={styles.skeletonText} />
+                <div className={`${styles.skeletonText} ${styles.skeletonText70}`} style={{ marginBottom: '2.5rem' }} />
+                <div className={styles.featuredFooter}>
+                  <div className={styles.featuredAuthor} style={{ opacity: 0.5 }}>
+                    <div className={styles.featuredAvatar}>C</div>
+                    <div>
+                      <div className={`${styles.skeleton}`} style={{ width: 130, height: 14, margin: '2px 0 4px' }} />
+                      <div className={`${styles.skeleton}`} style={{ width: 90, height: 12, opacity: 0.6 }} />
+                    </div>
+                  </div>
+                  <div className={`${styles.skeleton}`} style={{ width: 110, height: 32, borderRadius: 3 }} />
+                </div>
+              </div>
+            </article>
+          )}
+        </section>
 
-      {/* ── STORIES GRID with filter ── */}
-      <section className={styles.gridSection}>
-        <div className={styles.container}>
-          <div className={styles.sectionHead}>
-            <span className={styles.sectionBadge}>All Stories</span>
-            <h2 className={styles.sectionTitle}>Explore the Archive</h2>
-          </div>
-        </div>
-        <StoriesGrid stories={STORIES.slice(1)} categories={STORY_CATEGORIES} />
-      </section>
+        {/* ── STORIES GRID with filter ── */}
+        <section className={styles.gridSection}>
+          <StoriesGrid
+            stories={gridItems}
+            categories={STORY_CATEGORIES}
+            sectionHead={
+              <div className={styles.sectionHead}>
+                <div className={styles.sectionHeadText}>
+                  <span className={styles.sectionBadge}>All Stories</span>
+                  <h2 className={styles.sectionTitle}>Explore the Archive</h2>
+                </div>
+                {!hasStories && (
+                  <p className={styles.gridPlaceholderHint}>
+                    ✍️ No stories published yet — head to <strong>/studio → Stories / Case Studies</strong> to upload your first case study.
+                  </p>
+                )}
+              </div>
+            }
+          />
+        </section>
 
-      {/* ── PULL QUOTE SLIDER ── */}
-      <section className={styles.quotesSection}>
-        <div className={styles.container}>
+        {/* ── PULL QUOTE SLIDER ── */}
+        <section className={styles.quotesSection}>
           <div className={styles.sectionHead}>
             <span className={styles.sectionBadge}>In Their Words</span>
             <h2 className={styles.sectionTitle}>Voices from the Floor</h2>
           </div>
-        </div>
-        <StoriesQuoteSlider quotes={PULL_QUOTES} />
-      </section>
+          <StoriesQuoteSlider quotes={PULL_QUOTES} />
+        </section>
 
-      {/* ── NUMBERS ── */}
-      <section className={styles.numbersSection}>
-        <div className={styles.container}>
+        {/* ── NUMBERS ── */}
+        <section className={styles.numbersSection}>
           <div className={styles.numbersGrid}>
             <div className={styles.numberItem}>
               <span className={styles.numberValue}>200+</span>
@@ -249,22 +266,23 @@ export default function StoriesPage() {
               <span className={styles.numberLabel}>Of Publishing Stories</span>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── CTA ── */}
-      <section className={styles.ctaSection}>
-        <CTA
-          badge="Share Your Story"
-          title="Is Your Facility Ready for Its Story?"
-          description="If you've built something exceptional with our equipment, we want to document it. Reach out and let's tell your story."
-          primaryButtonText="Get in Touch"
-          primaryButtonLink="/contact"
-          secondaryButtonText="Browse Equipment"
-          secondaryButtonLink="/shop"
-        />
-      </section>
+        {/* ── CTA ── */}
+        <section className={styles.ctaSection}>
+          <CTA
+            badge="Share Your Story"
+            title="Is Your Facility Ready for Its Story?"
+            description="If you've built something exceptional with our equipment, we want to document it. Reach out and let's tell your story."
+            primaryButtonText="Get in Touch"
+            primaryButtonLink="/contact"
+            secondaryButtonText="Browse Equipment"
+            secondaryButtonLink="/shop"
+          />
+        </section>
 
+      </div>
+      {/* ===== END MAIN CANONICAL CONTAINER ===== */}
     </div>
   )
 }

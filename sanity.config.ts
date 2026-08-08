@@ -36,6 +36,8 @@ const structure = (S: StructureBuilder) =>
         ),
       S.divider(),
       // Add other document types
+      S.documentTypeListItem('story').title('Stories / Case Studies'),
+      S.documentTypeListItem('post').title('Blog / News Articles'),
       S.documentTypeListItem('category').title('Categories'),
       S.documentTypeListItem('subCategory').title('Sub Categories'),
       S.documentTypeListItem('inquiry').title('Inquiries'),

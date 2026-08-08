@@ -7,12 +7,12 @@
   background: radial-gradient(circle at 50% 50%, #16222e 0%, #000000 80%);
   background-attachment: fixed;
   color: #fff;
-  padding-top: 6rem;
+  padding-top: 7rem;
 }
 
 @media (max-width: 767px) {
   .page {
-    padding-top: 5rem;
+    padding-top: 7rem;
     background: radial-gradient(circle at 50% 50%, #16222e 0%, #000000 100%);
   }
 }

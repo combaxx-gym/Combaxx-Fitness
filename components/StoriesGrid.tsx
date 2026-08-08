@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import styles from '@/styles/pages/stories.module.css'
@@ -19,33 +19,40 @@ interface Story {
   featured: boolean
   size: string
   accent: string
+  imageUrl?: string | null
+  isPlaceholder?: boolean
 }
 
 interface Props {
   stories: Story[]
   categories: string[]
+  sectionHead?: ReactNode
 }
 
-export default function StoriesGrid({ stories, categories }: Props) {
+export default function StoriesGrid({ stories, categories, sectionHead }: Props) {
   const [active, setActive] = useState('All')
+  const showSkeletons = stories.length > 0 && stories.every(s => s.isPlaceholder)
 
-  const filtered = active === 'All' ? stories : stories.filter(s => s.category === active)
+  // Preserve skeleton placeholder cards across all category filters (don't filter them out)
+  const filtered = active === 'All'
+    ? stories
+    : stories.filter(s => s.category === active || s.isPlaceholder)
 
   return (
-    <div className={styles.gridWrap}>
-      <div className={styles.container}>
-        {/* Filter tabs */}
-        <div className={styles.filterTabs}>
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActive(cat)}
-              className={`${styles.filterTab} ${active === cat ? styles.filterTabActive : ''}`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+    <>
+      {sectionHead}
+      {/* Filter tabs */}
+      <div className={styles.filterTabs}>
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setActive(cat)}
+            className={`${styles.filterTab} ${active === cat ? styles.filterTabActive : ''}`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
 
         {/* Grid */}
         <motion.div className={styles.storiesGrid} layout>
@@ -59,48 +66,91 @@ export default function StoriesGrid({ stories, categories }: Props) {
                 exit={{ opacity: 0, scale: 0.96 }}
                 transition={{ duration: 0.3, delay: i * 0.05 }}
                 className={`${styles.storyCard} ${story.size === 'large' ? styles.storyCardLarge : ''}`}
+                style={story.isPlaceholder ? { cursor: 'default' } : undefined}
               >
-                {/* Card visual */}
-                <div className={styles.storyCardVisual}>
-                  <div className={styles.storyCardBg} style={{ background: `linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)` }} />
-                  <div className={styles.storyCardAccentLine} style={{ background: story.accent }} />
-                  <div className={styles.storyCardPattern} />
-                </div>
+                {story.isPlaceholder ? (
+                  <div className={styles.storyCardLink} style={{ pointerEvents: 'none' }}>
+                    {/* Card visual skeleton */}
+                    <div className={styles.storyCardVisual}>
+                      <div className={`${styles.skeleton} ${styles.skeletonImage}`} />
+                      <div className={styles.storyCardBg} style={{ background: `linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)` }} />
+                      <div className={styles.storyCardAccentLine} style={{ background: story.accent }} />
+                      <div className={styles.storyCardPattern} />
+                    </div>
 
-                {/* Card content */}
-                <div className={styles.storyCardContent}>
-                  <div className={styles.storyCardMeta}>
-                    <span className={styles.storyCardTag}>{story.tag}</span>
-                    <span className={styles.storyCardCat}>{story.category}</span>
-                  </div>
-                  <h3 className={styles.storyCardTitle}>{story.title}</h3>
-                  <p className={styles.storyCardExcerpt}>{story.excerpt}</p>
-                  <div className={styles.storyCardFooter}>
-                    <div className={styles.storyCardAuthorWrap}>
-                      <div className={styles.storyCardAvatar} style={{ borderColor: story.accent }}>
-                        {story.author[0]}
+                    {/* Card content skeleton */}
+                    <div className={styles.storyCardContent}>
+                      <div className={styles.storyCardMeta}>
+                        <div className={`${styles.skeleton} ${styles.skeletonBadgeSm}`} style={{ width: 72, borderRadius: 3 }} />
+                        <div className={`${styles.skeleton} ${styles.skeletonBadgeSm}`} style={{ width: 110 }} />
                       </div>
-                      <div>
-                        <div className={styles.storyCardAuthor}>{story.author}</div>
-                        <div className={styles.storyCardDate}>{story.date} · {story.readTime}</div>
+                      <div className={`${styles.skeleton} ${styles.skeletonTitle}`} style={{ height: '1.4rem', marginBottom: '0.75rem' }} />
+                      <div className={styles.skeletonText} />
+                      <div className={`${styles.skeletonText} ${styles.skeletonText70}`} />
+                      <div className={styles.storyCardFooter} style={{ borderTopColor: 'transparent' }}>
+                        <div className={styles.storyCardAuthorWrap}>
+                          <div className={`${styles.skeleton}`} style={{ width: 32, height: 32, borderRadius: '50%' }} />
+                          <div>
+                            <div className={`${styles.skeleton}`} style={{ width: 90, height: 12, margin: '2px 0 4px' }} />
+                            <div className={`${styles.skeleton}`} style={{ width: 110, height: 10, opacity: 0.7 }} />
+                          </div>
+                        </div>
+                        <div className={`${styles.skeleton}`} style={{ width: 34, height: 34, borderRadius: '50%' }} />
                       </div>
                     </div>
-                    <Link href={story.slug} className={styles.storyCardArrow}>
-                      →
-                    </Link>
                   </div>
-                </div>
+                ) : (
+                  /* Card visual */
+                  <Link href={`/stories/${story.slug}`} className={styles.storyCardLink} aria-label={`Read ${story.title}`}>
+                    <div className={styles.storyCardVisual}>
+                      {story.imageUrl ? (
+                        <img
+                          src={story.imageUrl}
+                          alt=""
+                          className={styles.storyCardImg}
+                          loading="lazy"
+                        />
+                      ) : null}
+                      <div className={styles.storyCardBg} style={{ background: `linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)` }} />
+                      <div className={styles.storyCardAccentLine} style={{ background: story.accent }} />
+                      <div className={styles.storyCardPattern} />
+                    </div>
+
+                    {/* Card content */}
+                    <div className={styles.storyCardContent}>
+                      <div className={styles.storyCardMeta}>
+                        <span className={styles.storyCardTag}>{story.tag}</span>
+                        <span className={styles.storyCardCat}>{story.category}</span>
+                      </div>
+                      <h3 className={styles.storyCardTitle}>{story.title}</h3>
+                      <p className={styles.storyCardExcerpt}>{story.excerpt}</p>
+                      <div className={styles.storyCardFooter}>
+                        <div className={styles.storyCardAuthorWrap}>
+                          <div className={styles.storyCardAvatar} style={{ borderColor: story.accent }}>
+                            {story.author[0]}
+                          </div>
+                          <div>
+                            <div className={styles.storyCardAuthor}>{story.author}</div>
+                            <div className={styles.storyCardDate}>{story.date} · {story.readTime}</div>
+                          </div>
+                        </div>
+                        <span className={styles.storyCardArrow}>
+                          →
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                )}
               </motion.article>
             ))}
           </AnimatePresence>
         </motion.div>
 
-        {filtered.length === 0 && (
+        {!showSkeletons && filtered.length === 0 && (
           <div className={styles.emptyState}>
             No stories in this category yet.
           </div>
         )}
-      </div>
-    </div>
+    </>
   )
 }

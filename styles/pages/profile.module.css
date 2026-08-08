@@ -8,5 +8,10 @@
   align-items: center;
   min-height: 100vh;
   background-color: #161616;
-  padding: 2.5rem 1rem;
+  padding-top: 7rem;
+  padding-bottom: 4rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
+@media (min-width: 768px) { .page { padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 8rem; } }
+@media (min-width: 1024px) { .page { padding-left: 3rem; padding-right: 3rem; } }
