@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import MaterialsAccordion from '@/components/MaterialsAccordion'
+import CTA from '@/components/CTA'
 import styles from '@/styles/pages/materials.module.css'
 
 export const metadata: Metadata = {
@@ -274,19 +275,14 @@ export default function MaterialsPage() {
 
       {/* ── CTA ── */}
       <section className={styles.ctaSection}>
-        <div className={styles.container}>
-          <div className={styles.ctaCard}>
-            <div className={styles.ctaGlow} />
-            <h2 className={styles.ctaTitle}>Need Full Material Documentation?</h2>
-            <p className={styles.ctaDesc}>
-              Our technical team can provide full material data sheets, test reports, and compliance certificates for any product in our range.
-            </p>
-            <div className={styles.ctaActions}>
-              <Link href="/contact" className={styles.ctaBtnRed}>Request Documentation</Link>
-              <Link href="/shop" className={styles.ctaBtnOutline}>Browse Products</Link>
-            </div>
-          </div>
-        </div>
+        <CTA
+          title="Need Full Material Documentation?"
+          description="Our technical team can provide full material data sheets, test reports, and compliance certificates for any product in our range."
+          primaryButtonText="Request Documentation"
+          primaryButtonLink="/contact"
+          secondaryButtonText="Browse Products"
+          secondaryButtonLink="/shop"
+        />
       </section>
 
     </div>
