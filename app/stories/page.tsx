@@ -167,39 +167,43 @@ export default function StoriesPage() {
           <div className={styles.heroOverlay} />
           <div className={styles.heroPattern} />
         </div>
-        <div className={styles.heroInner}>
-          <div className={styles.heroMeta}>
-            <span className={styles.heroBadge}>Stories</span>
-            <span className={styles.heroFeaturedLabel}>Featured Story</span>
+        <div className={styles.container}>
+          <div className={styles.heroInner}>
+            <div className={styles.heroMeta}>
+              <span className={styles.heroBadge}>Stories</span>
+              <span className={styles.heroFeaturedLabel}>Featured Story</span>
+            </div>
+            <h1 className={styles.heroTitle}>The People &amp;<br />Places We Equip</h1>
+            <p className={styles.heroDesc}>
+              Real projects. Real athletes. Real transformation. These are the stories behind the equipment.
+            </p>
           </div>
-          <h1 className={styles.heroTitle}>The People &amp;<br />Places We Equip</h1>
-          <p className={styles.heroDesc}>
-            Real projects. Real athletes. Real transformation. These are the stories behind the equipment.
-          </p>
         </div>
 
         {/* Featured card */}
-        <div className={styles.featuredCard}>
-          <div className={styles.featuredCardBg} />
-          <div className={styles.featuredCardInner}>
-            <div className={styles.featuredCardMeta}>
-              <span className={styles.featuredTag}>{FEATURED.tag}</span>
-              <span className={styles.featuredCategory}>{FEATURED.category}</span>
-              <span className={styles.featuredDate}>{FEATURED.date}</span>
-            </div>
-            <h2 className={styles.featuredTitle}>{FEATURED.title}</h2>
-            <p className={styles.featuredExcerpt}>{FEATURED.excerpt}</p>
-            <div className={styles.featuredFooter}>
-              <div className={styles.featuredAuthor}>
-                <div className={styles.featuredAvatar}>{FEATURED.author[0]}</div>
-                <div>
-                  <div className={styles.featuredAuthorName}>{FEATURED.author}</div>
-                  <div className={styles.featuredAuthorRole}>{FEATURED.role}</div>
-                </div>
+        <div className={styles.container}>
+          <div className={styles.featuredCard}>
+            <div className={styles.featuredCardBg} />
+            <div className={styles.featuredCardInner}>
+              <div className={styles.featuredCardMeta}>
+                <span className={styles.featuredTag}>{FEATURED.tag}</span>
+                <span className={styles.featuredCategory}>{FEATURED.category}</span>
+                <span className={styles.featuredDate}>{FEATURED.date}</span>
               </div>
-              <Link href={FEATURED.slug} className={styles.featuredReadBtn}>
-                Read Story →
-              </Link>
+              <h2 className={styles.featuredTitle}>{FEATURED.title}</h2>
+              <p className={styles.featuredExcerpt}>{FEATURED.excerpt}</p>
+              <div className={styles.featuredFooter}>
+                <div className={styles.featuredAuthor}>
+                  <div className={styles.featuredAvatar}>{FEATURED.author[0]}</div>
+                  <div>
+                    <div className={styles.featuredAuthorName}>{FEATURED.author}</div>
+                    <div className={styles.featuredAuthorRole}>{FEATURED.role}</div>
+                  </div>
+                </div>
+                <Link href={FEATURED.slug} className={styles.featuredReadBtn}>
+                  Read Story →
+                </Link>
+              </div>
             </div>
           </div>
         </div>
