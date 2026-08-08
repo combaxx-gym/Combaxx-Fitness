@@ -9,11 +9,23 @@
 }
 
 .container {
-  max-width: 1440px;
+  max-width: 1920px;
   margin: 0 auto;
-  padding: 0 3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
-@media (max-width: 767px) { .container { padding: 0 1.5rem; } }
+@media (min-width: 768px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
 
 .sectionBadge {
   display: inline-block;
@@ -103,12 +115,22 @@
 .heroInner {
   position: relative;
   z-index: 2;
-  max-width: 1440px;
+  max-width: 1920px;
   margin: 0 auto;
-  padding: 0 3rem 6rem;
+  padding: 0 1rem 6rem;
   width: 100%;
 }
-@media (max-width: 767px) { .heroInner { padding: 0 1.5rem 5rem; } }
+@media (min-width: 768px) {
+  .heroInner {
+    padding: 0 1.5rem 6rem;
+  }
+}
+@media (min-width: 1024px) {
+  .heroInner {
+    padding: 0 3rem 6rem;
+  }
+}
+@media (max-width: 767px) { .heroInner { padding-bottom: 5rem; } }
 
 .breadcrumb {
   display: flex;
@@ -177,7 +199,7 @@
 
 .heroScroll {
   position: absolute;
-  right: 3rem;
+  right: 1rem;
   bottom: 3rem;
   display: flex;
   flex-direction: column;
@@ -185,6 +207,8 @@
   gap: 0.75rem;
   z-index: 2;
 }
+@media (min-width: 768px) { .heroScroll { right: 1.5rem; } }
+@media (min-width: 1024px) { .heroScroll { right: 3rem; } }
 @media (max-width: 767px) { .heroScroll { display: none; } }
 
 .heroScroll span {
