@@ -90,10 +90,21 @@
 .heroInner {
   position: relative;
   z-index: 2;
-  padding: 4rem 0 3rem;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 4rem 1rem 3rem;
   width: 100%;
 }
-@media (max-width: 767px) { .heroInner { padding: 4rem 0 3rem; } }
+@media (min-width: 768px) {
+  .heroInner {
+    padding: 4rem 1.5rem 3rem;
+  }
+}
+@media (min-width: 1024px) {
+  .heroInner {
+    padding: 4rem 3rem 3rem;
+  }
+}
 
 .heroMeta {
   display: flex;
@@ -140,10 +151,21 @@
 .featuredCard {
   position: relative;
   z-index: 2;
-  padding: 0 0 5rem;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 1rem 5rem;
   width: 100%;
 }
-@media (max-width: 767px) { .featuredCard { padding: 0 0 4rem; } }
+@media (min-width: 768px) {
+  .featuredCard {
+    padding: 0 1.5rem 5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .featuredCard {
+    padding: 0 3rem 5rem;
+  }
+}
 
 .featuredCardBg {
   position: absolute;
