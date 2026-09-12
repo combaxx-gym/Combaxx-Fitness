@@ -2,14 +2,32 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowRight, ChevronDown, ChevronRight, Mail, MapPin, Phone } from "lucide-react"
+import { ArrowRight, ChevronDown, ChevronRight, Mail, MapPin } from "lucide-react"
 import styles from "@/styles/pages/contact.module.css"
 
 export default function ContactPage() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [error, setError] = useState<string | null>(null)
   const phoneDisplay = "+92 3028222893"
-  const phoneHref = "what:+923028222893"
+  const phoneHref = "https://wa.me/923028222893"
+  const whatsappDisplay = "+92 321 9231111"
+  const whatsappHref = "https://wa.me/923219231111"
+
+  const WhatsAppIcon = ({ className = "" }: { className?: string }) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+    </svg>
+  )
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -83,14 +101,27 @@ export default function ContactPage() {
                 <ArrowRight className={`h-5 w-5 ${styles.arrowIcon}`} />
               </a>
 
-              <a href={phoneHref} className={styles.contactCard}>
+              <a href={phoneHref} target="_blank" rel="noopener noreferrer" className={styles.contactCard}>
                 <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                   <div className={styles.contactCardIcon}>
-                    <Phone className="h-5 w-5" />
+                    <WhatsAppIcon className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className={styles.contactCardLabel}>Phone</p>
+                    <p className={styles.contactCardLabel}>WhatsApp</p>
                     <p className={styles.contactCardTitle}>{phoneDisplay}</p>
+                  </div>
+                </div>
+                <ArrowRight className={`h-5 w-5 ${styles.arrowIcon}`} />
+              </a>
+
+              <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className={styles.contactCard}>
+                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                  <div className={styles.contactCardIcon}>
+                    <WhatsAppIcon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className={styles.contactCardLabel}>WhatsApp</p>
+                    <p className={styles.contactCardTitle}>{whatsappDisplay}</p>
                   </div>
                 </div>
                 <ArrowRight className={`h-5 w-5 ${styles.arrowIcon}`} />
