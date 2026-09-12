@@ -117,17 +117,17 @@
   z-index: 2;
   max-width: 1920px;
   margin: 0 auto;
-  padding: 0 1rem 6rem;
+  padding: 0 1rem 5rem;
   width: 100%;
 }
 @media (min-width: 768px) {
   .heroInner {
-    padding: 0 1.5rem 6rem;
+    padding: 0 1.5rem 5rem;
   }
 }
 @media (min-width: 1024px) {
   .heroInner {
-    padding: 0 3rem 6rem;
+    padding: 0 3rem 5rem;
   }
 }
 @media (max-width: 767px) { .heroInner { padding-bottom: 5rem; } }
@@ -234,7 +234,7 @@
 
 /* ── INTRO ── */
 .introSection {
-  padding: 6rem 0;
+  padding: 5rem 0;
   border-top: 1px solid rgba(255,255,255,0.06);
 }
 
@@ -326,7 +326,7 @@
 
 /* ── ACCORDION ── */
 .materialsSection {
-  padding: 5rem 0 6rem;
+  padding: 5rem 0 5rem;
   background: #0d0d0d;
   border-top: 1px solid rgba(255,255,255,0.06);
   border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -518,7 +518,7 @@
 
 /* ── PROCESS ── */
 .processSection {
-  padding: 6rem 0;
+  padding: 5rem 0;
 }
 
 .processTrack {
@@ -586,7 +586,7 @@
 
 /* ── CERTIFICATIONS ── */
 .certsSection {
-  padding: 6rem 0;
+  padding: 5rem 0;
   background: #0d0d0d;
   border-top: 1px solid rgba(255,255,255,0.06);
   border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -642,7 +642,7 @@
 
 /* ── FINISHES ── */
 .finishesSection {
-  padding: 6rem 0;
+  padding: 5rem 0;
 }
 
 .finishesInner {

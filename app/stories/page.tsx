@@ -113,31 +113,56 @@ export default async function StoriesPage() {
 
   return (
     <div className={styles.page}>
-      {/* ===== MAIN SITE-WIDE CANONICAL CONTAINER — ALL SECTIONS LIVE INSIDE THIS ONE CONTAINER ===== */}
+
+      {/* ═══════ HERO — OUTSIDE container (full viewport bleed) ═══════ */}
+      <section className={styles.hero}>
+        <div className={styles.heroBg}>
+          {heroImgSrc && (
+            <img src={heroImgSrc} alt="" aria-hidden="true" className={styles.heroBgImage} />
+          )}
+          <div className={styles.heroPattern} />
+          <div className={styles.heroOverlay} />
+        </div>
+
+        <div className={styles.heroInner}>
+          <nav className={styles.heroBreadcrumb} aria-label="Breadcrumb">
+            <Link href="/" className={styles.heroBreadcrumbLink}>Home</Link>
+            <span className={styles.heroBreadcrumbSep}>/</span>
+            <span className={styles.heroBreadcrumbSep}>Stories</span>
+          </nav>
+
+          <div className={styles.heroMeta}>
+            <span className={styles.heroBadge}>Stories Archive</span>
+            <span className={styles.heroFeaturedLabel}>Editor&apos;s Showcase</span>
+          </div>
+
+          <h1 className={styles.heroTitle}>
+            The People &amp;<br />
+            <span className={styles.heroTitleAccent}>Places</span> We Equip
+          </h1>
+
+          <p className={styles.heroDesc}>
+            Real projects. Real athletes. Real transformation. From boutique studios to
+            five-star hotel gyms and professional training facilities — these are the
+            stories behind the equipment.
+          </p>
+
+          <div className={styles.heroMicro} aria-hidden>
+            <span className={styles.heroMicroItem}>{allStories.length}+ Stories</span>
+            <span className={styles.heroMicroDivider}>·</span>
+            <span className={styles.heroMicroItem}>60+ Countries</span>
+            <span className={styles.heroMicroDivider}>·</span>
+            <span className={styles.heroMicroItem}>
+              {(STORY_CATEGORIES.length - 1)} Categories
+            </span>
+            <span className={styles.heroMicroDivider}>·</span>
+            <span className={styles.heroMicroItem}>5 Year Warranty</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== MAIN SITE-WIDE CANONICAL CONTAINER — REST OF SECTIONS LIVE INSIDE ===== */}
       <div className={styles.container}>
-
-        {/* ── HERO ── ONLY TEXT (no featured card) → min-height 100vh, push content to bottom */}
-        <section className={styles.hero}>
-          <div className={styles.heroBg}>
-            {heroImgSrc && (
-              <img src={heroImgSrc} alt="" aria-hidden="true" className={styles.heroBgImage} />
-            )}
-            <div className={styles.heroPattern} />
-            <div className={styles.heroOverlay} />
-          </div>
-          <div className={styles.heroInner}>
-            <div className={styles.heroMeta}>
-              <span className={styles.heroBadge}>Stories</span>
-              <span className={styles.heroFeaturedLabel}>Featured Story</span>
-            </div>
-            <h1 className={styles.heroTitle}>The People &amp;<br />Places We Equip</h1>
-            <p className={styles.heroDesc}>
-              Real projects. Real athletes. Real transformation. These are the stories behind the equipment.
-            </p>
-          </div>
-        </section>
-
-        {/* ── FEATURED STORY — SEPARATE SECTION BELOW HERO ── */}
         <section className={styles.featuredSection}>
           <div className={styles.sectionHead}>
             <div className={styles.sectionHeadText}>
@@ -267,9 +292,8 @@ export default async function StoriesPage() {
             </div>
           </div>
         </section>
-
-        {/* ── CTA ── */}
-        <section className={styles.ctaSection}>
+      </div>
+      {/* ── CTA ── */}
           <CTA
             badge="Share Your Story"
             title="Is Your Facility Ready for Its Story?"
@@ -279,9 +303,6 @@ export default async function StoriesPage() {
             secondaryButtonText="Browse Equipment"
             secondaryButtonLink="/shop"
           />
-        </section>
-
-      </div>
       {/* ===== END MAIN CANONICAL CONTAINER ===== */}
     </div>
   )

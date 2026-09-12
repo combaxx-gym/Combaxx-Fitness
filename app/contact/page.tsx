@@ -8,8 +8,8 @@ import styles from "@/styles/pages/contact.module.css"
 export default function ContactPage() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [error, setError] = useState<string | null>(null)
-  const phoneDisplay = "+92 300 000 0000"
-  const phoneHref = "tel:+923000000000"
+  const phoneDisplay = "+92 3028222893"
+  const phoneHref = "what:+923028222893"
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()

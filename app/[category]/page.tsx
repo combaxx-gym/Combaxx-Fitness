@@ -255,13 +255,14 @@ export default async function CategoryPage(props: { params: Promise<{ category: 
           </section>
         )}
 
-        {/* ── CTA Banner ── */}
-        <CTA 
+       
+
+      </div>
+       {/* ── CTA Banner ── */}
+        <CTA
           title={`Ready to Equip Your ${title} Facility?`}
           description={`Contact our B2B team for bulk pricing, custom configurations, and professional installation services tailored to your gym or fitness center.`}
         />
-
-      </div>
     </div>
   )
 }

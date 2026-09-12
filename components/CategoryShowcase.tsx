@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronRight, ChevronLeft } from "lucide-react"
@@ -28,35 +28,58 @@ interface Category {
 export default function CategoryShowcase() {
   const [categories, setCategories] = useState<Category[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(true)
   const [cardWidth, setCardWidth] = useState(0)
   const [centerOffset, setCenterOffset] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(true)
 
   const cardRef = useRef<HTMLAnchorElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const maskRef = useRef<HTMLDivElement>(null)
+  const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null)
+
+  const stopAutoPlay = useCallback(() => {
+    if (autoPlayTimerRef.current) {
+      clearInterval(autoPlayTimerRef.current)
+      autoPlayTimerRef.current = null
+    }
+  }, [])
+
+  const startAutoPlay = useCallback(() => {
+    if (categories.length === 0) return
+    
+    stopAutoPlay()
+    
+    autoPlayTimerRef.current = setInterval(() => {
+      setCurrentIndex(prev => prev + 1)
+    }, 3000)
+  }, [categories.length, stopAutoPlay])
+
+  const resetInactivityTimer = useCallback(() => {
+    if (inactivityTimerRef.current) {
+      clearTimeout(inactivityTimerRef.current)
+    }
+    
+    stopAutoPlay()
+    
+    inactivityTimerRef.current = setTimeout(() => {
+      startAutoPlay()
+    }, 5000)
+  }, [stopAutoPlay, startAutoPlay])
 
   const handleNext = () => {
     setCurrentIndex(prev => prev + 1)
+    resetInactivityTimer()
   }
 
   const handlePrev = () => {
-    if (currentIndex === 0) {
-      setIsTransitioning(false)
-      setCurrentIndex(categories.length)
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setIsTransitioning(true)
-          setCurrentIndex(categories.length - 1)
-        })
-      })
-    } else {
-      setCurrentIndex(prev => prev - 1)
-    }
+    setCurrentIndex(prev => prev - 1)
+    resetInactivityTimer()
   }
 
   const handleDotClick = (index: number) => {
-    setCurrentIndex(index)
+    setCurrentIndex(categories.length + index)
+    resetInactivityTimer()
   }
 
   useEffect(() => {
@@ -71,7 +94,8 @@ export default function CategoryShowcase() {
         const result = await client.fetch(query) as Category[]
         const filtered = (result || []).filter(
           (c) => (c.slug?.current || "").toLowerCase() !== "top-selling-products" &&
-                 (c.name || "").toLowerCase() !== "top selling products"
+                 (c.name || "").toLowerCase() !== "top selling products" &&
+                 (c.image !== null && c.image !== undefined)
         )
         if (filtered.length > 0) {
           setCategories(filtered)
@@ -119,30 +143,50 @@ export default function CategoryShowcase() {
     }
   }, [categories])
 
+  // Handle infinite loop wrapping
   useEffect(() => {
     if (categories.length === 0) return
-    const interval = setInterval(() => {
-      handleNext()
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [categories.length])
 
-  useEffect(() => {
-    if (currentIndex === categories.length) {
-      const timer = setTimeout(() => {
+    const timer = setTimeout(() => {
+      // When we reach the end of the second copy, jump back to the first copy
+      if (currentIndex >= categories.length * 2) {
         setIsTransitioning(false)
-        setCurrentIndex(0)
+        setCurrentIndex(categories.length)
+        
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             setIsTransitioning(true)
           })
         })
-      }, 500)
-      return () => clearTimeout(timer)
-    }
+      }
+      // When we go before the first copy, jump to the last position of the second copy
+      else if (currentIndex < 0) {
+        setIsTransitioning(false)
+        setCurrentIndex(categories.length - 1)
+        
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setIsTransitioning(true)
+          })
+        })
+      }
+    }, 0)
+
+    return () => clearTimeout(timer)
   }, [currentIndex, categories.length])
 
-  const displayCategories = [...categories, ...categories]
+  useEffect(() => {
+    startAutoPlay()
+    return () => {
+      stopAutoPlay()
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current)
+      }
+    }
+  }, [categories.length, startAutoPlay, stopAutoPlay])
+
+  // Create infinite array: 3 copies of categories
+  const displayCategories = [...categories, ...categories, ...categories]
   const activeDotIndex = currentIndex % categories.length
 
   return (
@@ -187,17 +231,13 @@ export default function CategoryShowcase() {
                 >
                   {/* Image */}
                   <div className={styles.cardImageWrap}>
-                    {category.image ? (
-                      <Image
-                        src={typeof category.image === "string" ? category.image : urlFor(category.image).url()}
-                        alt={category.name}
-                        fill
-                        className={styles.cardImage}
-                        unoptimized
-                      />
-                    ) : (
-                      <div className={styles.cardNoImage}>No Image</div>
-                    )}
+                    <Image
+                      src={typeof category.image === "string" ? category.image : category.image ? urlFor(category.image).url() : "/images/placeholder.png"}
+                      alt={category.name}
+                      fill
+                      className={styles.cardImage}
+                      unoptimized
+                    />
                   </div>
 
                   {/* Gradient */}

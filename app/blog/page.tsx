@@ -98,30 +98,49 @@ export default async function BlogPage() {
 
   return (
     <div className={styles.page}>
-      {/* ===== MAIN SITE-WIDE CANONICAL CONTAINER — ALL SECTIONS LIVE INSIDE THIS ONE CONTAINER ===== */}
+
+      {/* ═══════ HERO — OUTSIDE container (full viewport bleed) ═══════ */}
+      <section className={styles.hero} aria-label="Blog hero">
+        <div className={styles.heroBg}>
+          <div className={styles.heroOverlay} />
+          <div className={styles.heroPattern} />
+        </div>
+        <div className={styles.heroInner}>
+          <nav className={styles.heroBreadcrumb} aria-label="Breadcrumb">
+            <Link href="/" className={styles.heroBreadcrumbLink}>Home</Link>
+            <span className={styles.heroBreadcrumbSep}>/</span>
+            <span>Blog</span>
+          </nav>
+
+          <div className={styles.heroBadgeRow}>
+            <span className={styles.heroBadge}>Combaxx Blog</span>
+            <span className={styles.heroBadgeSub}>Latest Stories &amp; News</span>
+          </div>
+
+          <h1 className={styles.heroTitle}>
+            Latest <span className={styles.heroTitleRed}>Stories &amp;</span><br />News
+          </h1>
+
+          <p className={styles.heroDesc}>
+            Gym design guides, equipment maintenance tips, industry trends, product announcements, and real-world insights from our commercial fitness experts.
+          </p>
+
+          <div className={styles.heroMicro} aria-hidden>
+            <span className={styles.heroMicroItem}>{posts.length}+ Articles</span>
+            <span className={styles.heroMicroDivider}>·</span>
+            <span className={styles.heroMicroItem}>Expert Editorial</span>
+            <span className={styles.heroMicroDivider}>·</span>
+            <span className={styles.heroMicroItem}>
+              {(BLOG_CATEGORIES.length - 1)} Categories
+            </span>
+            <span className={styles.heroMicroDivider}>·</span>
+            <span className={styles.heroMicroItem}>Product Updates</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== MAIN SITE-WIDE CANONICAL CONTAINER — REST OF SECTIONS LIVE INSIDE ===== */}
       <div className={styles.container}>
-
-        {/* ===== HERO ===== */}
-        <section className={styles.hero} aria-label="Blog hero">
-          <div className={styles.heroBg}>
-            <div className={styles.heroOverlay} />
-            <div className={styles.heroPattern} />
-          </div>
-          <div className={styles.heroInner}>
-            <div className={styles.heroBadgeRow}>
-              <span className={styles.heroBadge}>Combaxx Blog</span>
-              <span className={styles.heroBadgeSub}>Latest Stories &amp; News</span>
-            </div>
-            <h1 className={styles.heroTitle}>
-              Latest <span className={styles.heroTitleRed}>Stories &amp;</span><br />News
-            </h1>
-            <p className={styles.heroDesc}>
-              Gym design guides, equipment maintenance tips, industry trends, product announcements, and real-world insights from our commercial fitness experts.
-            </p>
-          </div>
-        </section>
-
-        {/* ===== FEATURED POST ===== */}
         <section className={styles.featuredSection}>
           <div className={styles.sectionHead}>
             <div className={styles.sectionHeadText}>
@@ -209,8 +228,10 @@ export default async function BlogPage() {
           />
         </section>
 
-        {/* ===== CTA ===== */}
-        <section className={styles.ctaSection}>
+        
+
+      </div>
+      {/* ===== CTA ===== */}
           <CTA
             badge="Stay Updated"
             title="Building Your Next Facility?"
@@ -220,9 +241,6 @@ export default async function BlogPage() {
             secondaryButtonText="Browse Equipment"
             secondaryButtonLink="/shop"
           />
-        </section>
-
-      </div>
       {/* ===== END MAIN CANONICAL CONTAINER ===== */}
     </div>
   )

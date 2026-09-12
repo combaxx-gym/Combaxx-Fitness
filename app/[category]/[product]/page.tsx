@@ -349,13 +349,7 @@ export default async function ProductPage(
             />
           )}
 
-          {/* ── CTA ── */}
-          <CTA 
-            title={`Interested in ${product.name}?`}
-            description={`Get in touch with our B2B team for bulk pricing, custom configurations, and professional installation services for this ${product.name}.`}
-            primaryButtonText="Request Quote"
-            secondaryButtonText="Contact Us"
-          />
+          
 
           {/* ── Product Reviews ── */}
           <ProductReviews
@@ -365,6 +359,13 @@ export default async function ProductPage(
           />
 
         </div>
+        {/* ── CTA ── */}
+          <CTA 
+            title={`Interested in ${product.name}?`}
+            description={`Get in touch with our B2B team for bulk pricing, custom configurations, and professional installation services for this ${product.name}.`}
+            primaryButtonText="Request Quote"
+            secondaryButtonText="Contact Us"
+          />
       </main>
     </>
   )

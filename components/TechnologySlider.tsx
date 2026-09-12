@@ -96,7 +96,9 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
     const canonical = ["treadmills", "bikes", "strength"]
     return match.some(m => canonical.includes(m) || synonyms.includes(m) || m.includes("titan"))
   })
-  const items = all
+
+  /* If strict filter returns empty, fall back to ALL products so slider isn't blank */
+  const items = all.length > 0 ? all : (products || [])
 
   const handleNext = () => setCurrentIndex(prev => prev + 1)
   const handlePrev = () => {
@@ -159,6 +161,69 @@ export default function TechnologySlider({ products = [] }: TechSliderProps) {
 
   const displayProducts = [...items, ...items]
   const activeDotIndex = items.length ? currentIndex % items.length : 0
+
+  if (items.length === 0) {
+    return (
+      <section className={styles.section}>
+        <div className={styles.wideContainer}>
+          <div className={styles.header}>
+            <div className={styles.textBlock}>
+              <p className={styles.eyebrow}>Elegantly designed. Fueled by technology.</p>
+              <h2 className={styles.heading}>
+                Precision engineered equipment, tuned for human performance.
+              </h2>
+              <p className={styles.desc}>
+                Explore a curated range of strength systems, racks, benches and functional training equipment engineered for exceptional performance, durability and versatility.
+              </p>
+            </div>
+            <div className={styles.ctaWrap}>
+              <Link href="/shop" className={styles.ctaLink}>
+                Shop online
+              </Link>
+            </div>
+          </div>
+        </div>
+        <div className={styles.container}>
+          <div className={styles.carouselOuter}>
+            <div className={styles.mask}>
+              <div
+                className={styles.track}
+                style={{
+                  transform: `translateX(0px)`,
+                  transition: "none",
+                  justifyContent: "center",
+                  minHeight: "300px",
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "2rem",
+                }}
+              >
+                <div
+                  style={{
+                    textAlign: "center",
+                    color: "#9ca3af",
+                    maxWidth: "600px",
+                    padding: "2rem",
+                    background: "rgba(255,255,255,0.02)",
+                    borderRadius: "16px",
+                    border: "2px dashed rgba(255,255,255,0.1)",
+                  }}
+                >
+                  <h3 style={{ color: "#fff", marginBottom: "0.75rem", fontSize: "1.5rem" }}>
+                    Products coming soon
+                  </h3>
+                  <p style={{ lineHeight: 1.7 }}>
+                    Add products to <strong>/studio</strong> &rarr; <strong>All Products</strong> with categories like{" "}
+                    <strong>Strength, Treadmills, Bikes, Titan Series, Benches</strong> to populate this slider.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className={styles.section}>

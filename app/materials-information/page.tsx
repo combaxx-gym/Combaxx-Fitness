@@ -274,7 +274,6 @@ export default function MaterialsPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className={styles.ctaSection}>
         <CTA
           title="Need Full Material Documentation?"
           description="Our technical team can provide full material data sheets, test reports, and compliance certificates for any product in our range."
@@ -283,7 +282,6 @@ export default function MaterialsPage() {
           secondaryButtonText="Browse Products"
           secondaryButtonLink="/shop"
         />
-      </section>
 
     </div>
   )

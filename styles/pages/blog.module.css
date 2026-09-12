@@ -1,24 +1,23 @@
-/* Blog Archive Page */
+/* Blog Archive Page — desktop-first, max-width ONLY */
 .page { background: #0d0d0d; min-height: 100vh; color: #fff; }
 
 .container {
   max-width: 1920px;
   margin: 0 auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
 }
-@media (min-width: 768px) {
+@media (max-width: 1023px) {
   .container { padding-left: 1.5rem; padding-right: 1.5rem; }
 }
-@media (min-width: 1024px) {
-  .container { padding-left: 3rem; padding-right: 3rem; }
+@media (max-width: 767px) {
+  .container { padding-left: 1rem; padding-right: 1rem; }
 }
 
-/* ===== HERO ===== */
-/* NOTE: All horizontal padding + 1920px max-width COMES FROM page-level ROOT .container wrapper (DO NOT add container props here! DO NOT add horizontal padding here!) */
+/* ===== HERO — lives OUTSIDE the page root container (full viewport bleed) ===== */
 .hero {
   position: relative;
-  min-height: 92vh;
+  min-height: 88vh;
   display: flex;
   align-items: flex-end;
   padding-top: 7rem;
@@ -26,7 +25,8 @@
   overflow: hidden;
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-@media (max-width: 767px) { .hero { min-height: 85vh; } }
+@media (max-width: 1023px) { .hero { min-height: 82vh; } }
+@media (max-width: 767px) { .hero { min-height: 78vh; padding-top: 6rem; } }
 
 .heroBg {
   position: absolute;
@@ -37,76 +37,169 @@
 .heroOverlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background:
-    radial-gradient(ellipse 50% 50% at 15% 30%, rgba(255,51,51,0.07) 0%, transparent 70%),
-    linear-gradient(180deg, #111111 0%, #0d0d0d 100%);
+    radial-gradient(ellipse 65% 55% at 18% 32%, rgba(255,51,51,0.1) 0%, transparent 72%),
+    radial-gradient(ellipse 50% 50% at 85% 70%, rgba(255,255,255,0.04) 0%, transparent 70%),
+    linear-gradient(
+      to bottom,
+      rgba(13,13,13,0.8) 0%,
+      rgba(13,13,13,0.6) 35%,
+      rgba(17,17,17,0.75) 65%,
+      rgba(17,17,17,1) 100%
+    );
 }
 
 .heroPattern {
   position: absolute;
   inset: 0;
+  z-index: 2;
   background-image:
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 60px 60px;
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.015) 0px,
+      rgba(255,255,255,0.015) 1px,
+      transparent 1px,
+      transparent 12px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255,255,255,0.015) 0px,
+      rgba(255,255,255,0.015) 1px,
+      transparent 1px,
+      transparent 12px
+    );
 }
 
-/* heroInner — ONLY vertical bottom padding (NO horizontal padding, NO max-width, NO margin auto!) */
+/* Left accent bar (about + stories page style) */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, #FF3333 0%, #FF3333 35%, transparent 85%);
+  z-index: 4;
+}
+
+/* Hero inner = self-contained canonical container
+   (matches site .container exactly — 1920 / 3rem / 1.5rem / 1rem) */
 .heroInner {
   position: relative;
-  z-index: 2;
-  padding-bottom: 6rem;
+  z-index: 5;
+  max-width: 1920px;
+  margin: 0 auto;
   width: 100%;
+  padding: 0 3rem 5rem;
 }
-@media (max-width: 767px) { .heroInner { padding-bottom: 5rem; } }
+@media (max-width: 1023px) {
+  .heroInner { padding: 0 1.5rem 5rem; }
+}
+@media (max-width: 767px) {
+  .heroInner { padding: 0 1rem 4rem; max-width: 100%; }
+}
+
+/* Breadcrumb */
+.heroBreadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 2rem;
+}
+.heroBreadcrumbLink { color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.2s ease; }
+.heroBreadcrumbLink:hover { color: #fff; }
+.heroBreadcrumbSep { color: rgba(255,255,255,0.15); }
 
 .heroBadgeRow {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .heroBadge {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.85rem;
-  background: rgba(255,51,51,0.12);
+  gap: 0.5rem;
+  padding: 0.375rem 0.875rem;
+  background: rgba(255,51,51,0.1);
   border: 1px solid rgba(255,51,51,0.3);
-  border-radius: 3px;
-  font-size: 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.63rem;
   font-weight: 800;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #FF3333;
 }
+.heroBadge::before {
+  content: '';
+  width: 6px; height: 6px; border-radius: 9999px;
+  background: #FF3333;
+}
+
 .heroBadgeSub {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+.heroBadgeSub::before {
+  content: '';
+  width: 6px; height: 6px; border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.heroTitle {
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 1.75rem;
+}
+@media (max-width: 1023px) { .heroTitle { font-size: clamp(2.75rem, 7vw, 4.5rem); } }
+@media (max-width: 767px) { .heroTitle { font-size: clamp(2.25rem, 10vw, 3rem); } }
+
+.heroTitleRed { color: #FF3333; }
+
+.heroDesc {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.55);
+  max-width: 640px;
+  margin: 0;
+}
+@media (max-width: 767px) {
+  .heroDesc { font-size: 1rem; max-width: 100%; }
+}
+
+/* Micro strip (stories style) */
+.heroMicro {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+.heroMicroItem {
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.3);
 }
-
-.heroTitle {
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  font-weight: 900;
-  letter-spacing: -0.035em;
-  line-height: 1;
-  text-transform: uppercase;
-  color: #fff;
-  margin: 0 0 1rem;
-  max-width: 25ch;
-}
-.heroTitleRed { color: #FF3333; }
-
-.heroDesc {
-  font-size: 0.9375rem;
-  line-height: 1.75;
-  color: rgba(255,255,255,0.45);
-  max-width: 50ch;
-  margin: 0;
-}
+.heroMicroDivider { color: rgba(255,255,255,0.15); }
 
 /* ===== SECTION HEAD ===== */
 .sectionHead {
@@ -174,7 +267,7 @@
 
 /* ===== FEATURED POST (big card) ===== */
 .featuredSection {
-  padding: 4rem 0 3rem;
+  padding: 5rem 0 3rem;
 }
 
 .featuredLink {
@@ -314,7 +407,7 @@
 .featuredCard:hover .readMore::after { transform: translateX(4px); }
 
 /* ===== GRID ===== */
-.gridSection { padding: 3rem 0 6rem; }
+.gridSection { padding: 3rem 0 5rem; }
 
 .postsGrid {
   display: grid;
@@ -521,7 +614,7 @@
 
 /* Grid placeholder empty hint */
 .gridPlaceholderHint {
-  padding: 1rem 0 0.5rem;
+  padding: 1rem 0rem;
   text-align: center;
   color: rgba(255,255,255,0.3);
   font-size: 0.78rem;
