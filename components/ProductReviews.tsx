@@ -196,7 +196,6 @@ export default function ProductReviews({ productId, productName, initialReviews 
               </div>
 
               <div className={styles.modalActions}>
-                <button type="button" onClick={closeModal} className={styles.cancelBtn}>Cancel</button>
                 <button type="submit" disabled={isSubmitting} className={styles.submitBtn}>
                   {isSubmitting ? 'Submitting...' : 'Submit Review'}
                 </button>

@@ -40,70 +40,85 @@
 }
 @media (max-width: 767px) { .headRow { margin-bottom: 2.25rem; } }
 
-.headText { display: flex; flex-direction: column; gap: 0.6rem; max-width: 780px; }
+.headText { display: flex; flex-direction: column; gap: 0; max-width: 780px; }
 
 .headEyebrow {
-  display: inline-flex;
-  align-self: flex-start;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.3rem 0.8rem;
-  background: rgba(255,51,51,0.08);
-  border: 1px solid rgba(255,51,51,0.25);
-  border-radius: 9999px;
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.3em;
+  display: block;
+  color: #f33;
   text-transform: uppercase;
-  color: #FF3333;
+  font-size: 14px;
+  font-weight: 700;
+  padding-bottom: 10px;
+  letter-spacing: normal;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
 }
+
 .headEyebrow::before {
-  content: '';
-  width: 6px; height: 6px; border-radius: 9999px;
-  background: #FF3333;
+  display: none;
 }
 
 .headTitle {
-  font-size: clamp(2.25rem, 4vw, 3.25rem);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: -0.03em;
-  line-height: 1;
+  margin: 0 0 1rem;
+  font-size: 45px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: capitalize;
+  letter-spacing: normal;
   color: #fff;
-  margin: 0;
+}
+
+@media (max-width: 1023px) {
+  .headTitle { font-size: 2.5rem; }
+}
+
+@media (max-width: 767px) {
+  .headTitle { font-size: 2rem; }
+}
+
+@media (max-width: 639px) {
+  .headTitle { font-size: 1.875rem; }
 }
 
 .headDesc {
-  font-size: 1.0625rem;
-  line-height: 1.75;
-  color: rgba(255,255,255,0.55);
+  font-size: 18px;
+  line-height: 1.7;
+  color: #9ca3af;
   margin: 0;
   max-width: 720px;
 }
 @media (max-width: 767px) {
-  .headDesc { font-size: 0.95rem; }
+  .headDesc { font-size: 1rem; }
+}
+@media (max-width: 639px) {
+  .headDesc { font-size: 0.875rem; }
 }
 
 .headMore {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.75rem 1.25rem;
-  border: 1px solid rgba(255,255,255,0.15);
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid rgba(255,255,255,0.2);
   border-radius: 9999px;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.22em;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   color: #fff;
   text-decoration: none;
   white-space: nowrap;
-  transition: all 0.25s ease;
+  transition: all 0.3s ease;
 }
 .headMore:hover {
   border-color: #FF3333;
   color: #FF3333;
-  background: rgba(255,51,51,0.06);
+  background: transparent;
 }
 .headMoreIcon { width: 1rem; height: 1rem; }
 
@@ -117,7 +132,17 @@
   flex-wrap: wrap;
 }
 @media (max-width: 767px) {
-  .catTabs { gap: 0.6rem; margin-bottom: 2.25rem; }
+  .catTabs {
+    gap: 0.55rem;
+    margin-bottom: 1.75rem;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.25rem;
+  }
+  .catTabs::-webkit-scrollbar { display: none; }
+  .catTab { flex-shrink: 0; }
 }
 
 .catTab {
@@ -125,22 +150,22 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
+  padding: 0.75rem 1.5rem;
   color: rgba(255,255,255,0.5);
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
   border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 800;
+  font-size: 0.875rem;
+  font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  transition: all 0.25s ease;
+  transition: all 0.3s ease;
 }
 @media (max-width: 767px) {
-  .catTab { padding: 0.65rem 1rem; font-size: 0.68rem; letter-spacing: 0.16em; }
+  .catTab { padding: 0.65rem 1.1rem; font-size: 0.75rem; letter-spacing: 0.14em; }
 }
 @media (max-width: 639px) {
-  .catTab { padding: 0.6rem 0.9rem; font-size: 0.62rem; letter-spacing: 0.14em; }
+  .catTab { padding: 0.6rem 1rem; font-size: 0.7rem; letter-spacing: 0.12em; }
 }
 
 .catTab:hover {
@@ -319,8 +344,42 @@
 
 @media (max-width: 1279px) { .card { width: 380px; height: 500px; } }
 @media (max-width: 1023px) { .card { width: 320px; height: 460px; } }
-@media (max-width: 767px)  { .card { width: 260px; height: 420px; } }
-@media (max-width: 639px)  { .card { width: 220px; height: 360px; } }
+
+@media (max-width: 767px) {
+  .card {
+    width: calc(100vw - 2rem);
+    max-width: none;
+    height: auto;
+    aspect-ratio: 3 / 4;
+  }
+  .cardContent { padding: 1.25rem; }
+  .mask {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1.75rem;
+  }
+  .track { gap: 0.75rem; }
+  .headRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.15rem;
+  }
+  .headMore {
+    align-self: flex-start;
+  }
+  .cardTitle { font-size: 1.25rem; line-height: 1.25; }
+  .cardLabel {
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .cardLabel { font-size: 0.85rem; }
+  .cardTitle { font-size: 1.15rem; }
+  .cardArrow { width: 2.35rem; height: 2.35rem; }
+}
 
 .cardImageWrap {
   position: absolute;
@@ -329,7 +388,7 @@
 }
 
 .cardImage {
-  object-fit: contain;
+  object-fit: cover;
   transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .card:hover .cardImage { transform: scale(1.05); }
@@ -364,7 +423,7 @@
   align-items: flex-end;
   gap: 1rem;
 }
-@media (max-width: 767px) { .cardContent { padding: 1.5rem; } }
+@media (max-width: 767px) { .cardContent { padding: 1.15rem; } }
 
 .cardLabel {
   text-transform: uppercase;
@@ -385,10 +444,6 @@
   transition: color 0.25s ease;
 }
 .card:hover .cardTitle { color: #FF3333; }
-
-@media (max-width: 1023px) { .cardTitle { font-size: 1.25rem; } }
-@media (max-width: 767px)  { .cardTitle { font-size: 1.1rem; } }
-@media (max-width: 639px)  { .cardTitle { font-size: 1rem; } }
 
 .cardArrow {
   flex-shrink: 0;
@@ -412,13 +467,43 @@
 }
 .cardArrowIcon { width: 1.15rem; height: 1.15rem; }
 
-/* ── Dots ── */
+/* ── Controls (dots + mobile arrows) ── */
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.25rem;
+  padding: 0 1rem;
+}
+
+.mobileNavBtn {
+  display: none;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background-color: rgba(255,255,255,0.06);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.mobileNavBtn:hover {
+  border-color: #FF3333;
+  color: #FF3333;
+  background-color: rgba(255,51,51,0.1);
+}
+
 .dots {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 0.25rem;
+  margin-top: 0;
 }
 .dot {
   height: 0.5rem;
@@ -434,4 +519,18 @@
   width: 1.75rem;
   background-color: #FF3333;
   box-shadow: 0 0 0 3px rgba(255,51,51,0.12);
+}
+
+/* Mobile nav — must come AFTER base .mobileNavBtn { display:none } */
+@media (max-width: 767px) {
+  .mobileNavBtn {
+    display: inline-flex;
+  }
+  .controls {
+    gap: 1.25rem;
+  }
+  /* Keep arrows only under the slider — hide card overlay arrows */
+  .arrowBtn {
+    display: none;
+  }
 }

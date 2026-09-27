@@ -25,11 +25,11 @@ async function getProducts(searchQuery?: string): Promise<Product[]> {
   const params: Record<string, unknown> = {}
   
   if (searchQuery && searchQuery.trim().length >= 2) {
-    const pattern = `*${searchQuery.toLowerCase()}*`
-    query = `*[_type == "product" && (
-      lower(name) match $pattern ||
-      lower(coalesce(title, "")) match $pattern
-    )] | order(_score desc)`
+    const pattern = `*${searchQuery.trim().toLowerCase()}*`
+    query = `*[_type == "product" && defined(slug.current) && (
+      name match $pattern ||
+      coalesce(title, "") match $pattern
+    )]`
     params.pattern = pattern
   }
   
@@ -183,13 +183,13 @@ export default async function ShopPage(props: {
             ))}
           </div>
         </section>
-
-        {/* ── CTA Banner ── */}
-        <CTA 
-          title="Ready to Equip Your Facility?"
-          description="Contact our B2B team for bulk pricing, custom configurations, and professional installation services tailored to your gym or fitness center."
-        />
       </div>
+
+      {/* ── CTA Banner ── */}
+      <CTA
+        title="Ready to Equip Your Facility?"
+        description="Contact our B2B team for bulk pricing, custom configurations, and professional installation services tailored to your gym or fitness center."
+      />
     </div>
   )
 }

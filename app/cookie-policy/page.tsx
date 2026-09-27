@@ -52,47 +52,32 @@ function CookieTable({ title, description, rows }: { title: string; description:
     <section className={styles.articleBlock}>
       <h2>{title}</h2>
       <p>{description}</p>
-      <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem', borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)' }}>
-        <thead>
-          <tr style={{ background: 'rgba(255,255,255,0.03)' }}>
-            <th style={thStyle}>Cookie</th>
-            <th style={thStyle}>Purpose</th>
-            <th style={thStyle}>Duration</th>
-            <th style={thStyle}>Type</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r, i) => (
-            <tr key={r.name} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.01)' : 'transparent' }}>
-              <td style={tdStyle}><strong style={{ color: 'rgba(255,255,255,0.92)' }}>{r.name}</strong></td>
-              <td style={tdStyle}>{r.purpose}</td>
-              <td style={tdStyle}>{r.duration}</td>
-              <td style={tdStyle}>{r.type}</td>
+      <div className={styles.cookieTableWrap}>
+        <table className={styles.cookieTable}>
+          <thead>
+            <tr>
+              <th>Cookie</th>
+              <th>Purpose</th>
+              <th>Duration</th>
+              <th>Type</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.name}>
+                <td data-label="Cookie">
+                  <strong className={styles.cookieName}>{r.name}</strong>
+                </td>
+                <td data-label="Purpose">{r.purpose}</td>
+                <td data-label="Duration">{r.duration}</td>
+                <td data-label="Type">{r.type}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   )
-}
-
-const thStyle: React.CSSProperties = {
-  textAlign: 'left',
-  padding: '0.85rem 1rem',
-  borderBottom: '1px solid rgba(255,255,255,0.07)',
-  color: '#FF3333',
-  fontWeight: 800,
-  fontSize: '0.7rem',
-  letterSpacing: '0.2em',
-  textTransform: 'uppercase',
-}
-const tdStyle: React.CSSProperties = {
-  padding: '0.85rem 1rem',
-  borderBottom: '1px solid rgba(255,255,255,0.05)',
-  fontSize: '0.9rem',
-  color: 'rgba(255,255,255,0.6)',
-  lineHeight: 1.6,
-  verticalAlign: 'top',
 }
 
 export default function CookiePolicyPage() {

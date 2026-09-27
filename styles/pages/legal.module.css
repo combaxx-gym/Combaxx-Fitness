@@ -21,7 +21,7 @@
 /* ── HERO (OUTSIDE container) ── */
 .hero {
   position: relative;
-  min-height: 58vh;
+  min-height: 80vh;
   display: flex;
   align-items: flex-end;
   padding-top: 7rem;
@@ -29,8 +29,8 @@
   overflow: hidden;
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-@media (max-width: 1023px) { .hero { min-height: 52vh; } }
-@media (max-width: 767px) { .hero { min-height: 48vh; padding-top: 6rem; } }
+@media (max-width: 1023px) { .hero { min-height: 80vh; } }
+@media (max-width: 767px) { .hero { min-height: 80vh; padding-top: 6rem; } }
 
 .heroBg {
   position: absolute;
@@ -330,4 +330,123 @@
   border: none;
   border-top: 1px solid rgba(255,255,255,0.06);
   margin: 0.25rem 0 0.25rem;
+}
+
+/* ── Cookie tables ── */
+.cookieTableWrap {
+  margin-top: 1rem;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cookieTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cookieTable thead tr {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.cookieTable th {
+  text-align: left;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  color: #FF3333;
+  font-weight: 800;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.cookieTable td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  vertical-align: top;
+}
+
+.cookieTable tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.cookieTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.cookieName {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 700;
+  word-break: break-word;
+}
+
+@media (max-width: 767px) {
+  .cookieTableWrap {
+    border: none;
+    overflow: visible;
+    margin-top: 1.25rem;
+  }
+
+  .cookieTable,
+  .cookieTable thead,
+  .cookieTable tbody,
+  .cookieTable tr,
+  .cookieTable th,
+  .cookieTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .cookieTable thead {
+    display: none;
+  }
+
+  .cookieTable tbody tr {
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .cookieTable tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .cookieTable tbody tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .cookieTable td {
+    padding: 0.55rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 0.875rem;
+  }
+
+  .cookieTable td:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .cookieTable td:first-child {
+    padding-top: 0;
+  }
+
+  .cookieTable td::before {
+    content: attr(data-label);
+    display: block;
+    color: #FF3333;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .cookieName {
+    font-size: 0.95rem;
+  }
 }

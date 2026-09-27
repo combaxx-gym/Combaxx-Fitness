@@ -112,3 +112,13 @@
 .flatTable {
   width: 100%;
 }
+
+/* Mobile section rhythm — match category / shop / product pages */
+@media (max-width: 767px) {
+  .section {
+    padding: var(--section-pad-y-mobile) 0 0;
+  }
+  .header {
+    margin-bottom: 1.75rem;
+  }
+}

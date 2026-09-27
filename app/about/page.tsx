@@ -401,17 +401,15 @@ export default function AboutPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className={styles.ctaSection}>
-          <CTA
-            badge="Stay Updated"
-            title="Building Your Next Facility?"
-            description="Subscribe to our blog for the latest gym design guides, equipment maintenance tips, and bulk pricing updates from Combaxx Fitness."
-            primaryButtonText="Get in Touch"
-            primaryButtonLink="/contact"
-            secondaryButtonText="Browse Equipment"
-            secondaryButtonLink="/shop"
-          />
-        </section>
+      <CTA
+        badge="Stay Updated"
+        title="Building Your Next Facility?"
+        description="Subscribe to our blog for the latest gym design guides, equipment maintenance tips, and bulk pricing updates from Combaxx Fitness."
+        primaryButtonText="Get in Touch"
+        primaryButtonLink="/contact"
+        secondaryButtonText="Browse Equipment"
+        secondaryButtonLink="/shop"
+      />
     </div>
   )
 }

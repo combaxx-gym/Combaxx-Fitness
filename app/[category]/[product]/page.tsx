@@ -339,6 +339,8 @@ export default async function ProductPage(
             productName={product.name}
             productSku={product.sku}
             productSlug={product.slug.current}
+            productImage={product.image}
+            gallery={product.gallery || []}
           />
 
           {/* ── Related Products ── */}

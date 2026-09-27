@@ -5,12 +5,12 @@ import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import type { SanityImageSource } from '@sanity/image-url'
 import styles from '@/styles/components/MegaMenu.module.css'
 
-// Static Categories (fallback/primary)
 const STATIC_CATEGORIES = [
   {
     _id: 'cat-1',
@@ -49,7 +49,6 @@ const STATIC_CATEGORIES = [
   },
 ]
 
-// Static Series (separate from categories)
 const STATIC_SERIES = [
   {
     _id: 'series-1',
@@ -88,6 +87,14 @@ const STATIC_SERIES = [
   },
 ]
 
+const MOBILE_LINKS = [
+  { href: '/shop', label: 'Shop All' },
+  { href: '/materials-information', label: 'Materials Information' },
+  { href: '/stories', label: 'Stories' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/about', label: 'About' },
+]
+
 interface Category {
   _id: string
   name: string
@@ -105,171 +112,231 @@ interface Props {
 }
 
 export default function MegaMenu({ isOpen, onClose, onMouseEnter, onMouseLeave }: Props) {
-  const [categories, setCategories] = useState<Category[]>(STATIC_CATEGORIES)
-  const [series, setSeries] = useState<Category[]>(STATIC_SERIES)
-  const [loading, setLoading] = useState(false)
+  const [categories] = useState<Category[]>(STATIC_CATEGORIES)
+  const [series] = useState<Category[]>(STATIC_SERIES)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
-    if (!isOpen) return;
-    // Optional: Try to fetch from Sanity as backup, but use static as primary
-    let cancelled = false;
+    if (!isOpen) return
+    let cancelled = false
     client
       .fetch<Category[]>(
         `*[_type == "category" && slug.current != "top-selling-products" && slug.current != "crosstrainers"] | order(name asc){ _id, name, slug, image, tagline, description }`
       )
-      .then(data => {
-        if (!cancelled && data && data.length > 0) {
-          // If you want to mix or replace, you can adjust here. For now, keep static.
-          // setCategories(data);
-        }
+      .then(() => {
+        if (cancelled) return
+        // Static categories stay primary for consistent branding
       })
-      .catch(() => {});
-    return () => { cancelled = true };
+      .catch(() => {})
+    return () => { cancelled = true }
   }, [isOpen])
 
-  if (!mounted) return null;
+  if (!mounted) return null
 
   return createPortal(
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <>
+          <motion.button
+            type="button"
+            className={styles.backdrop}
+            aria-label="Close menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={onClose}
+          />
+          <motion.div
             className={styles.panel}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
             role="navigation"
-            aria-label="Product categories"
+            aria-label="Main menu"
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
           >
-          <div className={styles.container}>
-            <div className={styles.heroImage}>
-              <Image
-                src="/images/mega-menu-image.png"
-                alt="Gym Equipment"
-                fill
-                style={{ objectFit: 'contain' }}
-                unoptimized
-              />
-            </div>
-            <div className={styles.inner}>
-              {/* Left Section - Hero */}
-              <div className={styles.heroSection}>
-                <span className={styles.heroBadge}>COMBAXX EQUIPMENT</span>
-                <h2 className={styles.heroTitle}>Built for<br />Serious Training</h2>
-                <p className={styles.heroDesc}>
-                  Engineered for performance, built to last. Equipment that pushes limits and delivers results.
-                </p>
-                <Link href="/shop" className={styles.heroBtn} onClick={onClose}>
-                  VIEW ALL PRODUCTS
-                  <span className={styles.heroBtnArrow}>→</span>
-                </Link>
-              </div>
-
-              {/* Middle Section - Categories */}
-              <div className={styles.categoriesSection}>
-                <h3 className={styles.sectionTitle}>EQUIPMENT CATEGORIES</h3>
-                <div className={styles.categoriesList}>
-                  {categories.slice(0, 5).map(cat => (
-                    <Link
-                      key={cat._id}
-                      href={`/${cat.slug.current}`}
-                      className={styles.categoryCard}
-                      onClick={onClose}
-                    >
-                      {cat.image ? (
-                        <div className={styles.categoryImageWrap}>
-                          <Image
-                            src={typeof cat.image === 'string' ? cat.image : urlFor(cat.image).url()}
-                            alt={cat.name}
-                            fill
-                            className={styles.categoryImage}
-                            sizes="(max-width: 768px) 60px, 80px"
-                            unoptimized
-                          />
-                        </div>
-                      ) : (
-                        <div className={styles.categoryImageWrap} />
-                      )}
-                      <div className={styles.categoryInfo}>
-                        <h4 className={styles.categoryName}>{cat.name}</h4>
-                        {cat.tagline && (
-                          <p className={styles.categoryTagline}>{cat.tagline}</p>
-                        )}
-                      </div>
-                      <span className={styles.categoryArrow}>›</span>
+            <div className={styles.container}>
+              {/* Mobile quick links + Login */}
+              <div className={styles.mobileBar}>
+                <nav className={styles.mobileNav} aria-label="Site links">
+                  {MOBILE_LINKS.map(link => (
+                    <Link key={link.href} href={link.href} className={styles.mobileNavLink} onClick={onClose}>
+                      {link.label}
                     </Link>
                   ))}
+                </nav>
+                <div className={styles.authBlock}>
+                  <SignedOut>
+                    <SignInButton mode="modal">
+                      <button type="button" className={styles.loginBtn} onClick={onClose}>
+                        Login
+                      </button>
+                    </SignInButton>
+                  </SignedOut>
+                  <SignedIn>
+                    <div className={styles.accountRow}>
+                      <span className={styles.accountLabel}>Account</span>
+                      <UserButton
+                        appearance={{
+                          elements: {
+                            avatarBox: 'w-8 h-8 ring-2 ring-white/20 hover:ring-[#FF3333] transition-all',
+                          },
+                        }}
+                      />
+                    </div>
+                  </SignedIn>
                 </div>
               </div>
 
-              {/* Right Section - Series */}
-              <div className={styles.categoriesSection}>
-                <h3 className={styles.sectionTitle}>EXPLORE SERIES</h3>
-                <div className={styles.categoriesList}>
-                  {series.slice(0, 5).map(serie => (
-                    <Link
-                      key={serie._id}
-                      href={`/${serie.slug.current}`}
-                      className={styles.categoryCard}
-                      onClick={onClose}
-                    >
-                      {serie.image ? (
-                        <div className={styles.categoryImageWrap}>
-                          <Image
-                            src={typeof serie.image === 'string' ? serie.image : urlFor(serie.image).url()}
-                            alt={serie.name}
-                            fill
-                            className={styles.categoryImage}
-                            sizes="(max-width: 768px) 60px, 80px"
-                            unoptimized
-                          />
-                        </div>
-                      ) : (
-                        <div className={styles.categoryImageWrap} />
-                      )}
-                      <div className={styles.categoryInfo}>
-                        <h4 className={styles.categoryName}>{serie.name}</h4>
-                        {serie.tagline && (
-                          <p className={styles.categoryTagline}>{serie.tagline}</p>
+              <div className={styles.heroImage}>
+                <Image
+                  src="/images/mega-menu-image.png"
+                  alt="Gym Equipment"
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  unoptimized
+                />
+              </div>
+              <div className={styles.inner}>
+                <div className={styles.heroSection}>
+                  <span className={styles.heroBadge}>COMBAXX EQUIPMENT</span>
+                  <h2 className={styles.heroTitle}>Built for<br />Serious Training</h2>
+                  <p className={styles.heroDesc}>
+                    Engineered for performance, built to last. Equipment that pushes limits and delivers results.
+                  </p>
+                  <Link href="/shop" className={styles.heroBtn} onClick={onClose}>
+                    VIEW ALL PRODUCTS
+                    <span className={styles.heroBtnArrow}>→</span>
+                  </Link>
+                </div>
+
+                <div className={styles.categoriesSection}>
+                  <h3 className={styles.sectionTitle}>EQUIPMENT CATEGORIES</h3>
+                  <div className={styles.categoriesList}>
+                    {categories.slice(0, 5).map(cat => (
+                      <Link
+                        key={cat._id}
+                        href={`/${cat.slug.current}`}
+                        className={styles.categoryCard}
+                        onClick={onClose}
+                      >
+                        {cat.image ? (
+                          <div className={styles.categoryImageWrap}>
+                            <Image
+                              src={typeof cat.image === 'string' ? cat.image : urlFor(cat.image).url()}
+                              alt={cat.name}
+                              fill
+                              className={styles.categoryImage}
+                              sizes="(max-width: 768px) 60px, 80px"
+                              unoptimized
+                            />
+                          </div>
+                        ) : (
+                          <div className={styles.categoryImageWrap} />
                         )}
-                      </div>
-                      <span className={styles.categoryArrow}>›</span>
-                    </Link>
-                  ))}
+                        <div className={styles.categoryInfo}>
+                          <h4 className={styles.categoryName}>{cat.name}</h4>
+                          {cat.tagline && (
+                            <p className={styles.categoryTagline}>{cat.tagline}</p>
+                          )}
+                        </div>
+                        <span className={styles.categoryArrow}>›</span>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Bottom CTA */}
-            <div className={styles.bottomCta}>
-              <div className={styles.bottomCtaLeft}>
-                <div className={styles.bottomCtaIcon}>
-                  <Image
-                    src="/images/image-removebg-preview.svg"
-                    alt="Icon"
-                    width={24}
-                    height={24}
-                    unoptimized
-                    style={{ filter: 'brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(7483%) hue-rotate(357deg) brightness(98%) contrast(118%)' }}
-                  />
-                </div>
-                <div className={styles.bottomCtaText}>
-                  <p className={styles.bottomCtaTitle}>Need help choosing equipment?</p>
-                  <p className={styles.bottomCtaDesc}>Our experts are here to help you find the right solution for your goals.</p>
+                <div className={styles.categoriesSection}>
+                  <h3 className={styles.sectionTitle}>EXPLORE SERIES</h3>
+                  <div className={styles.categoriesList}>
+                    {series.slice(0, 5).map(serie => (
+                      <Link
+                        key={serie._id}
+                        href={`/${serie.slug.current}`}
+                        className={styles.categoryCard}
+                        onClick={onClose}
+                      >
+                        {serie.image ? (
+                          <div className={styles.categoryImageWrap}>
+                            <Image
+                              src={typeof serie.image === 'string' ? serie.image : urlFor(serie.image).url()}
+                              alt={serie.name}
+                              fill
+                              className={styles.categoryImage}
+                              sizes="(max-width: 768px) 60px, 80px"
+                              unoptimized
+                            />
+                          </div>
+                        ) : (
+                          <div className={styles.categoryImageWrap} />
+                        )}
+                        <div className={styles.categoryInfo}>
+                          <h4 className={styles.categoryName}>{serie.name}</h4>
+                          {serie.tagline && (
+                            <p className={styles.categoryTagline}>{serie.tagline}</p>
+                          )}
+                        </div>
+                        <span className={styles.categoryArrow}>›</span>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <Link href="/contact" className={styles.bottomCtaBtn} onClick={onClose}>
-                TALK TO SALES
-                <span className={styles.bottomCtaBtnArrow}>→</span>
-              </Link>
+
+              {/* Desktop auth + bottom CTA */}
+              <div className={styles.bottomCta}>
+                <div className={styles.bottomCtaLeft}>
+                  <div className={styles.bottomCtaIcon}>
+                    <Image
+                      src="/images/image-removebg-preview.svg"
+                      alt="Icon"
+                      width={24}
+                      height={24}
+                      unoptimized
+                      style={{ filter: 'brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(7483%) hue-rotate(357deg) brightness(98%) contrast(118%)' }}
+                    />
+                  </div>
+                  <div className={styles.bottomCtaText}>
+                    <p className={styles.bottomCtaTitle}>Need help choosing equipment?</p>
+                    <p className={styles.bottomCtaDesc}>Our experts are here to help you find the right solution for your goals.</p>
+                  </div>
+                </div>
+                <div className={styles.bottomCtaActions}>
+                  <div className={styles.desktopAuth}>
+                    <SignedOut>
+                      <SignInButton mode="modal">
+                        <button type="button" className={styles.loginBtn} onClick={onClose}>
+                          Login
+                        </button>
+                      </SignInButton>
+                    </SignedOut>
+                    <SignedIn>
+                      <div className={styles.accountRow}>
+                        <span className={styles.accountLabel}>Account</span>
+                        <UserButton
+                          appearance={{
+                            elements: {
+                              avatarBox: 'w-8 h-8 ring-2 ring-white/20 hover:ring-[#FF3333] transition-all',
+                            },
+                          }}
+                        />
+                      </div>
+                    </SignedIn>
+                  </div>
+                  <Link href="/contact" className={styles.bottomCtaBtn} onClick={onClose}>
+                    TALK TO SALES
+                    <span className={styles.bottomCtaBtnArrow}>→</span>
+                  </Link>
+                </div>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </>
       )}
     </AnimatePresence>,
     document.body

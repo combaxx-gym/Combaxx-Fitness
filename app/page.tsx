@@ -93,32 +93,14 @@ async function getProducts(): Promise<ProductsCarouselProduct[]> {
 
 export default async function Home() {
   const products = await getProducts()
-  const isTopSelling = (p: ProductsCarouselProduct) => {
-    const match = (name?: string, slug?: string) => {
-      const n = (name || "").toLowerCase()
-      const s = (slug || "").toLowerCase()
-      return (
-        n === "top selling products" ||
-        n === "top selling" ||
-        s === "top-selling-products" ||
-        s === "top-selling"
-      )
-    }
-    if (match(p.category?.name, p.category?.slug?.current)) return true
-    if (Array.isArray(p.categories)) {
-      for (const c of p.categories) {
-        if (match(c?.name, c?.slug?.current)) return true
-      }
-    }
-    return false
-  }
-  const topSellingProducts = products.filter(isTopSelling)
-  const techSliderProducts = topSellingProducts.length > 0 ? topSellingProducts : products
+  const functionalTrainingProducts = products.filter(
+    (p) => p.__matchedCat === "functional-training"
+  )
 
   return (
     <div className={styles.page}>
       <HeroCarousel />
-      <TechnologySlider products={techSliderProducts} />
+      <TechnologySlider products={functionalTrainingProducts} />
       <CategoryShowcase />
       <ShapingFuture />
       <PerformanceWorld />
@@ -127,7 +109,7 @@ export default async function Home() {
         products={products}
         heading={{
           eyebrow: "Our Equipment Range",
-          title: "Featured Equipment Across 5 Core Categories",
+          title: "Featured equipment across core categories",
           description: "Commercial-grade pieces spanning Rigs & Racks, Storage Systems, Functional Training, Barbells, and Benches — engineered for facilities that never compromise on durability or biomechanics.",
           moreLink: "/shop",
           moreText: "Browse All Products"

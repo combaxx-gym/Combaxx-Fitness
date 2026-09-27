@@ -46,6 +46,11 @@
   --spacing-2xl:  4rem;
   --spacing-3xl:  6rem;
 
+  /* Section rhythm (desktop / mobile) */
+  --section-pad-y:        5rem;
+  --section-pad-y-mobile: 3rem;
+  --section-gap-mobile:   3rem;
+
   /* Container */
   --container-max: 1920px;
   --container-px-mobile:  1rem;    /* 16px */

@@ -30,6 +30,7 @@ export default function CategoryShowcase() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [cardWidth, setCardWidth] = useState(0)
   const [centerOffset, setCenterOffset] = useState(0)
+  const [mobileCardPx, setMobileCardPx] = useState<number | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(true)
 
   const cardRef = useRef<HTMLAnchorElement>(null)
@@ -112,30 +113,37 @@ export default function CategoryShowcase() {
 
   useEffect(() => {
     const updateWidth = () => {
-      if (cardRef.current) {
-        let gap = 24
-        if (trackRef.current) {
-          const style = getComputedStyle(trackRef.current)
-          const gapStr = style.columnGap || (style as CSSStyleDeclaration).gap || "24px"
-          const parsed = parseFloat(gapStr)
-          if (!Number.isNaN(parsed)) gap = parsed
-        }
-        const cardW = cardRef.current.offsetWidth
-        setCardWidth(cardW + gap)
-        if (maskRef.current) {
-          let offset = 0
-          if (typeof window !== "undefined" && window.matchMedia("(max-width: 639px)").matches) {
-            const maskW = maskRef.current.clientWidth
-            offset = Math.max(0, (maskW - cardW) / 2)
-          }
-          setCenterOffset(offset)
-        }
+      if (!maskRef.current) return
+      let gap = 24
+      if (trackRef.current) {
+        const style = getComputedStyle(trackRef.current)
+        const gapStr = style.columnGap || (style as CSSStyleDeclaration).gap || "24px"
+        const parsed = parseFloat(gapStr)
+        if (!Number.isNaN(parsed)) gap = parsed
       }
+
+      const isMobile = window.matchMedia("(max-width: 767px)").matches
+      if (isMobile) {
+        const maskStyle = getComputedStyle(maskRef.current)
+        const pl = parseFloat(maskStyle.paddingLeft) || 0
+        const pr = parseFloat(maskStyle.paddingRight) || 0
+        const available = Math.max(200, maskRef.current.clientWidth - pl - pr)
+        setMobileCardPx(available)
+        setCardWidth(available + gap)
+        setCenterOffset(0)
+        return
+      }
+
+      setMobileCardPx(null)
+      if (cardRef.current) {
+        setCardWidth(cardRef.current.offsetWidth + gap)
+      }
+      setCenterOffset(0)
     }
 
     updateWidth()
     window.addEventListener("resize", updateWidth)
-    const timer = setTimeout(updateWidth, 500)
+    const timer = setTimeout(updateWidth, 300)
 
     return () => {
       window.removeEventListener("resize", updateWidth)
@@ -228,6 +236,7 @@ export default function CategoryShowcase() {
                   key={`${category._id}-${index}`}
                   ref={index === 0 ? cardRef : null}
                   className={styles.card}
+                  style={mobileCardPx ? { width: mobileCardPx, height: "auto", aspectRatio: "3 / 4" } : undefined}
                 >
                   {/* Image */}
                   <div className={styles.cardImageWrap}>
@@ -258,16 +267,35 @@ export default function CategoryShowcase() {
             </div>
           </div>
 
-          {/* Dots */}
-          <div className={styles.dots}>
-            {categories.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => handleDotClick(index)}
-                className={`${styles.dot} ${index === activeDotIndex ? styles.dotActive : ""}`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
+          {/* Dots + mobile nav */}
+          <div className={styles.controls}>
+            <button
+              type="button"
+              onClick={handlePrev}
+              className={styles.mobileNavBtn}
+              aria-label="Previous slide"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <div className={styles.dots}>
+              {categories.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => handleDotClick(index)}
+                  className={`${styles.dot} ${index === activeDotIndex ? styles.dotActive : ""}`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={handleNext}
+              className={styles.mobileNavBtn}
+              aria-label="Next slide"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </div>

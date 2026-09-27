@@ -153,10 +153,10 @@
 }
 
 .featureLabel {
-  font-size: 0.875rem;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.10em;
   color: #fff;
 }
 

@@ -25,13 +25,6 @@
   padding-right: 3rem;
 }
 
-@media (max-width: 767px) {
-  .wideContainer {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-}
-
 /* ── Header row ── */
 .header {
   margin-bottom: 2.5rem;
@@ -42,56 +35,30 @@
   gap: 1.5rem;
 }
 
-@media (max-width: 767px) {
-  .header {
-    margin-bottom: 2rem;
-    flex-direction: column;
-    align-items: stretch;
-  }
-}
-
 .textBlock {
   flex: 1;
   max-width: 55%;
 }
 
-@media (max-width: 767px) {
-  .textBlock {
-    max-width: 100%;
-  }
-}
-
 .eyebrow {
-    color: #f33;
-    text-transform: uppercase;
-    font-size: 14px;
-    font-weight: 700;
-    padding-bottom: 10px;
+  color: #f33;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 700;
+  padding-bottom: 10px;
 }
 
 .heading {
-    margin-bottom: 1rem;
-    font-size: 45px;
-    font-weight: 600;
-    line-height: 1.2;
-    text-transform: capitalize;
-}
-
-@media (max-width: 767px) {
-  .heading { font-size: 2.25rem; }
-}
-
-@media (max-width: 639px) {
-  .heading { font-size: 1.875rem; }
+  margin-bottom: 1rem;
+  font-size: 45px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: capitalize;
 }
 
 .desc {
-    color: #9ca3af;
-    font-size: 18px;
-}
-
-@media (max-width: 639px) {
-  .desc { font-size: 0.875rem; }
+  color: #9ca3af;
+  font-size: 18px;
 }
 
 /* ── CTA link ── */
@@ -100,12 +67,6 @@
   align-items: center;
   justify-content: center;
   min-width: 20rem;
-}
-
-@media (max-width: 767px) {
-  .ctaWrap {
-    min-width: 0;
-  }
 }
 
 .ctaLink {
@@ -124,10 +85,6 @@
   color: #fff;
   text-decoration: none;
   transition: all 0.3s ease;
-}
-
-@media (max-width: 639px) {
-  .ctaLink { width: 13.75rem; }
 }
 
 .ctaLink:hover {
@@ -161,10 +118,6 @@
   transition: background-color 0.3s ease;
 }
 
-@media (max-width: 767px) {
-  .arrowBtn { display: none; }
-}
-
 .arrowBtn:hover { background-color: rgba(0,0,0,0.7); }
 
 .arrowLeft  { left: 0.5rem; }
@@ -178,18 +131,11 @@
   padding-bottom: 3rem;
 }
 
-@media (max-width: 767px) {
-  .mask { padding-left: 1.5rem; padding-right: 1.5rem; }
-}
-
 .track {
   display: flex;
   gap: 1.5rem;
   will-change: transform;
 }
-
-@media (max-width: 767px) { .track { gap: 1rem; } }
-@media (max-width: 639px) { .track { gap: 0.75rem; } }
 
 /* ── Product card ── */
 .card {
@@ -207,10 +153,13 @@
 
 .card:hover { border-color: #FF3333; }
 
-@media (max-width: 1279px) { .card { width: 380px; height: 500px; } }
-@media (max-width: 1023px) { .card { width: 320px; height: 460px; } }
-@media (max-width: 767px)  { .card { width: 260px; height: 420px; } }
-@media (max-width: 639px)  { .card { width: 220px; height: 360px; } }
+@media (max-width: 1279px) {
+  .card { width: 380px; height: 500px; }
+}
+
+@media (max-width: 1023px) {
+  .card { width: 320px; height: 460px; }
+}
 
 .cardImageWrap {
   position: absolute;
@@ -218,7 +167,7 @@
 }
 
 .cardImage {
-  object-fit: contain;
+  object-fit: cover;
   transition: transform 0.7s ease;
 }
 
@@ -243,14 +192,15 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  gap: 0.75rem;
 }
 
 .cardLabel {
-    text-transform: uppercase;
-    color: #e2e2e2;
-    margin-bottom: .25rem;
-    font-size: 18px;
-    font-weight: 500;
+  text-transform: uppercase;
+  color: #e2e2e2;
+  margin-bottom: 0.25rem;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .cardTitle {
@@ -262,10 +212,6 @@
 }
 
 .card:hover .cardTitle { color: #FF3333; }
-
-@media (max-width: 767px) {
-  .cardTitle { font-size: 1.25rem; }
-}
 
 .cardArrow {
   flex-shrink: 0;
@@ -286,13 +232,42 @@
   border-color: #FF3333;
 }
 
-/* ── Dots ── */
+/* ── Controls (dots + mobile arrows) ── */
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  padding: 0 1rem;
+}
+
+.mobileNavBtn {
+  display: none;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background-color: rgba(255,255,255,0.06);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.mobileNavBtn:hover {
+  border-color: #FF3333;
+  color: #FF3333;
+  background-color: rgba(255,51,51,0.1);
+}
+
 .dots {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 0.5rem;
 }
 
 .dot {
@@ -305,5 +280,87 @@
   transition: all 0.3s ease;
 }
 
-.dot:hover     { background-color: #9ca3af; }
-.dotActive     { width: 1.875rem; background-color: #FF3333; }
+.dot:hover { background-color: #9ca3af; }
+.dotActive { width: 1.875rem; background-color: #FF3333; }
+
+/* ── Mobile: one card only + CTA left ── */
+@media (max-width: 767px) {
+  .wideContainer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .header {
+    margin-bottom: 1.75rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.15rem;
+  }
+
+  .textBlock { max-width: 100%; }
+
+  .heading {
+    font-size: 1.75rem;
+    line-height: 1.25;
+  }
+
+  .desc { font-size: 0.95rem; }
+
+  .ctaWrap {
+    min-width: 0;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .ctaLink {
+    width: auto;
+    max-width: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.16em;
+    padding: 0.7rem 1.35rem;
+  }
+
+  .arrowBtn {
+    display: none;
+  }
+
+  .mobileNavBtn {
+    display: inline-flex;
+  }
+
+  .controls {
+    gap: 1.25rem;
+    margin-top: 0.25rem;
+  }
+
+  .mask {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1.75rem;
+  }
+
+  .track { gap: 0.75rem; }
+
+  .card {
+    width: calc(100vw - 2rem);
+    max-width: none;
+    height: auto;
+    aspect-ratio: 3 / 4;
+  }
+
+  .cardContent { padding: 1.25rem; }
+  .cardLabel {
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.4rem;
+  }
+  .cardTitle { font-size: 1.25rem; line-height: 1.25; }
+  .cardArrow { width: 2.35rem; height: 2.35rem; }
+}
+
+@media (max-width: 639px) {
+  .heading { font-size: 1.5rem; }
+  .desc { font-size: 0.875rem; }
+  .cardLabel { font-size: 0.85rem; }
+  .cardTitle { font-size: 1.15rem; }
+}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { urlFor } from '@/sanity/lib/image'
@@ -56,16 +56,56 @@ function ImagePlaceholder() {
   )
 }
 
-const CARDS_PER_VIEW = 4
+function getPerView(width: number) {
+  if (width <= 767) return 1
+  if (width <= 900) return 2
+  if (width <= 1200) return 3
+  return 4
+}
 
 export default function RelatedProductsSlider({ products, categorySlug }: Props) {
   const [offset, setOffset] = useState(0)
+  const [perView, setPerView] = useState(1)
+  const [stepPx, setStepPx] = useState(0)
   const trackRef = useRef<HTMLDivElement>(null)
 
-  const maxOffset = Math.max(0, products.length - CARDS_PER_VIEW)
+  const measure = useCallback(() => {
+    const next = getPerView(window.innerWidth)
+    setPerView(next)
+    setOffset(o => Math.min(o, Math.max(0, products.length - next)))
 
+    const track = trackRef.current
+    const firstCard = track?.querySelector(`.${styles.card}`) as HTMLElement | null
+    if (!track || !firstCard) return
+
+    const gap = next === 1 ? 0 : 24 // 1.5rem
+    setStepPx(firstCard.getBoundingClientRect().width + gap)
+  }, [products.length])
+
+  useEffect(() => {
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [measure])
+
+  useEffect(() => {
+    // Re-measure after layout / images settle
+    const id = window.requestAnimationFrame(measure)
+    return () => window.cancelAnimationFrame(id)
+  }, [measure, products.length])
+
+  const maxOffset = Math.max(0, products.length - perView)
   const goPrev = useCallback(() => setOffset(p => Math.max(0, p - 1)), [])
   const goNext = useCallback(() => setOffset(p => Math.min(maxOffset, p + 1)), [maxOffset])
+
+  // Autoplay every 2s — loop back to start
+  useEffect(() => {
+    if (maxOffset <= 0) return
+    const id = window.setInterval(() => {
+      setOffset(p => (p >= maxOffset ? 0 : p + 1))
+    }, 2000)
+    return () => window.clearInterval(id)
+  }, [maxOffset])
 
   if (!products.length) return null
 
@@ -82,7 +122,7 @@ export default function RelatedProductsSlider({ products, categorySlug }: Props)
           <h2 className={styles.title} id="related-heading">Related Products</h2>
         </div>
 
-        {products.length > CARDS_PER_VIEW && (
+        {products.length > perView && (
           <div className={styles.navBtns}>
             <button onClick={goPrev} disabled={offset === 0} className={styles.navBtn} aria-label="Previous products">
               <ChevronLeft />
@@ -97,7 +137,9 @@ export default function RelatedProductsSlider({ products, categorySlug }: Props)
       <div className={styles.track} ref={trackRef}>
         <div
           className={styles.slides}
-          style={{ transform: `translateX(calc(-${offset} * (100% / ${Math.min(products.length, CARDS_PER_VIEW)} + 1.5rem / ${Math.min(products.length, CARDS_PER_VIEW)})))` }}
+          style={{
+            transform: stepPx ? `translateX(-${offset * stepPx}px)` : undefined,
+          }}
         >
           {products.map(product => (
             <Link key={product._id} href={getProductUrl(product)} className={styles.card}>
@@ -108,7 +150,7 @@ export default function RelatedProductsSlider({ products, categorySlug }: Props)
                     alt={product.name}
                     fill
                     className={styles.image}
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    sizes="(max-width: 767px) 100vw, (max-width: 900px) 50vw, (max-width: 1200px) 33vw, 25vw"
                     unoptimized
                   />
                 ) : (

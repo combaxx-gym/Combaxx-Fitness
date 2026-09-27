@@ -21,7 +21,12 @@
 }
 
 @media (max-width: 1023px) { .hero { min-height: 60vh; } }
-@media (max-width: 767px) { .hero { min-height: 52vh; padding-top: 7rem; } }
+@media (max-width: 767px) {
+  .hero {
+    min-height: auto;
+    padding-top: 6rem;
+  }
+}
 
 .heroBg {
   position: absolute;
@@ -75,9 +80,14 @@
 
 @media (max-width: 767px) {
   .heroContent {
-    padding: 3rem 1.5rem 3.5rem;
+    padding: 2rem 1rem 2.5rem;
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
+  .heroBreadcrumb { margin-bottom: 1.25rem; }
+  .heroBadge { margin-bottom: 1rem; }
+  .heroTitle { margin-bottom: 1rem; }
+  .heroDesc { margin-bottom: 1.5rem; font-size: 0.95rem; }
 }
 
 .heroLeft {}
@@ -136,8 +146,6 @@
   margin: 0 0 2rem;
   font-weight: 400;
 }
-
-@media (max-width: 767px) { .heroDesc { font-size: 1rem; } }
 
 .heroStats {
   display: flex;
@@ -205,7 +213,26 @@
   padding-inline: 3rem;
 }
 
-@media (max-width: 767px) { .main { padding: 4rem 1.5rem 6rem; } }
+@media (max-width: 767px) {
+  .main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--section-gap-mobile);
+    padding: var(--section-pad-y-mobile) var(--container-px-mobile);
+  }
+  .sectionHead { margin-bottom: 1.75rem; }
+  .productsSection {
+    margin-block: 0;
+    padding: 0;
+  }
+  .whySection,
+  .faqSection {
+    padding: 0 !important;
+    padding-top: 2rem !important;
+  }
+  .faqAnswerInner { padding-right: 0; }
+  .emptyState { padding: 2rem 0.5rem; }
+}
 
 /* ── Section ── */
 .sectionHead {
@@ -236,6 +263,13 @@
 /* ── Product Grid ── */
 .productsSection {
   margin-block: 5rem;
+}
+
+@media (max-width: 767px) {
+  .productsSection {
+    margin-block: 0;
+    padding: 0;
+  }
 }
 
 .productGrid {

@@ -782,3 +782,114 @@
   color: rgba(255,255,255,0.5);
   background: rgba(255,255,255,0.02);
 }
+
+/* ── Mobile section rhythm ── */
+@media (max-width: 767px) {
+  .hero {
+    min-height: 90vh;
+    padding-top: 7rem;
+  }
+
+  .heroInner {
+    padding: 0 1.25rem 4.5rem;
+  }
+
+  .breadcrumb {
+    margin-bottom: 1.75rem;
+  }
+
+  .heroBadge {
+    margin-bottom: 1.25rem;
+  }
+
+  .heroTitle {
+    margin-bottom: 1.75rem;
+  }
+
+  .heroDesc {
+    margin-bottom: 2rem;
+  }
+
+  .statsSection {
+    margin-top: 0;
+    padding: 0 0 var(--section-pad-y-mobile);
+  }
+
+  .statsItem {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .sectionHead {
+    margin-bottom: 1.75rem;
+  }
+
+  .introSection,
+  .valuesSection,
+  .journeySection,
+  .processSection,
+  .whySection {
+    padding: var(--section-pad-y-mobile) 0;
+  }
+
+  .introGrid {
+    gap: 1.75rem;
+  }
+
+  .journeyContent {
+    padding: 0.35rem 0 1.75rem;
+  }
+
+  .journeyStep {
+    gap: 1.25rem;
+  }
+
+  .valueCard {
+    padding: 1.75rem 1.25rem;
+    gap: 1rem;
+  }
+
+  .processCard {
+    padding: 1.75rem 1.25rem 1.5rem;
+  }
+
+  .whyGrid {
+    gap: 2.25rem;
+  }
+
+  .whyRight {
+    height: auto;
+    min-height: 0;
+    padding: 2.5rem 1.75rem;
+  }
+
+  .whyVisual {
+    position: relative;
+    inset: auto;
+  }
+
+  .whyVisualInner {
+    padding: 0;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .whyVisualBig {
+    font-size: 2rem;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+
+  .whyVisualStrip {
+    gap: 0.5rem;
+    padding: 0 0.25rem;
+  }
+
+  .whyList {
+    gap: 1.25rem;
+  }
+
+  .container {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}

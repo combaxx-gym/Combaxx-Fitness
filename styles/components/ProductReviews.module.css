@@ -142,7 +142,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 1rem;
   z-index: 1000;
 }
 
@@ -152,7 +152,7 @@
   border-radius: 1rem;
   width: 100%;
   max-width: 500px;
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .modalHeader {
@@ -261,32 +261,11 @@
 
 .modalActions {
   display: flex;
-  gap: 1rem;
   margin-top: 0.5rem;
 }
 
-.cancelBtn {
-  flex: 1;
-  padding: 1rem;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 0.75rem;
-  color: rgba(255,255,255,0.8);
-  font-size: 0.95rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.cancelBtn:hover {
-  border-color: rgba(255,255,255,0.5);
-  background: rgba(255,255,255,0.05);
-}
-
 .submitBtn {
-  flex: 1;
+  width: 100%;
   padding: 1rem;
   background: #FF3333;
   border: none;
@@ -309,4 +288,39 @@
 .submitBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+@media (max-width: 767px) {
+  .section {
+    padding-top: var(--section-pad-y-mobile);
+    padding-bottom: 0;
+  }
+
+  .header {
+    margin-bottom: 1.5rem;
+  }
+
+  .headerContent {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.25rem;
+  }
+
+  .title {
+    font-size: 2rem;
+    line-height: 1.05;
+  }
+
+  .writeBtn {
+    width: 100%;
+    text-align: center;
+    padding: 0.95rem 1.25rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  .empty {
+    padding: 2rem 1.25rem;
+    font-size: 0.95rem;
+  }
 }

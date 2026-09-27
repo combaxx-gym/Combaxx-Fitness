@@ -316,7 +316,6 @@ export default function ProductHeroInfo({
               </div>
 
               <div className={reviewStyles.modalActions}>
-                <button type="button" onClick={closeModal} className={reviewStyles.cancelBtn}>Cancel</button>
                 <button type="submit" disabled={isSubmitting} className={reviewStyles.submitBtn}>
                   {isSubmitting ? 'Submitting...' : 'Submit Review'}
                 </button>

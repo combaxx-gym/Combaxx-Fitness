@@ -53,13 +53,13 @@
 @media (max-width: 767px) {
   .heading {
     font-size: 2.25rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
 }
 
 @media (max-width: 639px) {
   .heading {
-    font-size: 45px !important;
+    font-size: 35px !important;
   }
 }
 
@@ -104,12 +104,6 @@
 .arrowLeft  { left:  2rem; }
 .arrowRight { right: 2rem; }
 
-@media (max-width: 767px) {
-  .arrowBtn    { padding: 0.5rem; }
-  .arrowLeft   { left:  1rem; }
-  .arrowRight  { right: 1rem; }
-}
-
 /* Mask */
 .mask {
   overflow: hidden;
@@ -120,8 +114,8 @@
 
 @media (max-width: 767px) {
   .mask {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
 
@@ -154,8 +148,27 @@
 
 @media (max-width: 1279px) { .card { width: 380px; height: 500px; } }
 @media (max-width: 1023px) { .card { width: 320px; height: 460px; } }
-@media (max-width: 767px)  { .card { width: 260px; height: 420px; } }
-@media (max-width: 639px)  { .card { width: 220px; height: 360px; } }
+
+@media (max-width: 767px) {
+  .card {
+    width: calc(100vw - 2rem);
+    max-width: none;
+    height: auto;
+    aspect-ratio: 3 / 4;
+  }
+  .cardContent { padding: 1.15rem; }
+  .mask {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .track { gap: 0.75rem; }
+  /* arrows + mobileNav shown in end-of-file mobile block */
+  .cardTitle { font-size: 1.05rem; }
+}
+
+@media (max-width: 639px) {
+  .cardTitle { font-size: 0.95rem; }
+}
 
 .cardImageWrap {
   position: absolute;
@@ -256,13 +269,43 @@
   border-color: #FF3333;
 }
 
-/* ── Pagination dots ── */
+/* ── Controls (dots + mobile arrows) ── */
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 0 1rem;
+}
+
+.mobileNavBtn {
+  display: none;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background-color: rgba(255,255,255,0.06);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.mobileNavBtn:hover {
+  border-color: #FF3333;
+  color: #FF3333;
+  background-color: rgba(255,51,51,0.1);
+}
+
 .dots {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 1rem;
+  margin-top: 0;
 }
 
 .dot {
@@ -282,4 +325,18 @@
 .dotActive {
   width: 1.875rem;
   background-color: #FF3333;
+}
+
+/* Mobile nav — must come AFTER base .mobileNavBtn { display:none } */
+@media (max-width: 767px) {
+  .mobileNavBtn {
+    display: inline-flex;
+  }
+  .controls {
+    gap: 1.25rem;
+  }
+  /* Keep arrows only under the slider — hide card overlay arrows */
+  .arrowBtn {
+    display: none;
+  }
 }

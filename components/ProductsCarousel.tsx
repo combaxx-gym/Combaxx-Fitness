@@ -101,6 +101,7 @@ export default function ProductsCarousel({ products, heading }: ProductsCarousel
   const [isTransitioning, setIsTransitioning] = useState(true)
   const [cardWidth, setCardWidth] = useState(0)
   const [centerOffset, setCenterOffset] = useState(0)
+  const [mobileCardPx, setMobileCardPx] = useState<number | null>(null)
   const cardRef = useRef<HTMLAnchorElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const maskRef = useRef<HTMLDivElement>(null)
@@ -170,30 +171,36 @@ export default function ProductsCarousel({ products, heading }: ProductsCarousel
     else if (distance < -50) handlePrev()
   }
 
-  /* Measure card width + mobile center offset */
+  /* Measure card width — mobile = exact one-card viewport */
   useEffect(() => {
     let alive = true
     const updateWidth = () => {
-      if (!alive) return
-      if (cardRef.current) {
-        let gap = 24
-        if (trackRef.current) {
-          const style = getComputedStyle(trackRef.current)
-          const gapStr = (style as CSSStyleDeclaration).columnGap || (style as CSSStyleDeclaration).gap || "24px"
-          const parsed = parseFloat(gapStr)
-          if (!Number.isNaN(parsed)) gap = parsed
-        }
-        const cardW = cardRef.current.offsetWidth
-        setCardWidth(cardW + gap)
-        if (maskRef.current) {
-          let offset = 0
-          if (typeof window !== "undefined" && window.matchMedia("(max-width: 639px)").matches) {
-            const maskW = maskRef.current.clientWidth
-            offset = Math.max(0, (maskW - cardW) / 2)
-          }
-          setCenterOffset(offset)
-        }
+      if (!alive || !maskRef.current) return
+      let gap = 24
+      if (trackRef.current) {
+        const style = getComputedStyle(trackRef.current)
+        const gapStr = (style as CSSStyleDeclaration).columnGap || (style as CSSStyleDeclaration).gap || "24px"
+        const parsed = parseFloat(gapStr)
+        if (!Number.isNaN(parsed)) gap = parsed
       }
+
+      const isMobile = window.matchMedia("(max-width: 767px)").matches
+      if (isMobile) {
+        const maskStyle = getComputedStyle(maskRef.current)
+        const pl = parseFloat(maskStyle.paddingLeft) || 0
+        const pr = parseFloat(maskStyle.paddingRight) || 0
+        const available = Math.max(200, maskRef.current.clientWidth - pl - pr)
+        setMobileCardPx(available)
+        setCardWidth(available + gap)
+        setCenterOffset(0)
+        return
+      }
+
+      setMobileCardPx(null)
+      if (cardRef.current) {
+        setCardWidth(cardRef.current.offsetWidth + gap)
+      }
+      setCenterOffset(0)
     }
     updateWidth()
     window.addEventListener("resize", updateWidth)
@@ -302,7 +309,6 @@ export default function ProductsCarousel({ products, heading }: ProductsCarousel
                 className={`${styles.catTab} ${isActive ? styles.catTabActive : ""} ${t.count === 0 ? styles.catTabEmpty : ""}`}
               >
                 <span className={styles.catTabText}>{t.label}</span>
-                <span className={styles.catTabCount}>{t.count}</span>
               </button>
             )
           })}
@@ -346,6 +352,7 @@ export default function ProductsCarousel({ products, heading }: ProductsCarousel
                       key={`${product._id}-${index}`}
                       ref={index === 0 ? cardRef : null}
                       className={styles.card}
+                      style={mobileCardPx ? { width: mobileCardPx, height: "auto", aspectRatio: "3 / 4" } : undefined}
                     >
                       <div className={styles.cardImageWrap}>
                         <Image
@@ -375,17 +382,36 @@ export default function ProductsCarousel({ products, heading }: ProductsCarousel
             )}
           </div>
 
-          {/* Dots */}
+          {/* Dots + mobile nav */}
           {items.length > 1 && (
-            <div className={styles.dots}>
-              {items.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleDotClick(index)}
-                  className={`${styles.dot} ${index === activeDotIndex ? styles.dotActive : ""}`}
-                  aria-label={`Go to product ${index + 1}`}
-                />
-              ))}
+            <div className={styles.controls}>
+              <button
+                type="button"
+                onClick={handlePrev}
+                aria-label="Previous products"
+                className={styles.mobileNavBtn}
+              >
+                <ChevronLeft className={styles.arrowIcon} />
+              </button>
+              <div className={styles.dots}>
+                {items.map((_, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => handleDotClick(index)}
+                    className={`${styles.dot} ${index === activeDotIndex ? styles.dotActive : ""}`}
+                    aria-label={`Go to product ${index + 1}`}
+                  />
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={handleNext}
+                aria-label="Next products"
+                className={styles.mobileNavBtn}
+              >
+                <ChevronRight className={styles.arrowIcon} />
+              </button>
             </div>
           )}
         </div>

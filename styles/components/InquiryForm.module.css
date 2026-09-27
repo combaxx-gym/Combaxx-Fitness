@@ -1,5 +1,5 @@
 /* ============================================
-   INQUIRY FORM
+   INQUIRY FORM — split layout (images + form)
    ============================================ */
 
 .section {
@@ -8,8 +8,9 @@
 }
 
 .header {
-  margin-bottom: 3rem;
-  text-align: center;
+  margin-bottom: 2.5rem;
+  text-align: left;
+  max-width: 640px;
 }
 
 .badge {
@@ -19,7 +20,7 @@
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #FF3333;
-  margin-bottom: 1rem;
+  margin-bottom: 0.875rem;
 }
 
 .title {
@@ -28,68 +29,200 @@
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: #fff;
-  margin: 0 0 1rem;
+  margin: 0 0 0.875rem;
 }
 
-@media (min-width: 768px) { .title { font-size: 2.5rem; } }
+@media (min-width: 768px) {
+  .title { font-size: 2.35rem; }
+}
 
 .subtitle {
   font-size: 1rem;
   color: #9ca3af;
-  line-height: 1.6;
-  max-width: 540px;
-  margin: 0 auto;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Split layout ── */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr);
+    gap: 1.75rem;
+  }
+}
+
+/* ── Left visual panel ── */
+.visual {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  min-width: 0;
+}
+
+.visualMain {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0f0f0f;
+}
+
+@media (min-width: 1024px) {
+  .visualMain {
+    flex: 0 0 auto;
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+  }
+}
+
+.visualImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+.visualPlaceholder {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(255, 51, 51, 0.12), transparent 55%),
+    #151515;
+}
+
+.visualOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.35) 42%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.visualMeta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.35rem 1.35rem 1.25rem;
+  z-index: 1;
+}
+
+.visualLabel {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #FF3333;
+  margin-bottom: 0.4rem;
+}
+
+.visualName {
+  font-size: 1.15rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #fff;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.visualSku {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0.4rem 0 0;
+  letter-spacing: 0.06em;
+}
+
+.thumbs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.thumb {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #111;
+  padding: 0;
+  cursor: pointer;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.thumb:hover {
+  border-color: rgba(255, 51, 51, 0.45);
+}
+
+.thumbActive {
+  border-color: #FF3333;
+  box-shadow: 0 0 0 1px rgba(255, 51, 51, 0.35);
+}
+
+.thumbImage {
+  object-fit: cover;
+}
+
+.perks {
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.perks li {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.3;
+}
+
+.perkIcon {
+  width: 14px;
+  height: 14px;
+  color: #FF3333;
+  flex-shrink: 0;
 }
 
 /* ── Form Card ── */
 .card {
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 2.5rem 2rem;
-  max-width: 860px;
-  margin: 0 auto;
+  border-radius: 14px;
+  padding: 1.75rem 1.35rem;
+  min-width: 0;
 }
 
 @media (min-width: 640px) {
-  .card { padding: 3rem 2.5rem; }
+  .card { padding: 2.25rem 2rem; }
 }
 
-/* ── Product Context Banner ── */
-.productBanner {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  background: rgba(255, 51, 51, 0.07);
-  border: 1px solid rgba(255, 51, 51, 0.2);
-  border-radius: 6px;
-  margin-bottom: 2rem;
-}
-
-.bannerIcon {
-  width: 20px;
-  height: 20px;
-  color: #FF3333;
-  flex-shrink: 0;
-}
-
-.bannerText {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.4;
-}
-
-.bannerProduct {
-  font-weight: 700;
-  color: #fff;
+@media (min-width: 1024px) {
+  .card { padding: 2.5rem 2.25rem; }
 }
 
 /* ── Grid ── */
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.25rem;
+  gap: 1.15rem;
 }
 
 @media (min-width: 640px) {
@@ -123,7 +256,7 @@
 .select {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  border-radius: 6px;
   color: #fff;
   font-size: 0.9375rem;
   padding: 0.75rem 1rem;
@@ -158,41 +291,46 @@
 
 .textarea {
   resize: vertical;
-  min-height: 130px;
+  min-height: 120px;
 }
 
 /* ── Submit ── */
 .footer {
-  margin-top: 2rem;
+  margin-top: 1.75rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+  gap: 1rem;
+  text-align: center;
 }
 
 .privacy {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: rgba(255, 255, 255, 0.3);
   line-height: 1.5;
+  margin: 0;
+  /* max-width: 360px; */
+  order: 2;
 }
 
 .submitBtn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.625rem;
   padding: 0.875rem 2rem;
   background: #FF3333;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   color: #fff;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   cursor: pointer;
   transition: background 0.25s ease, transform 0.2s ease;
   flex-shrink: 0;
+  order: 1;
 }
 
 .submitBtn:hover {
@@ -215,7 +353,7 @@
 /* ── States ── */
 .successCard {
   text-align: center;
-  padding: 3rem 2rem;
+  padding: 3rem 1.5rem;
 }
 
 .successIcon {
@@ -244,9 +382,44 @@
   padding: 0.75rem 1rem;
   background: rgba(255, 51, 51, 0.1);
   border: 1px solid rgba(255, 51, 51, 0.3);
-  border-radius: 4px;
+  border-radius: 6px;
   color: #ff6666;
   font-size: 0.875rem;
-  margin-top: 1rem;
+  margin-top: 0.25rem;
   grid-column: 1 / -1;
+}
+
+/* Mobile section rhythm */
+@media (max-width: 767px) {
+  .section {
+    padding: var(--section-pad-y-mobile) 0 0;
+  }
+
+  .header {
+    margin-bottom: 1.5rem;
+  }
+
+  .title {
+    font-size: 1.65rem;
+  }
+
+  .visualMain,
+  .thumbs {
+    display: none;
+  }
+
+  .perks {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.65rem 1rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .perks li {
+    font-size: 0.72rem;
+  }
+
+  .card {
+    padding: 1.35rem 1.1rem;
+  }
 }
