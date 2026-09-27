@@ -6,7 +6,6 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { Search, X, Menu } from "lucide-react"
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
-import { client } from "@/sanity/lib/client"
 import { urlFor } from "@/sanity/lib/image"
 import type { SanityImageSource } from "@sanity/image-url"
 import MegaMenu from "@/components/MegaMenu"
@@ -23,21 +22,12 @@ interface SearchResult {
 
 async function searchProducts(query: string): Promise<SearchResult[]> {
   if (!query.trim() || query.trim().length < 2) return []
-  const pattern = `*${query.trim().toLowerCase()}*`
-  return client.fetch(
-    `*[_type == "product" && defined(slug.current) && (
-      name match $pattern ||
-      coalesce(title, "") match $pattern
-    )][0...8]{
-      _id,
-      "name": coalesce(name, title, "Product"),
-      slug,
-      image,
-      category->{name, slug},
-      categories[]->{name, slug}
-    }`,
-    { pattern }
-  )
+  const res = await fetch(`/api/search?q=${encodeURIComponent(query.trim())}`, {
+    cache: 'no-store',
+  })
+  if (!res.ok) throw new Error(`Search failed (${res.status})`)
+  const data = await res.json()
+  return Array.isArray(data) ? data : []
 }
 
 function HighlightMatch({ text, query }: { text: string; query: string }) {
