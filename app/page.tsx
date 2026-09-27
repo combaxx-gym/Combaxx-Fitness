@@ -1,4 +1,5 @@
 import { client } from "@/sanity/lib/client"
+import { urlFor } from "@/sanity/lib/image"
 import HeroCarousel from "@/components/HeroCarousel"
 import CategoryShowcase from "@/components/CategoryShowcase"
 import ShapingFuture from "@/components/ShapingFuture"
@@ -25,6 +26,59 @@ const productFragment = `
   subCategory->{name, slug},
   subCategories[]->{name, slug}
 `
+
+type ShowcaseCategory = {
+  _id: string
+  name: string
+  slug: { current: string }
+  image: string | null
+}
+
+async function getShowcaseCategories(): Promise<ShowcaseCategory[]> {
+  try {
+    const result = await client.fetch<Array<{
+      _id: string
+      name?: string
+      slug?: { current?: string }
+      image?: unknown
+    }>>(
+      `*[_type == "category" && defined(slug.current) && slug.current != "top-selling-products" && slug.current != "crosstrainers"] | order(name asc){
+        _id,
+        name,
+        slug,
+        image
+      }`
+    )
+
+    return (result || [])
+      .filter((c) => {
+        const slug = (c.slug?.current || "").toLowerCase()
+        const name = (c.name || "").toLowerCase()
+        if (!slug || !c.name) return false
+        if (slug === "top-selling-products" || name === "top selling products") return false
+        return Boolean(c.image)
+      })
+      .map((c) => {
+        let imageUrl: string | null = null
+        try {
+          if (typeof c.image === "string") imageUrl = c.image
+          else if (c.image) imageUrl = urlFor(c.image as Parameters<typeof urlFor>[0]).width(1400).url()
+        } catch {
+          imageUrl = null
+        }
+        return {
+          _id: c._id,
+          name: c.name!,
+          slug: { current: c.slug!.current! },
+          image: imageUrl,
+        }
+      })
+      .filter((c) => Boolean(c.image))
+  } catch (error) {
+    console.error("Failed to fetch showcase categories:", error)
+    return []
+  }
+}
 
 /** Fetch products using THE SAME 2-QUERY LOGIC as app/[category]/page.tsx (references + cat.products[]) */
 async function fetchProductsForCatSlug(slugVariants: string[]) {
@@ -92,7 +146,10 @@ async function getProducts(): Promise<ProductsCarouselProduct[]> {
 }
 
 export default async function Home() {
-  const products = await getProducts()
+  const [products, showcaseCategories] = await Promise.all([
+    getProducts(),
+    getShowcaseCategories(),
+  ])
   const functionalTrainingProducts = products.filter(
     (p) => p.__matchedCat === "functional-training"
   )
@@ -101,7 +158,7 @@ export default async function Home() {
     <div className={styles.page}>
       <HeroCarousel />
       <TechnologySlider products={functionalTrainingProducts} />
-      <CategoryShowcase />
+      <CategoryShowcase categories={showcaseCategories} />
       <ShapingFuture />
       <PerformanceWorld />
       <StoriesShowcase />
