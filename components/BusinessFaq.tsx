@@ -55,13 +55,12 @@ export default function BusinessFaq() {
           <div className={styles.videoInner}>
             <div className={styles.videoTextBlock}>
               <h2 className={styles.videoTitle}>
-                SHAPE UP YOUR BUSINESS
+               Shape up your business 
                 <br />
-                WITH TECHNOGYM
+                with COMBAXX.
               </h2>
               <p className={styles.videoDesc}>
-                Since 1983, we&apos;ve been empowering health and wellness facilities with top‑notch technology.
-                Revolutionize your business and boost customer engagement with our integrated ecosystem.
+                Power up your space with bold design, serious performance, and equipment built to work as hard as your business does.
               </p>
               <Link href="/shop" className={styles.videoCta}>
                 <span className={styles.videoCtaText}>Browse business solutions</span>
