@@ -80,15 +80,6 @@ const PROCESS = [
   { step: '05', title: 'Final Inspection', desc: 'A final audit covering structural integrity, surface finish, upholstery seam quality, and hardware torque values is completed. Documentation pack issued with each unit.' },
 ]
 
-const CERTS = [
-  { code: 'ISO 9001', name: 'Quality Management' },
-  { code: 'EN 957', name: 'Fitness Equipment Standard' },
-  { code: 'CE Marked', name: 'European Conformity' },
-  { code: 'ISO 20957', name: 'Stationary Training' },
-  { code: 'OEKO-TEX', name: 'Textile Safety' },
-  { code: 'RoHS', name: 'Hazardous Substances' },
-]
-
 const FINISHES = [
   { name: 'Graphite Black', hex: '#1a1a1a' },
   { name: 'Steel Grey', hex: '#4b5563' },
@@ -256,29 +247,6 @@ export default function MaterialsPage() {
                   <h3 className={styles.processTitle}>{p.title}</h3>
                   <p className={styles.processDesc}>{p.desc}</p>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CERTIFICATIONS ── */}
-      <section className={styles.certsSection}>
-        <div className={styles.container}>
-          <div className={styles.sectionHead}>
-            <span className={styles.sectionBadge}>Verified Quality</span>
-            <h2 className={styles.sectionTitle}>Certifications & Standards</h2>
-          </div>
-          <div className={styles.certsGrid}>
-            {CERTS.map((c) => (
-              <div key={c.code} className={styles.certCard}>
-                <div className={styles.certShield}>
-                  <svg viewBox="0 0 40 46" fill="none" className={styles.certShieldSvg}>
-                    <path d="M20 2L36 9V21C36 31 29 40 20 44C11 40 4 31 4 21V9L20 2Z" stroke="#FF3333" strokeWidth="1.5" fill="rgba(255,51,51,0.06)" />
-                  </svg>
-                </div>
-                <div className={styles.certCode}>{c.code}</div>
-                <div className={styles.certName}>{c.name}</div>
               </div>
             ))}
           </div>
