@@ -76,7 +76,7 @@ export default function ProductError({
           style={{
             margin: 0,
             fontSize: 28,
-            fontWeight: 800,
+            fontWeight: 700,
             color: '#fff',
             letterSpacing: '-0.03em',
             marginBottom: 10,

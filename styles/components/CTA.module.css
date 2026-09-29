@@ -164,7 +164,7 @@
 
 .ctaTitle {
   font-size: 3rem;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: #fff;
@@ -230,7 +230,7 @@
   color: #fff;
   font-size: 1.25rem;
   line-height: 1;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .ctaBtn:hover {

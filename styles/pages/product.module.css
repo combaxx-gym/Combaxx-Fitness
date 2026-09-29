@@ -108,7 +108,7 @@
 /* ── Legacy section titles (for extra/additional sections) ── */
 .sectionTitle {
   font-size: 2rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #fff;
@@ -192,7 +192,7 @@
 
 .notFoundTitle {
   font-size: 2rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   color: #fff;
   margin: 0;

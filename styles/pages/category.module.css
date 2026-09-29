@@ -113,7 +113,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.7rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: #FF3333;
@@ -126,7 +126,7 @@
 
 .heroTitle {
   font-size: 5rem;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   /* letter-spacing: -0.04em; */
   color: #fff;
@@ -191,7 +191,7 @@
   border-radius: 8px;
   color: #fff;
   font-size: 0.75rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   cursor: pointer;
@@ -242,7 +242,7 @@
 .sectionBadge {
   display: block;
   font-size: 0.65rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #FF3333;
@@ -251,7 +251,7 @@
 
 .sectionTitle {
   font-size: 2.25rem;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: #fff;
@@ -408,7 +408,7 @@
   border-radius: 8px;
   color: #fff;
   font-size: 0.75rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
@@ -465,7 +465,7 @@
 
 .whyNumber {
   font-size: 2.5rem;
-  font-weight: 900;
+  font-weight: 700;
   color: rgba(255,51,51,0.2);
   line-height: 1;
   margin-bottom: 1rem;
@@ -474,7 +474,7 @@
 
 .whyCardTitle {
   font-size: 0.85rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: #fff;

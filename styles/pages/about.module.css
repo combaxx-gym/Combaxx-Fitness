@@ -33,7 +33,7 @@
 .sectionBadge {
   display: inline-block;
   font-size: 0.63rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #FF3333;
@@ -46,7 +46,7 @@
 
 .sectionTitle {
   font-size: 2.75rem;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.025em;
   color: #fff;
@@ -163,7 +163,7 @@
 .heroBadge {
   display: block;
   font-size: 0.63rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #FF3333;
@@ -172,7 +172,7 @@
 
 .heroTitle {
   font-size: 6.5rem;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.04em;
   line-height: 0.92;
@@ -311,7 +311,7 @@
 
 .statsNum {
   font-size: 3.25rem;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: -0.04em;
   color: #fff;
   line-height: 1;
@@ -353,7 +353,7 @@
 
 .introTitle {
   font-size: 3.5rem;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.03em;
   color: #fff;
@@ -444,14 +444,14 @@
 
 .valueNum {
   font-size: 0.65rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.25em;
   color: rgba(255,255,255,0.25);
 }
 
 .valueTitle {
   font-size: 1.125rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #fff;
@@ -524,7 +524,7 @@
 
 .journeyYear {
   font-size: 0.6rem;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 0.05em;
   color: #FF3333;
   line-height: 1;
@@ -545,7 +545,7 @@
 
 .journeyTitle {
   font-size: 1.125rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #fff;
@@ -594,7 +594,7 @@
   top: -20px;
   right: -5px;
   font-size: 8rem;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: -0.05em;
   line-height: 1;
   color: rgba(255,51,51,0.04);
@@ -603,7 +603,7 @@
 
 .processCardNum {
   font-size: 0.65rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.25em;
   color: #FF3333;
   margin-bottom: 1rem;
@@ -630,7 +630,7 @@
 
 .processCardTitle {
   font-size: 1.125rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #fff;
@@ -740,7 +740,7 @@
 
 .whyVisualBig {
   font-size: 5.5rem;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: -0.05em;
   line-height: 0.95;
   color: #fff;

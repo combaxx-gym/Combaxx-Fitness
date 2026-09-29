@@ -9,7 +9,7 @@
 
 .categoryLabel {
   font-size: 0.7rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #FF3333;
@@ -18,7 +18,7 @@
 
 .productName {
   font-size: 2rem;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: #fff;
@@ -159,7 +159,7 @@
 
 .featuresTitle {
   font-size: 0.7rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: #9ca3af;

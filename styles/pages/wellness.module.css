@@ -21,7 +21,7 @@
 .sectionBadge {
   display: inline-block;
   font-size: 0.63rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #FF3333;
@@ -34,7 +34,7 @@
 
 .sectionTitle {
   font-size: 2.75rem;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.025em;
   color: #fff;
@@ -96,7 +96,7 @@
 
 .heroBadge {
   font-size: 0.63rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #FF3333;
@@ -111,7 +111,7 @@
 
 .heroTitle {
   font-size: clamp(2.5rem, 7vw, 6rem);
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.04em;
   line-height: 0.95;
@@ -152,7 +152,7 @@
   background: #FF3333;
   color: #fff;
   font-size: 0.8rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   text-decoration: none;
@@ -194,7 +194,7 @@
 
 .statValue {
   font-size: 2.5rem;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: -0.04em;
   color: #fff;
   line-height: 1;
@@ -233,7 +233,7 @@
 
 .philosophyTitle {
   font-size: 3rem;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.03em;
   color: #fff;
@@ -371,7 +371,7 @@
 
 .zoneBadge {
   font-size: 0.63rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.25em;
   text-transform: uppercase;
 }
@@ -384,7 +384,7 @@
 
 .zoneTitle {
   font-size: 1.5rem;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: #fff;
@@ -413,7 +413,7 @@
   align-items: center;
   gap: 0.375rem;
   font-size: 0.68rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: #FF3333;
@@ -446,7 +446,7 @@
 
 .scienceTitle {
   font-size: 3rem;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.03em;
   color: #fff;
@@ -469,7 +469,7 @@
   border: 1px solid rgba(255,255,255,0.18);
   border-radius: 3px;
   font-size: 0.75rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: rgba(255,255,255,0.7);
@@ -496,7 +496,7 @@
 
 .scienceNum {
   font-size: 2rem;
-  font-weight: 900;
+  font-weight: 700;
   color: rgba(255,51,51,0.2);
   line-height: 1;
   margin-bottom: 1rem;
@@ -504,7 +504,7 @@
 
 .scienceCardTitle {
   font-size: 0.85rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: #fff;
@@ -563,7 +563,7 @@
   bottom: 1.25rem;
   left: 1.25rem;
   font-size: 0.65rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: rgba(255,255,255,0.5);
@@ -658,14 +658,14 @@
   align-items: center;
   justify-content: center;
   font-size: 1rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #FF3333;
   flex-shrink: 0;
 }
 
 .quoteAuthor {
   font-size: 0.85rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #fff;
   letter-spacing: 0.05em;
 }
@@ -730,7 +730,7 @@
 
 .ctaTitle {
   font-size: 2.75rem;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.025em;
   color: #fff;
@@ -762,7 +762,7 @@
   color: #fff;
   border-radius: 4px;
   font-size: 0.8rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   text-decoration: none;
@@ -778,7 +778,7 @@
   color: rgba(255,255,255,0.7);
   border-radius: 4px;
   font-size: 0.8rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   text-decoration: none;

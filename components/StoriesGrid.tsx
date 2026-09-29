@@ -111,7 +111,14 @@ export default function StoriesGrid({ stories, categories, sectionHead }: Props)
                           loading="lazy"
                         />
                       ) : null}
-                      <div className={styles.storyCardBg} style={{ background: `linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)` }} />
+                      <div
+                        className={styles.storyCardBg}
+                        style={
+                          story.imageUrl
+                            ? undefined
+                            : { background: 'linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)' }
+                        }
+                      />
                       <div className={styles.storyCardAccentLine} style={{ background: story.accent }} />
                       <div className={styles.storyCardPattern} />
                     </div>

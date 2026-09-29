@@ -16,7 +16,7 @@
 .badge {
   display: inline-block;
   font-size: 0.7rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #FF3333;
@@ -25,7 +25,7 @@
 
 .title {
   font-size: 2rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: #fff;
@@ -121,7 +121,7 @@
 .visualLabel {
   display: block;
   font-size: 0.62rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: #FF3333;
@@ -130,7 +130,7 @@
 
 .visualName {
   font-size: 1.15rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   color: #fff;
@@ -365,7 +365,7 @@
 
 .successTitle {
   font-size: 1.5rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   color: #fff;
   margin: 0 0 0.75rem;

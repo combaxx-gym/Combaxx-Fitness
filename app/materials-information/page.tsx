@@ -100,23 +100,75 @@ const FINISHES = [
   { name: 'Forest Green', hex: '#1a3a2a' },
 ]
 
+const HERO_FLOATS = [
+  {
+    id: 'sourcing',
+    label: 'Material Sourcing',
+    meta: 'Certified',
+    image: '/images/Material Sourcing.webp',
+    pos: 'a' as const,
+  },
+  {
+    id: 'engineering',
+    label: 'Precision Engineering',
+    meta: '±0.5 mm',
+    image: '/images/Precision Engineering.webp',
+    pos: 'b' as const,
+  },
+  {
+    id: 'testing',
+    label: 'Quality Testing',
+    meta: '47-Point QC',
+    image: '/images/Quality Testing.webp',
+    pos: 'c' as const,
+  },
+]
+
 export default function MaterialsPage() {
+  const floatPos = {
+    a: styles.float_a,
+    b: styles.float_b,
+    c: styles.float_c,
+  }
+
   return (
     <div className={styles.page}>
 
       {/* ── HERO ── */}
       <section className={styles.hero}>
-        <div className={styles.heroBg}>
+        <div className={styles.heroBg} aria-hidden>
+          <div className={styles.heroGlow} />
           <div className={styles.heroTexture} />
           <div className={styles.heroOverlay} />
         </div>
+
+        <div className={styles.heroFloats} aria-hidden>
+          {HERO_FLOATS.map((item) => (
+            <div
+              key={item.id}
+              className={`${styles.floatCard} ${floatPos[item.pos]}`}
+            >
+              <div className={styles.floatMedia}>
+                <img
+                  src={item.image}
+                  alt=""
+                  className={styles.floatImg}
+                />
+              </div>
+              <div className={styles.floatCopy}>
+                <span className={styles.floatLabel}>{item.label}</span>
+                <span className={styles.floatMeta}>{item.meta}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
         <div className={styles.heroInner}>
           <nav className={styles.breadcrumb} aria-label="Breadcrumb">
             <Link href="/" className={styles.breadLink}>Home</Link>
             <span className={styles.breadSep}>/</span>
             <span>Materials Information</span>
           </nav>
-          <span className={styles.heroBadge}>Engineering Excellence</span>
           <h1 className={styles.heroTitle}>
             Built With<br />
             <span className={styles.heroTitleAccent}>Precision</span><br />
@@ -125,13 +177,6 @@ export default function MaterialsPage() {
           <p className={styles.heroDesc}>
             Every frame, pad, cable, and fastener has been selected for one reason: to perform under the harshest commercial conditions, day after day, year after year.
           </p>
-          <div className={styles.heroMicro}>
-            <span className={styles.microItem}>ISO 9001 Certified</span>
-            <span className={styles.microDivider}>·</span>
-            <span className={styles.microItem}>CE Marked</span>
-            <span className={styles.microDivider}>·</span>
-            <span className={styles.microItem}>EN 957 Compliant</span>
-          </div>
         </div>
         <div className={styles.heroScroll}>
           <span>Scroll to explore</span>

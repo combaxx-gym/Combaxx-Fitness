@@ -95,7 +95,7 @@
   border: 1px solid rgba(255,51,51,0.35);
   border-radius: 999px;
   font-size: 0.6rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #FF3333;
@@ -110,7 +110,7 @@
 
 .heroTitle {
   font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.03;
   text-transform: uppercase;
@@ -154,7 +154,7 @@
   align-items: center;
   justify-content: center;
   font-size: 1rem;
-  font-weight: 900;
+  font-weight: 700;
   color: rgba(255,255,255,0.35);
   overflow: hidden;
   flex-shrink: 0;
@@ -198,7 +198,7 @@
 /* Portable text block styles */
 .article :global(h2) {
   font-size: 1.75rem;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: #fff;
@@ -207,7 +207,7 @@
 }
 .article :global(h3) {
   font-size: 1.25rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.01em;
   color: #fff;
   margin: 2.25rem 0 0.75rem;
@@ -307,7 +307,7 @@
 .notFoundWrap { padding: 8rem 0 10rem; text-align: center; }
 .notFoundTitle {
   font-size: 3rem;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: -0.03em;
   color: #fff;
   margin: 0 0 1rem;
@@ -319,7 +319,7 @@
   background: #FF3333;
   color: #fff;
   font-size: 0.8rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   text-decoration: none;

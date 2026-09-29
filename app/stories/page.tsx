@@ -36,6 +36,9 @@ const PULL_QUOTES = [
   },
 ]
 
+const imgUrl = (source?: unknown) =>
+  source ? urlFor(source).ignoreImageParams().url() : null
+
 async function getStories(): Promise<StoryArchiveItem[]> {
   try {
     return await client.fetch(
@@ -60,14 +63,11 @@ async function getStories(): Promise<StoryArchiveItem[]> {
 export default async function StoriesPage() {
   const allStories = await getStories()
   const hasStories = allStories.length > 0
-  const featured = allStories.find(s => s.featured) || allStories[0] || null
-  const rest = featured ? allStories.filter(s => s._id !== featured._id) : []
-
-  const featuredImgSrc = featured?.featuredImage ? urlFor(featured.featuredImage).width(1600).quality(80).url() : null
-  const heroImgSrc = featuredImgSrc
+  const heroStory = allStories.find(s => s.featured) || allStories[0] || null
+  const heroImgSrc = heroStory?.featuredImage ? imgUrl(heroStory.featuredImage) : null
 
   // Format grid-compatible items already in JSX rendered server side with image URLs so client component doesn't need Sanity import
-  let gridItems = rest.map((s, idx) => {
+  let gridItems = allStories.map((s, idx) => {
     const size = idx % 5 === 0 ? 'large' : 'normal'
     const accent = s.category === 'Facilities' || s.category === 'Community' ? '#FF3333' : s.category === 'Innovation' ? '#ffffff' : '#9ca3af'
     return {
@@ -84,7 +84,7 @@ export default async function StoriesPage() {
       featured: false,
       size,
       accent,
-      imageUrl: s.featuredImage ? urlFor(s.featuredImage).width(900).quality(80).url() : null,
+      imageUrl: s.featuredImage ? imgUrl(s.featuredImage) : null,
       isPlaceholder: false,
     }
   })
@@ -131,11 +131,6 @@ export default async function StoriesPage() {
             <span className={styles.heroBreadcrumbSep}>Stories</span>
           </nav>
 
-          <div className={styles.heroMeta}>
-            <span className={styles.heroBadge}>Stories Archive</span>
-            <span className={styles.heroFeaturedLabel}>Editor&apos;s Showcase</span>
-          </div>
-
           <h1 className={styles.heroTitle}>
             The People &amp;<br />
             <span className={styles.heroTitleAccent}>Places</span> We Equip
@@ -147,100 +142,11 @@ export default async function StoriesPage() {
             stories behind the equipment.
           </p>
 
-          <div className={styles.heroMicro} aria-hidden>
-            <span className={styles.heroMicroItem}>{allStories.length}+ Stories</span>
-            <span className={styles.heroMicroDivider}>·</span>
-            <span className={styles.heroMicroItem}>60+ Countries</span>
-            <span className={styles.heroMicroDivider}>·</span>
-            <span className={styles.heroMicroItem}>
-              {(STORY_CATEGORIES.length - 1)} Categories
-            </span>
-            <span className={styles.heroMicroDivider}>·</span>
-            <span className={styles.heroMicroItem}>5 Year Warranty</span>
-          </div>
         </div>
       </section>
 
       {/* ===== MAIN SITE-WIDE CANONICAL CONTAINER — REST OF SECTIONS LIVE INSIDE ===== */}
       <div className={styles.container}>
-        <section className={styles.featuredSection}>
-          <div className={styles.sectionHead}>
-            <div className={styles.sectionHeadText}>
-              <span className={styles.sectionBadge}>Featured Story</span>
-              <h2 className={styles.sectionTitle}>Editor&rsquo;s Showcase</h2>
-            </div>
-          </div>
-          {featured ? (
-            <Link href={`/stories/${featured.slug.current}`} className={styles.featuredCard} aria-label={`Read ${featured.title}`}>
-              {featuredImgSrc && (
-                <div className={styles.featuredCardImage}>
-                  <img src={featuredImgSrc} alt="" aria-hidden="true" />
-                </div>
-              )}
-              <div className={styles.featuredCardBg} />
-              <div className={styles.featuredCardInner}>
-                <div className={styles.featuredCardMeta}>
-                  <span className={styles.featuredTag}>{featured.tag || 'Case Study'}</span>
-                  <span className={styles.featuredCategory}>{featured.category}</span>
-                  {featured.date && <span className={styles.featuredDate}>{featured.date}</span>}
-                </div>
-                <h2 className={styles.featuredTitle}>{featured.title}</h2>
-                <p className={styles.featuredExcerpt}>{featured.excerpt}</p>
-                <div className={styles.featuredFooter}>
-                  <div className={styles.featuredAuthor}>
-                    <div className={styles.featuredAvatar}>C</div>
-                    <div>
-                      <div className={styles.featuredAuthorName}>Combaxx Editorial</div>
-                      <div className={styles.featuredAuthorRole}>Stories Team</div>
-                    </div>
-                  </div>
-                  <span className={styles.featuredReadBtn}>
-                    Read Story →
-                  </span>
-                </div>
-              </div>
-            </Link>
-          ) : (
-            <article className={styles.featuredCard} style={{ cursor: 'default' }}>
-              <div className={styles.featuredCardImage}>
-                <div className={`${styles.skeleton} ${styles.skeletonImage}`} />
-                <div className={styles.featPlaceholderInfo}>
-                  <span className={styles.featPlaceholderBadge}>Featured Coming Soon</span>
-                  <h3 className={styles.skeletonTitle} style={{ marginBottom: '1rem', maxWidth: '620px' }} />
-                  <div className={styles.skeletonText} style={{ maxWidth: 620, margin: '0 auto 0.5rem' }} />
-                  <div className={`${styles.skeletonText} ${styles.skeletonTextHalf}`} style={{ maxWidth: 420, margin: '0 auto' }} />
-                  <p className={styles.featPlaceholderHint}>
-                    💡 Mark any story as <strong>&ldquo;Featured&rdquo;</strong> in Sanity Studio to pin it here.
-                    Go to <strong>/studio → Stories / Case Studies</strong>.
-                  </p>
-                </div>
-              </div>
-              <div className={styles.featuredCardBg} />
-              <div className={styles.featuredCardInner}>
-                <div className={styles.featuredCardMeta}>
-                  <div className={`${styles.skeleton} ${styles.skeletonBadgeSm}`} style={{ width: 88 }} />
-                  <div className={`${styles.skeleton} ${styles.skeletonBadgeSm}`} style={{ width: 110 }} />
-                  <div className={`${styles.skeleton} ${styles.skeletonBadgeSm}`} style={{ width: 80, marginLeft: 'auto' }} />
-                </div>
-                <div className={`${styles.skeleton} ${styles.skeletonTitle}`} style={{ height: '2.5rem', marginBottom: '1rem' }} />
-                <div className={styles.skeletonText} />
-                <div className={styles.skeletonText} />
-                <div className={`${styles.skeletonText} ${styles.skeletonText70}`} style={{ marginBottom: '2.5rem' }} />
-                <div className={styles.featuredFooter}>
-                  <div className={styles.featuredAuthor} style={{ opacity: 0.5 }}>
-                    <div className={styles.featuredAvatar}>C</div>
-                    <div>
-                      <div className={`${styles.skeleton}`} style={{ width: 130, height: 14, margin: '2px 0 4px' }} />
-                      <div className={`${styles.skeleton}`} style={{ width: 90, height: 12, opacity: 0.6 }} />
-                    </div>
-                  </div>
-                  <div className={`${styles.skeleton}`} style={{ width: 110, height: 32, borderRadius: 3 }} />
-                </div>
-              </div>
-            </article>
-          )}
-        </section>
-
         {/* ── STORIES GRID with filter ── */}
         <section className={styles.gridSection}>
           <StoriesGrid
@@ -286,10 +192,10 @@ export default async function StoriesPage() {
               <span className={styles.numberValue}>1000+</span>
               <span className={styles.numberLabel}>Athletes Profiled</span>
             </div>
-            <div className={styles.numberItem}>
+            {/* <div className={styles.numberItem}>
               <span className={styles.numberValue}>12yr</span>
               <span className={styles.numberLabel}>Of Publishing Stories</span>
-            </div>
+            </div> */}
           </div>
         </section>
       </div>
