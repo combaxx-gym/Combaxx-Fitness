@@ -53,7 +53,7 @@ export const metadata: Metadata = {
 // ─── Static features ──────────────────────────────────────────────────────────
 const WHY_FEATURES = [
   { num: '01', title: 'Commercial Grade', desc: 'Built to withstand the rigorous demands of professional fitness facilities worldwide.' },
-  { num: '02', title: 'ISO Certified', desc: 'All products meet international quality and safety standards for commercial equipment.' },
+  { num: '02', title: 'Quality Assured', desc: 'All products meet rigorous internal quality and safety standards for commercial equipment.' },
   { num: '03', title: '5-Year Warranty', desc: 'Industry-leading warranty on frames, components, and structural elements.' },
   { num: '04', title: 'Expert Support', desc: 'Dedicated technical and after-sales support available for every product line.' },
 ]

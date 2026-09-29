@@ -40,7 +40,7 @@ const VALUES = [
     icon: Factory,
     title: "In-House Manufacturing",
     desc:
-      "Precision laser cutting, robotic welding and multi-stage powder coating under one roof — giving us complete control over tolerances and finish.",
+      "Precision laser cutting, robotic welding and multi-stage automotive paint under one roof — giving us complete control over tolerances and finish.",
   },
   {
     num: "04",
@@ -66,9 +66,9 @@ const JOURNEY = [
   },
   {
     year: "2018",
-    title: "ISO 9001 & CE Certification",
+    title: "CE Marking & EU Expansion",
     desc:
-      "Achieved ISO 9001 quality management and CE marking across our strength and cardio lines. Opened our first European distribution hub in Germany.",
+      "Secured CE marking across our strength and cardio lines. Opened our first European distribution hub in Germany.",
   },
   {
     year: "2021",
@@ -103,7 +103,7 @@ const PROCESS = [
     icon: Factory,
     title: "Precision Manufacturing",
     desc:
-      "Laser-cut steel, robotic MIG/TIG welding, CNC machining and multi-stage powder coating — each station inspected by senior technicians with digital QA checks.",
+      "Laser-cut steel, robotic MIG/TIG welding, CNC machining and multi-stage automotive paint — each station inspected by senior technicians with digital QA checks.",
   },
   {
     num: "STEP 03",
@@ -117,7 +117,7 @@ const PROCESS = [
     icon: Shield,
     title: "Certification & Finish",
     desc:
-      "Every batch is audited against ISO, CE and ASTM standards. Final surfaces receive our signature anti-rust, anti-sweat textured powder coat for a lifetime of use.",
+      "Every batch is audited against CE and ASTM standards. Final surfaces receive our signature anti-rust, anti-sweat automotive paint finish for a lifetime of use.",
   },
   {
     num: "STEP 05",
@@ -201,8 +201,6 @@ export default function AboutPage() {
           </p>
 
           <div className={styles.heroMicro}>
-            <span className={styles.microItem}>ISO 9001 Certified</span>
-            <span className={styles.microDivider}>·</span>
             <span className={styles.microItem}>CE Marked</span>
             <span className={styles.microDivider}>·</span>
             <span className={styles.microItem}>60+ Countries</span>

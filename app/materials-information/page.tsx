@@ -20,7 +20,7 @@ const MATERIALS = [
     properties: ['EN 10219 Certified', 'Tensile strength: 550 MPa', 'Anti-corrosion treatment', 'Welded to 3mm tolerance'],
     desc: 'Our frames are fabricated from high-tensile structural steel, heat-treated and precision-welded. Every tube, joint and bracket is engineered to handle the continuous load cycles of a commercial facility — not just occasional home use.',
     weight: 'Frame Weight: 25–280 kg',
-    certLabel: 'ISO 9001 Frame Standard',
+    certLabel: 'Commercial Frame Spec',
   },
   {
     id: 'upholstery',
@@ -37,14 +37,19 @@ const MATERIALS = [
   {
     id: 'coating',
     num: '03',
-    name: 'Powder Coating',
-    category: 'Surface Finish', 
+    name: 'Automotive Paint',
+    category: 'Surface Finish',
     color: '#FF3333',
     hex: '#FF3333',
-    properties: ['Electrostatic application', '60–80 micron thickness', 'Salt spray test: 500h', 'RAL custom colors available'],
-    desc: 'Our powder coating process uses electrostatic application at 180°C cure temperature, achieving a 60–80 micron film that resists chipping, scratching, and chemical attack. Available in standard black and grey, or custom RAL colors for branded facility builds.',
-    weight: 'Coating Thickness: 60–80μm',
-    certLabel: 'ISO 2409 Adhesion Test',
+    properties: [
+      'Multi-layer base + clear coat',
+      'UV-resistant high-gloss finish',
+      'Chip & scratch resistant',
+      'Custom colour matching available',
+    ],
+    desc: 'Every frame receives a multi-stage automotive paint system — primer, colour base, and protective clear coat — applied in controlled spray booths. The finish delivers a durable, high-gloss surface that resists sweat, cleaning chemicals, UV fade, and daily commercial wear. Available in standard black and grey, or custom colours for branded facility builds.',
+    weight: 'Paint System: 3-Layer Coat',
+    certLabel: 'Finish Durability Tested',
   },
   {
     id: 'hardware',
@@ -58,24 +63,12 @@ const MATERIALS = [
     weight: 'Grade: AISI 316',
     certLabel: 'ASTM A276 Certified',
   },
-  {
-    id: 'cables',
-    num: '05',
-    name: 'Aircraft-Grade Cable',
-    category: 'Cable Systems',
-    color: '#374151',
-    hex: '#374151',
-    properties: ['7×19 strand configuration', 'Min. break load: 12 kN', 'Nylon-jacketed', 'Factory pre-stretched'],
-    desc: 'Our cable systems use 7×19 aircraft-specification wire rope — the same strand configuration used in aviation and rigging applications. Pre-stretched at the factory to eliminate initial stretch, nylon-jacketed to reduce friction, and rated to a minimum breaking load of 12,000 Newtons.',
-    weight: 'Break Load: 12,000 N',
-    certLabel: 'DIN 3060 / EN 12385',
-  },
 ]
 
 const PROCESS = [
   { step: '01', title: 'Material Sourcing', desc: 'All raw materials are sourced from certified European suppliers. Every batch is tested for tensile strength, chemical composition, and surface quality before entering production.' },
   { step: '02', title: 'Precision Fabrication', desc: 'CNC laser cutting and robotic MIG welding ensure dimensional accuracy to ±0.5mm. Each weld is visually inspected and a 5% sample batch undergoes destructive pull testing.' },
-  { step: '03', title: 'Surface Treatment', desc: 'Shot-blasting removes mill scale and surface contamination. Pre-treatment phosphate coat improves paint adhesion by 300% before electrostatic powder application.' },
+  { step: '03', title: 'Surface Treatment', desc: 'Shot-blasting removes mill scale and surface contamination. A primer stage locks adhesion, then frames move into spray booths for multi-layer automotive paint and clear-coat finishing.' },
   { step: '04', title: 'Assembly & QC', desc: 'Each unit is assembled by trained technicians against a 47-point checklist. Load testing, adjustment verification, and safety pin tests are completed before packaging.' },
   { step: '05', title: 'Final Inspection', desc: 'A final audit covering structural integrity, surface finish, upholstery seam quality, and hardware torque values is completed. Documentation pack issued with each unit.' },
 ]
@@ -194,26 +187,27 @@ export default function MaterialsPage() {
               </p>
             </div>
           </div>
-          <div className={styles.introBanner}>
-            <div className={styles.introBannerItem}>
-              <span className={styles.introBannerNum}>47</span>
-              <span className={styles.introBannerLabel}>Point QC Checklist</span>
-            </div>
-            <div className={styles.introBannerDivider} />
-            <div className={styles.introBannerItem}>
-              <span className={styles.introBannerNum}>5yr</span>
-              <span className={styles.introBannerLabel}>Frame Warranty</span>
-            </div>
-            <div className={styles.introBannerDivider} />
-            <div className={styles.introBannerItem}>
-              <span className={styles.introBannerNum}>500K</span>
-              <span className={styles.introBannerLabel}>Cycle Tested</span>
-            </div>
-            <div className={styles.introBannerDivider} />
-            <div className={styles.introBannerItem}>
-              <span className={styles.introBannerNum}>6</span>
-              <span className={styles.introBannerLabel}>International Certs</span>
-            </div>
+          <div className={styles.statsGrid}>
+            <article className={styles.statCard}>
+              <span className={styles.statIndex}>01</span>
+              <span className={styles.statNum}>47</span>
+              <span className={styles.statLabel}>Point QC Checklist</span>
+            </article>
+            <article className={styles.statCard}>
+              <span className={styles.statIndex}>02</span>
+              <span className={styles.statNum}>2yr</span>
+              <span className={styles.statLabel}>Frame Warranty</span>
+            </article>
+            <article className={styles.statCard}>
+              <span className={styles.statIndex}>03</span>
+              <span className={styles.statNum}>500K</span>
+              <span className={styles.statLabel}>Cycle Tested</span>
+            </article>
+            <article className={styles.statCard}>
+              <span className={styles.statIndex}>04</span>
+              <span className={styles.statNum}>3-Layer</span>
+              <span className={styles.statLabel}>Automotive Paint</span>
+            </article>
           </div>
         </div>
       </section>
@@ -229,26 +223,38 @@ export default function MaterialsPage() {
         </div>
       </section>
 
-      {/* ── PROCESS TIMELINE ── */}
+      {/* ── PROCESS ROADMAP ── */}
       <section className={styles.processSection}>
         <div className={styles.container}>
           <div className={styles.sectionHead}>
             <span className={styles.sectionBadge}>From Raw to Ready</span>
             <h2 className={styles.sectionTitle}>Manufacturing Process</h2>
           </div>
-          <div className={styles.processTrack}>
-            {PROCESS.map((p, i) => (
-              <div key={p.step} className={styles.processStep}>
-                <div className={styles.processStepLeft}>
-                  <div className={styles.processNum}>{p.step}</div>
-                  {i < PROCESS.length - 1 && <div className={styles.processConnector} />}
-                </div>
-                <div className={styles.processContent}>
+
+          <div className={styles.processRoad}>
+            {PROCESS.map((p, i) => {
+              const isLeft = i % 2 === 0
+              const card = (
+                <article className={styles.processCard}>
+                  <span className={styles.processCardTag}>Step {p.step}</span>
                   <h3 className={styles.processTitle}>{p.title}</h3>
                   <p className={styles.processDesc}>{p.desc}</p>
+                </article>
+              )
+
+              return (
+                <div
+                  key={p.step}
+                  className={`${styles.processStep} ${isLeft ? styles.processStepLeft : styles.processStepRight}`}
+                >
+                  {isLeft ? card : <div className={styles.processPad} aria-hidden />}
+                  <div className={styles.processMilestone}>
+                    <span>{p.step}</span>
+                  </div>
+                  {isLeft ? <div className={styles.processPad} aria-hidden /> : card}
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
@@ -256,31 +262,36 @@ export default function MaterialsPage() {
       {/* ── CUSTOM FINISHES ── */}
       <section className={styles.finishesSection}>
         <div className={styles.container}>
-          <div className={styles.finishesInner}>
-            <div className={styles.finishesLeft}>
-              <span className={styles.sectionBadge}>Bespoke Options</span>
-              <h2 className={styles.finishesTitle}>
-                Your Brand.<br />Our Equipment.
-              </h2>
-              <p className={styles.finishesDesc}>
-                Custom powder coat colours, branded upholstery, laser-engraved logos — we offer full bespoke finishing for facilities that want a truly unique look. Minimum order quantities apply.
-              </p>
-              <Link href="/contact" className={styles.finishesCta}>
-                Request Custom Quote
-              </Link>
-            </div>
-            <div className={styles.finishesRight}>
-              <div className={styles.swatchGrid}>
-                {FINISHES.map((f) => (
-                  <div key={f.name} className={styles.swatch}>
-                    <div className={styles.swatchColor} style={{ background: f.hex }} />
-                    <span className={styles.swatchName}>{f.name}</span>
-                  </div>
-                ))}
+          <div className={styles.finishesPanel}>
+            <div className={styles.finishesHead}>
+              <div>
+                <span className={styles.sectionBadge}>Bespoke Options</span>
+                <h2 className={styles.finishesTitle}>
+                  Your Brand.<br />Our Equipment.
+                </h2>
+                <p className={styles.finishesDesc}>
+                  Custom automotive paint colours, branded upholstery, laser-engraved logos — we offer full bespoke finishing for facilities that want a truly unique look. Minimum order quantities apply.
+                </p>
               </div>
-              <p className={styles.finishesNote}>
-                + Custom RAL colours available on request
-              </p>
+              <div className={styles.finishesCopy}>
+                <div className={styles.finishesActions}>
+                  <Link href="/contact" className={styles.finishesCta}>
+                    Request Custom Quote
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.swatchGrid}>
+              {FINISHES.map((f) => (
+                <div key={f.name} className={styles.swatch}>
+                  <div className={styles.swatchColor} style={{ background: f.hex }} />
+                  <div className={styles.swatchMeta}>
+                    <span className={styles.swatchName}>{f.name}</span>
+                    <span className={styles.swatchHex}>{f.hex}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
