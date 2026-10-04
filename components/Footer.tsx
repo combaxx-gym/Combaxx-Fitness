@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, MapPin, Mail, Instagram, Facebook, Twitter, Youtube, Linkedin } from "lucide-react"
+import { ArrowRight, MapPin, Mail, Instagram, Youtube } from "lucide-react"
 import { client } from "@/sanity/lib/client"
 import styles from "@/styles/components/Footer.module.css"
 
@@ -128,6 +128,26 @@ export default async function Footer() {
                 Subscribe Now <Mail className="w-5 h-5" />
               </button>
             </div>
+            <div className={styles.socialRow}>
+              <Link
+                href="https://www.instagram.com/combaxx.fitness/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialIcon}
+                aria-label="Instagram"
+              >
+                <Instagram className={styles.socialIconSvg} />
+              </Link>
+              <Link
+                href="https://www.youtube.com/@Combaxx.Fitness"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialIcon}
+                aria-label="YouTube"
+              >
+                <Youtube className={styles.socialIconSvg} />
+              </Link>
+            </div>
           </div>
 
           {/* Middle: Links */}
@@ -185,33 +205,27 @@ export default async function Footer() {
 
       {/* Bottom Bar */}
       <div className={`${styles.container} ${styles.bottomBar}`}>
-        {/* Social Icons */}
-        <div className={styles.socialRow}>
-          <Link href="#" className={styles.socialIcon}>
-            <Instagram className={styles.socialIconSvg} />
-          </Link>
-          <Link href="#" className={styles.socialIcon}>
-            <Facebook className={styles.socialIconSvg} />
-          </Link>
-          <Link href="#" className={styles.socialIcon}>
-            <Twitter className={styles.socialIconSvg} />
-          </Link>
-          <Link href="#" className={styles.socialIcon}>
-            <Youtube className={styles.socialIconSvg} />
-          </Link>
-          <Link href="#" className={styles.socialIcon}>
-            <Linkedin className={styles.socialIconSvg} />
-          </Link>
-        </div>
-
-        {/* Copyright */}
         <div className={styles.copyright}>
-          <p>&copy; {new Date().getFullYear()} COMBAXX. All rights reserved.</p>
-          {/* <div className={styles.legalLinks}>
-            <Link href="#" className={styles.legalLink}>Privacy Policy</Link>
-            <Link href="#" className={styles.legalLink}>Terms of Use</Link>
-            <Link href="#" className={styles.legalLink}>Cookie Settings</Link>
-          </div> */}
+          <p>
+            Copyright &copy; {new Date().getFullYear()} -{' '}
+            <a
+              href="http://combaxxfitness.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.creditLink}
+            >
+              Combaxx Fitness
+            </a>
+            . All Rights Reserved. | Designed &amp; Developed by{' '}
+            <a
+              href="https://branndx.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.creditLink}
+            >
+              Brannd X
+            </a>
+          </p>
         </div>
       </div>
 
