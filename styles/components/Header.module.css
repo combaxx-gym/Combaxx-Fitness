@@ -459,6 +459,31 @@
   color: #FF3333;
 }
 
+.cartBtn {
+  position: relative;
+  padding: 0.15rem;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -0.45rem;
+  right: -0.55rem;
+  min-width: 1.05rem;
+  height: 1.05rem;
+  padding: 0 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: #FF3333;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 0 0 2px #111;
+  pointer-events: none;
+}
+
 /* ── Auth / menu buttons ── */
 .loginBtn {
   background: none;

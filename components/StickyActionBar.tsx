@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import styles from '@/styles/components/StickyActionBar.module.css'
+import { QUOTE_CART_UPDATED, addToQuoteCart, isInQuoteCart, openQuoteCart } from '@/lib/quoteCart'
 
 interface Props {
   productId: string
@@ -49,23 +50,20 @@ export default function StickyActionBar({ productId, productName, productSku, pr
   }, [])
 
   useEffect(() => {
-    try {
-      const cart: { _id: string }[] = JSON.parse(localStorage.getItem('quoteCart') || '[]')
-      setAdded(cart.some(i => i._id === productId))
-    } catch { /* ignore */ }
+    const sync = () => setAdded(isInQuoteCart(productId))
+    sync()
+    window.addEventListener(QUOTE_CART_UPDATED, sync)
+    return () => window.removeEventListener(QUOTE_CART_UPDATED, sync)
   }, [productId])
 
   const handleAddToCart = useCallback(() => {
     try {
-      const cart: unknown[] = JSON.parse(localStorage.getItem('quoteCart') || '[]')
-      const exists = (cart as { _id: string }[]).some(i => i._id === productId)
-      if (!exists) {
-        cart.push({ _id: productId, name: productName, slug: productSlug, sku: productSku })
-        localStorage.setItem('quoteCart', JSON.stringify(cart))
-        window.dispatchEvent(new Event('quoteCartUpdated'))
+      if (!isInQuoteCart(productId)) {
+        addToQuoteCart({ _id: productId, name: productName, slug: productSlug, sku: productSku })
       }
       setAdded(true)
     } catch { /* ignore */ }
+    openQuoteCart()
   }, [productId, productName, productSlug, productSku])
 
   const handleRequestQuote = useCallback(() => {

@@ -6,7 +6,9 @@ import { inquiry } from './inquiry'
 import { review } from './review'
 import { story } from './story'
 import { post } from './post'
+import { visitorLead } from './visitorLead'
+import { quoteRequest } from './quoteRequest'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [product, category, subCategory, inquiry, review, story, post],
+  types: [product, category, subCategory, inquiry, review, story, post, visitorLead, quoteRequest],
 }

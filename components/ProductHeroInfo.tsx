@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import styles from '@/styles/components/ProductHeroInfo.module.css'
 import reviewStyles from '@/styles/components/ProductReviews.module.css'
+import { QUOTE_CART_UPDATED, addToQuoteCart, isInQuoteCart, openQuoteCart } from '@/lib/quoteCart'
 
 interface Review {
   _id: string
@@ -19,6 +20,8 @@ interface Props {
   productName: string
   productSku?: string
   productSlug: string
+  productImage?: string
+  categorySlug?: string
   categoryName?: string
   description?: string
   features?: string[]
@@ -62,7 +65,7 @@ function FileIcon() {
 }
 
 export default function ProductHeroInfo({
-  productId, productName, productSku, productSlug, categoryName, description, features = [], specsPdfUrl, reviews,
+  productId, productName, productSku, productSlug, productImage, categorySlug, categoryName, description, features = [], specsPdfUrl, reviews,
 }: Props) {
   const [added, setAdded] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -83,24 +86,26 @@ export default function ProductHeroInfo({
   const roundedRating = Math.round(averageRating * 10) / 10
 
   useEffect(() => {
-    try {
-      const cart: { _id: string }[] = JSON.parse(localStorage.getItem('quoteCart') || '[]')
-      setAdded(cart.some(i => i._id === productId))
-    } catch { /* ignore */ }
+    const sync = () => setAdded(isInQuoteCart(productId))
+    sync()
+    window.addEventListener(QUOTE_CART_UPDATED, sync)
+    return () => window.removeEventListener(QUOTE_CART_UPDATED, sync)
   }, [productId])
 
   const handleAddToCart = useCallback(() => {
     try {
-      const cart: unknown[] = JSON.parse(localStorage.getItem('quoteCart') || '[]')
-      const exists = (cart as { _id: string }[]).some(i => i._id === productId) 
-      if (!exists) {
-        cart.push({ _id: productId, name: productName, slug: productSlug, sku: productSku })
-        localStorage.setItem('quoteCart', JSON.stringify(cart))
-        window.dispatchEvent(new Event('quoteCartUpdated'))
-      }
+      addToQuoteCart({
+        _id: productId,
+        name: productName,
+        slug: productSlug,
+        sku: productSku,
+        image: productImage,
+        categorySlug,
+      })
       setAdded(true)
     } catch { /* ignore */ }
-  }, [productId, productName, productSlug, productSku])
+    openQuoteCart()
+  }, [productId, productName, productSlug, productSku, productImage, categorySlug])
 
   const handleScrollToForm = useCallback(() => {
     document.getElementById('inquiry-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' })

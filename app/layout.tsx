@@ -4,6 +4,8 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Footer from "@/components/Footer"
 import Header from "@/components/Header"
+import QuoteCart from "@/components/QuoteCart"
+import CountryPopup from "@/components/CountryPopup"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,6 +50,8 @@ export default function RootLayout({
            <Header />
           {children}
           <Footer />
+          <QuoteCart />
+          <CountryPopup />
         </body>
       </html>
     </ClerkProvider>

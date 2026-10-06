@@ -264,6 +264,8 @@ export default async function ProductPage(
               productName={product.name}
               productSku={product.sku}
               productSlug={product.slug.current}
+              productImage={product.image ? urlFor(product.image).width(240).height(240).fit('max').url() : undefined}
+              categorySlug={primaryCatSlug || undefined}
               categoryName={categoryName}
               description={product.description}
               features={product.features || []}

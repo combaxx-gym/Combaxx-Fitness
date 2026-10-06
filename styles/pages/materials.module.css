@@ -1081,7 +1081,7 @@
   gap: 3rem;
   align-items: center;
   margin-bottom: 2.25rem;
-}
+}  
 
 .finishesTitle {
   font-size: clamp(2.4rem, 4vw, 3.4rem);

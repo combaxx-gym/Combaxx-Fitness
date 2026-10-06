@@ -4,11 +4,12 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { Search, X, Menu } from "lucide-react"
+import { Search, X, Menu, ClipboardList } from "lucide-react"
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
 import { urlFor } from "@/sanity/lib/image"
 import type { SanityImageSource } from "@sanity/image-url"
 import MegaMenu from "@/components/MegaMenu"
+import { QUOTE_CART_UPDATED, getQuoteCart, openQuoteCart } from "@/lib/quoteCart"
 import styles from "@/styles/components/Header.module.css"
 
 interface SearchResult {
@@ -56,6 +57,7 @@ export default function Header() {
   const [results, setResults] = useState<SearchResult[]>([])
   const [isSearching, setIsSearching] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
+  const [cartCount, setCartCount] = useState(0)
 
   const searchWrapRef = useRef<HTMLDivElement>(null)
   const mobileSearchRef = useRef<HTMLDivElement>(null)
@@ -68,6 +70,17 @@ export default function Header() {
     const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const sync = () => setCartCount(getQuoteCart().length)
+    sync()
+    window.addEventListener(QUOTE_CART_UPDATED, sync)
+    window.addEventListener("storage", sync)
+    return () => {
+      window.removeEventListener(QUOTE_CART_UPDATED, sync)
+      window.removeEventListener("storage", sync)
+    }
   }, [])
 
   useEffect(() => {
@@ -323,6 +336,16 @@ export default function Header() {
               </div>
             )}
           </div>
+
+          <button
+            type="button"
+            className={`${styles.iconBtn} ${styles.cartBtn}`}
+            onClick={() => { closeMega(); closeSearch(); openQuoteCart() }}
+            aria-label={`Open quote cart${cartCount ? ` (${cartCount} items)` : ""}`}
+          >
+            <ClipboardList size={19} />
+            {cartCount > 0 && <span className={styles.cartBadge}>{cartCount > 99 ? "99+" : cartCount}</span>}
+          </button>
 
           <div className={styles.desktopAuth}>
             <SignedOut>

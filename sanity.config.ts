@@ -40,7 +40,9 @@ const structure = (S: StructureBuilder) =>
       S.documentTypeListItem('post').title('Blog / News Articles'),
       S.documentTypeListItem('category').title('Categories'),
       S.documentTypeListItem('subCategory').title('Sub Categories'),
+      S.documentTypeListItem('quoteRequest').title('Quote Cart Requests'),
       S.documentTypeListItem('inquiry').title('Inquiries'),
+      S.documentTypeListItem('visitorLead').title('Visitor Leads'),
       S.documentTypeListItem('review').title('Product Reviews'),
     ]);
 
