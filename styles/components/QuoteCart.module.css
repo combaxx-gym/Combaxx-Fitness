@@ -384,55 +384,69 @@
   inset: 0;
   z-index: 1150;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  background: #0e0e0e;
 }
 
 .modal {
   position: relative;
   width: 100%;
-  max-width: 760px;
-  max-height: calc(100dvh - 3rem);
-  overflow-y: auto;
-  padding: 2.5rem;
-  border-radius: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.25rem clamp(1.25rem, 3.5vw, 3.5rem) 1.25rem;
+  border-radius: 0;
+  border: none;
   background:
-    radial-gradient(80% 50% at 0% 0%, rgba(255, 51, 51, 0.12), transparent 60%),
-    linear-gradient(180deg, #1a1a1a 0%, #111 100%);
-  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.9);
+    radial-gradient(60% 40% at 0% 0%, rgba(255, 51, 51, 0.14), transparent 55%),
+    linear-gradient(180deg, #161616 0%, #0e0e0e 100%);
+  box-shadow: none;
   color: #fff;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
 
 .modalClose {
-  position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
+  position: fixed;
+  top: 0.85rem;
+  right: 0.85rem;
+  z-index: 1160;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.45);
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .modalHead {
-  margin-bottom: 1.25rem;
-  padding-right: 3rem;
+  margin: 0 auto 0.75rem;
+  max-width: 1100px;
+  width: 100%;
+  padding-right: 2.25rem;
+}
+
+.modalHead .eyebrow {
+  margin-bottom: 0.2rem;
 }
 
 .modalTitle {
   margin: 0;
-  font-size: 1.85rem;
+  font-size: 2.4rem;
   font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 .modalSub {
-  margin: 0.6rem 0 0;
-  font-size: 0.9rem;
-  line-height: 1.6;
+  margin: 0.35rem 0 0;
+  font-size: 1rem;
+  line-height: 1.4;
   color: rgba(255, 255, 255, 0.6);
 }
 
@@ -442,10 +456,13 @@
 }
 
 .itemsPreview {
-  margin-bottom: 1.5rem;
-  border-radius: 0.9rem;
+  margin: 0 auto 0.75rem;
+  max-width: 1100px;
+  width: 100%;
+  border-radius: 0.65rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.03);
+  flex-shrink: 0;
 }
 
 .itemsPreview summary {
@@ -454,8 +471,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.9rem 1.1rem;
-  font-size: 0.78rem;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -479,20 +496,20 @@
 .itemsPreview ul {
   list-style: none;
   margin: 0;
-  padding: 0 1.1rem 0.9rem;
+  padding: 0 0.9rem 0.65rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  max-height: 180px;
+  gap: 0.35rem;
+  max-height: 110px;
   overflow-y: auto;
 }
 
 .itemsPreview li {
   display: flex;
   align-items: baseline;
-  gap: 0.6rem;
-  font-size: 0.88rem;
-  padding-top: 0.5rem;
+  gap: 0.55rem;
+  font-size: 0.8rem;
+  padding-top: 0.35rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -510,31 +527,39 @@
 
 .previewSku {
   flex-shrink: 0;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: rgba(255, 255, 255, 0.4);
 }
 
 .form {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem 1.1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem 0.85rem;
+  margin: 0 auto;
+  max-width: 1100px;
+  width: 100%;
+  flex-shrink: 0;
 }
 
 .full {
   grid-column: 1 / -1;
 }
 
+.span2 {
+  grid-column: span 2;
+}
+
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.28rem;
   min-width: 0;
 }
 
 .label {
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.55);
 }
@@ -542,18 +567,18 @@
 .input,
 .phoneWrap {
   width: 100%;
-  height: 3rem;
-  border-radius: 0.75rem;
+  height: 2.45rem;
+  border-radius: 0.55rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.04);
   color: #fff;
-  font-size: 0.92rem;
+  font-size: 0.86rem;
   font-family: inherit;
   transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .input {
-  padding: 0 1rem;
+  padding: 0 0.8rem;
 }
 
 .input::placeholder,
@@ -571,7 +596,7 @@
 select.input {
   appearance: none;
   -webkit-appearance: none;
-  padding-right: 2.5rem;
+  padding-right: 2.1rem;
   cursor: pointer;
 }
 
@@ -583,10 +608,11 @@ select.input optgroup {
 
 .textarea {
   height: auto;
-  min-height: 7rem;
-  padding: 0.85rem 1rem;
-  resize: vertical;
-  line-height: 1.5;
+  min-height: 3.4rem;
+  max-height: 3.8rem;
+  padding: 0.55rem 0.8rem;
+  resize: none;
+  line-height: 1.4;
 }
 
 .selectWrap {
@@ -596,7 +622,7 @@ select.input optgroup {
 
 .chevron {
   position: absolute;
-  right: 0.9rem;
+  right: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
@@ -611,15 +637,15 @@ select.input optgroup {
 
 .dial {
   flex-shrink: 0;
-  min-width: 3.75rem;
+  min-width: 3.25rem;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 0.75rem;
+  padding: 0 0.55rem;
   border-right: 1px solid rgba(255, 255, 255, 0.12);
   color: #FF3333;
-  font-size: 0.88rem;
+  font-size: 0.8rem;
   font-weight: 700;
 }
 
@@ -627,24 +653,33 @@ select.input optgroup {
   flex: 1;
   min-width: 0;
   height: 100%;
-  padding: 0 1rem;
+  padding: 0 0.8rem;
   border: none;
   outline: none;
   background: transparent;
   color: #fff;
-  font-size: 0.92rem;
+  font-size: 0.86rem;
   font-family: inherit;
+}
+
+.formFooter {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.15rem;
 }
 
 .checkbox {
   position: relative;
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
-  font-size: 0.85rem;
-  line-height: 1.5;
+  gap: 0.6rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
   color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
+  min-width: 0;
 }
 
 .checkbox input {
@@ -655,13 +690,13 @@ select.input optgroup {
 
 .checkmark {
   flex-shrink: 0;
-  width: 1.25rem;
-  height: 1.25rem;
-  margin-top: 0.1rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: 0.05rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.35rem;
+  border-radius: 0.3rem;
   border: 1px solid rgba(255, 255, 255, 0.25);
   color: transparent;
   transition: all 0.2s ease;
@@ -679,24 +714,28 @@ select.input optgroup {
 
 .error {
   margin: 0;
-  padding: 0.7rem 1rem;
-  border-radius: 0.65rem;
-  font-size: 0.84rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 0.55rem;
+  font-size: 0.8rem;
   color: #ff8080;
   background: rgba(255, 51, 51, 0.1);
   border: 1px solid rgba(255, 51, 51, 0.25);
 }
 
-.form .btnPrimary {
-  margin-top: 0.5rem;
-  height: 3.3rem;
+.formFooter .btnPrimary {
+  height: 2.7rem;
+  min-width: 12.5rem;
+  padding: 0 1.35rem;
+  font-size: 0.75rem;
 }
 
 .successBox {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  min-height: 70dvh;
   padding: 2rem 1rem 1rem;
   text-align: center;
 }
@@ -720,31 +759,95 @@ select.input optgroup {
 }
 
 /* ── Responsive ── */
-@media (max-width: 767px) {
-  .modalOverlay {
-    align-items: flex-end;
-    padding: 0;
+@media (max-height: 700px) {
+  .modal {
+    overflow-y: auto;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 1023px) {
+  .form {
+    grid-template-columns: 1fr 1fr;
   }
 
+  .span2 {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 767px) {
   .modal {
-    max-width: none;
-    max-height: 94dvh;
-    border-radius: 1.5rem 1.5rem 0 0;
-    padding: 2rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding: 1.75rem 1.15rem calc(1.5rem + env(safe-area-inset-bottom));
   }
 
   .modalClose {
-    top: 1rem;
-    right: 1rem;
+    top: 0.65rem;
+    right: 0.65rem;
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+
+  .modalHead {
+    margin-bottom: 1rem;
   }
 
   .modalTitle {
-    font-size: 1.45rem;
+    font-size: 1.4rem;
+  }
+
+  .modalSub {
+    font-size: 0.85rem;
+  }
+
+  .itemsPreview {
+    margin-bottom: 1rem;
+  }
+
+  .itemsPreview summary {
+    padding: 0.8rem 1rem;
   }
 
   .form {
     grid-template-columns: 1fr;
-    gap: 0.9rem;
+    gap: 0.85rem;
+  }
+
+  .span2,
+  .full {
+    grid-column: 1 / -1;
+  }
+
+  .field {
+    gap: 0.4rem;
+  }
+
+  .input,
+  .phoneWrap {
+    height: 2.9rem;
+    font-size: 0.9rem;
+  }
+
+  .textarea {
+    min-height: 5.5rem;
+    max-height: none;
+    resize: vertical;
+  }
+
+  .formFooter {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .formFooter .btnPrimary {
+    width: 100%;
+    height: 3.1rem;
+  }
+
+  .checkbox {
+    font-size: 0.84rem;
   }
 }
 

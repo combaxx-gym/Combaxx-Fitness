@@ -363,14 +363,14 @@ export default function QuoteCart() {
               role="dialog"
               aria-modal="true"
               aria-labelledby="rq-title"
-              initial={{ opacity: 0, y: 28, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.98 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 12 }}
+              transition={{ duration: 0.28, ease: 'easeOut' }}
               onClick={e => e.stopPropagation()}
             >
               <button type="button" className={styles.modalClose} onClick={closeForm} aria-label="Close">
-                <X size={18} />
+                <X size={14} />
               </button>
 
               {status === 'success' ? (
@@ -412,7 +412,7 @@ export default function QuoteCart() {
                   </details>
 
                   <form className={styles.form} onSubmit={handleSubmit}>
-                    <label className={`${styles.field} ${styles.full}`}>
+                    <label className={styles.field}>
                       <span className={styles.label}>Country *</span>
                       <span className={styles.selectWrap}>
                         <select
@@ -430,7 +430,7 @@ export default function QuoteCart() {
                             </optgroup>
                           ))}
                         </select>
-                        <ChevronDown size={16} className={styles.chevron} />
+                        <ChevronDown size={14} className={styles.chevron} />
                       </span>
                     </label>
 
@@ -476,7 +476,7 @@ export default function QuoteCart() {
                       <input className={styles.input} value={form.city} onChange={e => update('city', e.target.value)} autoComplete="address-level2" placeholder="City" required />
                     </label>
 
-                    <label className={`${styles.field} ${styles.full}`}>
+                    <label className={styles.field}>
                       <span className={styles.label}>Email *</span>
                       <input className={styles.input} type="email" value={form.email} onChange={e => update('email', e.target.value)} autoComplete="email" placeholder="you@company.com" required />
                     </label>
@@ -487,18 +487,18 @@ export default function QuoteCart() {
                         <select className={styles.input} value={form.sendTo} onChange={e => update('sendTo', e.target.value)}>
                           {EXPERTS.map(x => <option key={x} value={x}>{x}</option>)}
                         </select>
-                        <ChevronDown size={16} className={styles.chevron} />
+                        <ChevronDown size={14} className={styles.chevron} />
                       </span>
                     </label>
 
-                    <label className={styles.field}>
+                    <label className={`${styles.field} ${styles.span2}`}>
                       <span className={styles.label}>Business Category *</span>
                       <span className={styles.selectWrap}>
                         <select className={styles.input} value={form.businessCategory} onChange={e => update('businessCategory', e.target.value)} required>
                           <option value="" disabled>Select category</option>
                           {BUSINESS_CATEGORIES.map(x => <option key={x} value={x}>{x}</option>)}
                         </select>
-                        <ChevronDown size={16} className={styles.chevron} />
+                        <ChevronDown size={14} className={styles.chevron} />
                       </span>
                     </label>
 
@@ -508,22 +508,24 @@ export default function QuoteCart() {
                         className={`${styles.input} ${styles.textarea}`}
                         value={form.message}
                         onChange={e => update('message', e.target.value)}
-                        rows={4}
+                        rows={2}
                         placeholder="Tell us about your facility, timeline or any custom requirements"
                       />
                     </label>
 
-                    <label className={`${styles.checkbox} ${styles.full}`}>
-                      <input type="checkbox" checked={form.wantsUpdates} onChange={e => update('wantsUpdates', e.target.checked)} />
-                      <span className={styles.checkmark}><Check size={12} /></span>
-                      <span>Yes, I would like to receive updates about Combaxx products, offers and news.</span>
-                    </label>
+                    <div className={`${styles.formFooter} ${styles.full}`}>
+                      <label className={styles.checkbox}>
+                        <input type="checkbox" checked={form.wantsUpdates} onChange={e => update('wantsUpdates', e.target.checked)} />
+                        <span className={styles.checkmark}><Check size={11} /></span>
+                        <span>Yes, I would like to receive updates about Combaxx products, offers and news.</span>
+                      </label>
+
+                      <button type="submit" className={styles.btnPrimary} disabled={status === 'loading' || items.length === 0}>
+                        {status === 'loading' ? 'Sending…' : <>Submit Request <ArrowRight size={15} /></>}
+                      </button>
+                    </div>
 
                     {error && <p className={`${styles.error} ${styles.full}`} role="alert">{error}</p>}
-
-                    <button type="submit" className={`${styles.btnPrimary} ${styles.full}`} disabled={status === 'loading' || items.length === 0}>
-                      {status === 'loading' ? 'Sending…' : <>Submit Request <ArrowRight size={16} /></>}
-                    </button>
                   </form>
                 </>
               )}
