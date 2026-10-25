@@ -159,7 +159,7 @@ export default async function Footer() {
             <div>
               <h5 className={styles.linkColTitle}>Legal & Policies</h5>
               <ul className={styles.linkList}>
-                <li><Link href="/safe-use" className={styles.linkItem}>Safe use of Technogym products</Link></li>
+                <li><Link href="/safe-use" className={styles.linkItem}>Safe use of Combaxx products</Link></li>
                 <li><Link href="/privacy-policy" className={styles.linkItem}>Privacy policy</Link></li>
                 <li><Link href="/cookie-policy" className={styles.linkItem}>Cookie policy</Link></li>
                 <li><Link href="/terms-and-conditions" className={styles.linkItem}>Terms and conditions</Link></li>
