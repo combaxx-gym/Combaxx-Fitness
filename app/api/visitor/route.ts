@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { writeClient } from '@/sanity/lib/writeClient'
 import { findCountry } from '@/lib/countries'
+import { notifyFormSubmission } from '@/lib/notifyEmail'
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,16 +22,31 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Server configuration error. Please try again later.' }, { status: 500 })
     }
 
+    const phoneDisplay = `${country.dial} ${digits}`
+    const page = String(landingPage || '').slice(0, 300)
+
     await writeClient.create({
       _type: 'visitorLead',
-      phone: `${country.dial} ${digits}`,
+      phone: phoneDisplay,
       country: country.name,
       countryCode: country.code,
       region: country.region,
       detectedCountry: findCountry(detectedCountry)?.name || '',
-      landingPage: String(landingPage || '').slice(0, 300),
+      landingPage: page,
       status: 'new',
       submittedAt: new Date().toISOString(),
+    })
+
+    await notifyFormSubmission({
+      formType: 'Visitor Lead',
+      subject: `New visitor lead — ${country.name} (${phoneDisplay})`,
+      fields: {
+        Phone: phoneDisplay,
+        Country: country.name,
+        Region: country.region,
+        'Detected country': findCountry(detectedCountry)?.name || '',
+        Page: page,
+      },
     })
 
     return NextResponse.json({ success: true })

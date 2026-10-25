@@ -89,7 +89,7 @@ const STATIC_SERIES = [
 
 const MOBILE_LINKS = [
   { href: '/shop', label: 'Shop All' },
-  { href: '/materials-information', label: 'Materials Information' },
+  { href: '/material-engineering', label: 'Material & Engineering' },
   { href: '/stories', label: 'Stories' },
   { href: '/contact', label: 'Contact' },
   { href: '/about', label: 'About' },

@@ -71,12 +71,12 @@ export const quoteRequest = defineType({
     { title: 'Newest first', name: 'submittedAtDesc', by: [{ field: 'submittedAt', direction: 'desc' }] },
   ],
   preview: {
-    select: { title: 'fullName', country: 'country', items: 'items' },
-    prepare: ({ title, country, items }) => {
+    select: { title: 'fullName', city: 'city', items: 'items' },
+    prepare: ({ title, city, items }) => {
       const count = Array.isArray(items) ? items.length : 0
       return {
         title: title || 'Quote request',
-        subtitle: [`${count} product${count === 1 ? '' : 's'}`, country].filter(Boolean).join(' · '),
+        subtitle: [`${count} product${count === 1 ? '' : 's'}`, city, 'Pakistan'].filter(Boolean).join(' · '),
       }
     },
   },

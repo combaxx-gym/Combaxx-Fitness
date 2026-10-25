@@ -59,39 +59,6 @@ export default async function Footer() {
 
   return (
     <footer className={styles.footer}>
-
-      {/* Top CTA Section */}
-      <div className={`${styles.container} ${styles.ctaRow}`}>
-        <div className={styles.ctaGrid}>
-          {/* Card 1 */}
-          <div className={styles.ctaCard}>
-            <h3 className={styles.ctaCardTitle}>Join the Community</h3>
-            <p className={styles.ctaCardDesc}>Unlock exclusive training content and member-only offers.</p>
-            <div className={styles.ctaCardBtn}>
-              Become a Member <ArrowRight className="w-4 h-4" />
-            </div>
-          </div>
-
-          {/* Card 2 */}
-          <div className={styles.ctaCard}>
-            <h3 className={styles.ctaCardTitle}>Visit Our Showrooms</h3>
-            <p className={styles.ctaCardDesc}>Experience the equipment in person at our boutiques.</p>
-            <div className={styles.ctaCardBtn}>
-              Find Nearest <MapPin className="w-4 h-4" />
-            </div>
-          </div>
-
-          {/* Card 3 */}
-          <div className={styles.ctaCard}>
-            <h3 className={styles.ctaCardTitle}>Business Solutions</h3>
-            <p className={styles.ctaCardDesc}>Equip your gym or hotel with professional gear.</p>
-            <div className={styles.ctaCardBtn}>
-              Explore B2B <ArrowRight className="w-4 h-4" />
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main Footer Content */}
       <div className={`${styles.container} ${styles.mainContent}`}>
 
@@ -157,7 +124,7 @@ export default async function Footer() {
               <h5 className={styles.linkColTitle}>Explore</h5>
               <ul className={styles.linkList}>
                 <li><Link href="/shop" className={styles.linkItem}>Products</Link></li>
-                <li><Link href="/materials-information" className={styles.linkItem}>Materials Information</Link></li>
+                <li><Link href="/material-engineering" className={styles.linkItem}>Material & Engineering</Link></li>
                 <li><Link href="/stories" className={styles.linkItem}>Stories</Link></li>
                 <li><Link href="/blog" className={styles.linkItem}>Blog</Link></li>
                 <li><Link href="/about" className={styles.linkItem}>About Us</Link></li>

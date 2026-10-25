@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { Search, X, Menu, ClipboardList } from "lucide-react"
+import { Search, X, Menu, ClipboardList, User } from "lucide-react"
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
 import { urlFor } from "@/sanity/lib/image"
 import type { SanityImageSource } from "@sanity/image-url"
@@ -285,6 +285,7 @@ export default function Header() {
 
         <div className={styles.navWrap}>
           <nav className={`${styles.nav} ${scrolled ? styles.navScrolled : ""}`}>
+            <Link href="/about" className={styles.navLink}>About Us</Link>
             <div className={styles.megaTrigger} onMouseEnter={handleProductsEnter}>
               <Link
                 href="/shop"
@@ -294,9 +295,8 @@ export default function Header() {
                 <span className={`${styles.chevron} ${isMegaOpen ? styles.chevronOpen : ""}`}>▾</span>
               </Link>
             </div>
-            <Link href="/materials-information" className={styles.navLink}>Materials Information</Link>
+            <Link href="/material-engineering" className={styles.navLink}>Material & Engineering</Link>
             <Link href="/stories" className={styles.navLink}>Stories</Link>
-            <Link href="/contact" className={styles.navLink}>Contact</Link>
           </nav>
         </div>
 
@@ -350,7 +350,9 @@ export default function Header() {
           <div className={styles.desktopAuth}>
             <SignedOut>
               <SignInButton mode="modal">
-                <button type="button" className={styles.loginBtn}>Login</button>
+                <button type="button" className={styles.loginBtn} aria-label="Login">
+                  <User size={19} />
+                </button>
               </SignInButton>
             </SignedOut>
             <SignedIn>

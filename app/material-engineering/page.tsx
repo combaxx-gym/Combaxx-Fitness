@@ -5,7 +5,7 @@ import CTA from '@/components/CTA'
 import styles from '@/styles/pages/materials.module.css'
 
 export const metadata: Metadata = {
-  title: 'Materials Information | Commercial Gym Equipment',
+  title: 'Material & Engineering | Commercial Gym Equipment',
   description: 'Discover the premium materials, engineering processes, and quality certifications behind every piece of equipment we manufacture.',
 }
 
@@ -151,7 +151,7 @@ export default function MaterialsPage() {
           <nav className={styles.breadcrumb} aria-label="Breadcrumb">
             <Link href="/" className={styles.breadLink}>Home</Link>
             <span className={styles.breadSep}>/</span>
-            <span>Materials Information</span>
+            <span>Material &amp; Engineering</span>
           </nav>
           <h1 className={styles.heroTitle}>
             Built With<br />

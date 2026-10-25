@@ -11,54 +11,24 @@ import {
   QUOTE_CART_OPEN, QUOTE_CART_UPDATED, clearQuoteCart, getProductPath, getQuoteCart,
   removeFromQuoteCart, setQuoteCartQty, type QuoteCartItem,
 } from '@/lib/quoteCart'
-import { COUNTRIES, REGIONS, findCountry } from '@/lib/countries'
-import { detectCountryCode, getVisitor } from '@/lib/visitor'
+import { PAKISTAN_CITIES } from '@/lib/pakistanCities'
+import { getVisitor } from '@/lib/visitor'
 import styles from '@/styles/components/QuoteCart.module.css'
 
-const BUSINESS_CATEGORIES = [
-  'Commercial Gym / Fitness Club',
-  'Hotel & Resort',
-  'Corporate Wellness',
-  'School / University',
-  'Physiotherapy & Rehab',
-  'Military / Police / Government',
-  'Residential / Home Gym',
-  'Dealer / Distributor',
-  'Other',
-]
-
-const EXPERTS = [
-  'Sales Expert',
-  'Gym Setup Consultant',
-  'Technical Support',
-]
-
 type FormState = {
-  countryCode: string
   name: string
   phone: string
-  street: string
-  extraAddress: string
-  zip: string
   city: string
   email: string
-  sendTo: string
-  businessCategory: string
   message: string
   wantsUpdates: boolean
 }
 
 const EMPTY_FORM: FormState = {
-  countryCode: '',
   name: '',
   phone: '',
-  street: '',
-  extraAddress: '',
-  zip: '',
   city: '',
   email: '',
-  sendTo: EXPERTS[0],
-  businessCategory: '',
   message: '',
   wantsUpdates: true,
 }
@@ -120,20 +90,13 @@ export default function QuoteCart() {
   }, [toast])
 
   const totalQty = useMemo(() => items.reduce((sum, i) => sum + i.qty, 0), [items])
-  const country = findCountry(form.countryCode)
 
   const openForm = useCallback(() => {
     const visitor = getVisitor()
     setForm(prev => ({
       ...prev,
-      countryCode: prev.countryCode || visitor?.countryCode || '',
       phone: prev.phone || visitor?.phone || '',
     }))
-    if (!visitor?.countryCode) {
-      detectCountryCode().then(code =>
-        setForm(prev => (prev.countryCode ? prev : { ...prev, countryCode: code }))
-      )
-    }
     setError('')
     setStatus('idle')
     setFormOpen(true)
@@ -162,7 +125,7 @@ export default function QuoteCart() {
     e.preventDefault()
     setError('')
     if (items.length === 0) return setError('Your quote cart is empty.')
-    if (!country) return setError('Please select your country.')
+    if (!form.city.trim()) return setError('Please select your city.')
 
     setStatus('loading')
     try {
@@ -179,7 +142,7 @@ export default function QuoteCart() {
       if (!res.ok) throw new Error(data?.error || 'Failed to send your request.')
       clearQuoteCart()
       setStatus('success')
-      setForm(prev => ({ ...EMPTY_FORM, countryCode: prev.countryCode, phone: prev.phone }))
+      setForm(prev => ({ ...EMPTY_FORM, phone: prev.phone }))
     } catch (err) {
       setStatus('idle')
       setError(err instanceof Error ? err.message : 'Failed to send your request.')
@@ -413,36 +376,19 @@ export default function QuoteCart() {
 
                   <form className={styles.form} onSubmit={handleSubmit}>
                     <label className={styles.field}>
-                      <span className={styles.label}>Country *</span>
-                      <span className={styles.selectWrap}>
-                        <select
-                          className={styles.input}
-                          value={form.countryCode}
-                          onChange={e => update('countryCode', e.target.value)}
-                          required
-                        >
-                          <option value="" disabled>Select country</option>
-                          {REGIONS.map(r => (
-                            <optgroup key={r} label={r}>
-                              {COUNTRIES.filter(c => c.region === r).map(c => (
-                                <option key={c.code} value={c.code}>{c.name}</option>
-                              ))}
-                            </optgroup>
-                          ))}
-                        </select>
-                        <ChevronDown size={14} className={styles.chevron} />
-                      </span>
-                    </label>
-
-                    <label className={styles.field}>
                       <span className={styles.label}>Name *</span>
                       <input className={styles.input} value={form.name} onChange={e => update('name', e.target.value)} autoComplete="name" placeholder="Full name" required />
                     </label>
 
                     <label className={styles.field}>
+                      <span className={styles.label}>Email *</span>
+                      <input className={styles.input} type="email" value={form.email} onChange={e => update('email', e.target.value)} autoComplete="email" placeholder="you@email.com" required />
+                    </label>
+
+                    <label className={styles.field}>
                       <span className={styles.label}>Phone *</span>
                       <span className={styles.phoneWrap}>
-                        <span className={styles.dial}>{country?.dial || '+'}</span>
+                        <span className={styles.dial}>+92</span>
                         <input
                           className={styles.phoneInput}
                           type="tel"
@@ -457,46 +403,18 @@ export default function QuoteCart() {
                     </label>
 
                     <label className={styles.field}>
-                      <span className={styles.label}>Street Address</span>
-                      <input className={styles.input} value={form.street} onChange={e => update('street', e.target.value)} autoComplete="address-line1" placeholder="Street and number" />
-                    </label>
-
-                    <label className={styles.field}>
-                      <span className={styles.label}>Extra Address</span>
-                      <input className={styles.input} value={form.extraAddress} onChange={e => update('extraAddress', e.target.value)} autoComplete="address-line2" placeholder="Apartment, suite, building" />
-                    </label>
-
-                    <label className={styles.field}>
-                      <span className={styles.label}>Zip Code</span>
-                      <input className={styles.input} value={form.zip} onChange={e => update('zip', e.target.value)} autoComplete="postal-code" placeholder="Zip / Postal code" />
-                    </label>
-
-                    <label className={styles.field}>
                       <span className={styles.label}>City *</span>
-                      <input className={styles.input} value={form.city} onChange={e => update('city', e.target.value)} autoComplete="address-level2" placeholder="City" required />
-                    </label>
-
-                    <label className={styles.field}>
-                      <span className={styles.label}>Email *</span>
-                      <input className={styles.input} type="email" value={form.email} onChange={e => update('email', e.target.value)} autoComplete="email" placeholder="you@company.com" required />
-                    </label>
-
-                    <label className={styles.field}>
-                      <span className={styles.label}>Send to Expert</span>
                       <span className={styles.selectWrap}>
-                        <select className={styles.input} value={form.sendTo} onChange={e => update('sendTo', e.target.value)}>
-                          {EXPERTS.map(x => <option key={x} value={x}>{x}</option>)}
-                        </select>
-                        <ChevronDown size={14} className={styles.chevron} />
-                      </span>
-                    </label>
-
-                    <label className={`${styles.field} ${styles.span2}`}>
-                      <span className={styles.label}>Business Category *</span>
-                      <span className={styles.selectWrap}>
-                        <select className={styles.input} value={form.businessCategory} onChange={e => update('businessCategory', e.target.value)} required>
-                          <option value="" disabled>Select category</option>
-                          {BUSINESS_CATEGORIES.map(x => <option key={x} value={x}>{x}</option>)}
+                        <select
+                          className={styles.input}
+                          value={form.city}
+                          onChange={e => update('city', e.target.value)}
+                          required
+                        >
+                          <option value="" disabled>Select your city</option>
+                          {PAKISTAN_CITIES.map(c => (
+                            <option key={c} value={c}>{c}</option>
+                          ))}
                         </select>
                         <ChevronDown size={14} className={styles.chevron} />
                       </span>
@@ -508,7 +426,7 @@ export default function QuoteCart() {
                         className={`${styles.input} ${styles.textarea}`}
                         value={form.message}
                         onChange={e => update('message', e.target.value)}
-                        rows={2}
+                        rows={3}
                         placeholder="Tell us about your facility, timeline or any custom requirements"
                       />
                     </label>

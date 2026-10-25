@@ -21,6 +21,11 @@ const nextConfig: NextConfig = {
         destination: "/shop",
         permanent: true,
       },
+      {
+        source: "/materials-information",
+        destination: "/material-engineering",
+        permanent: true,
+      },
     ];
   },
 };

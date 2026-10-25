@@ -34,6 +34,13 @@ export const inquiry = defineType({
       title: 'Country',
       type: 'string',
       readOnly: true,
+      initialValue: 'Pakistan',
+    }),
+    defineField({
+      name: 'city',
+      title: 'City',
+      type: 'string',
+      readOnly: true,
     }),
     defineField({
       name: 'message',
@@ -90,7 +97,12 @@ export const inquiry = defineType({
   preview: {
     select: {
       title: 'fullName',
-      subtitle: 'productName',
+      productName: 'productName',
+      city: 'city',
     },
+    prepare: ({ title, productName, city }) => ({
+      title,
+      subtitle: [productName, city, 'Pakistan'].filter(Boolean).join(' · '),
+    }),
   },
 })

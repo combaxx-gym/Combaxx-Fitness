@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { randomUUID } from 'crypto'
 import { writeClient } from '@/sanity/lib/writeClient'
-import { findCountry } from '@/lib/countries'
+import { PAKISTAN_CITIES } from '@/lib/pakistanCities'
+import { notifyFormSubmission } from '@/lib/notifyEmail'
 
 interface IncomingItem {
   _id?: string
@@ -32,9 +33,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Please enter a valid phone number.' }, { status: 400 })
     }
 
-    const country = findCountry(body.countryCode)
-    if (!country) {
-      return NextResponse.json({ error: 'Please select your country.' }, { status: 400 })
+    const city = str(body.city, 120)
+    if (!city || !(PAKISTAN_CITIES as readonly string[]).includes(city)) {
+      return NextResponse.json({ error: 'Please select your city.' }, { status: 400 })
     }
 
     if (!process.env.SANITY_WRITE_TOKEN) {
@@ -58,25 +59,52 @@ export async function POST(request: NextRequest) {
         }
       })
 
+    const fullName = str(body.name, 200)
+    const email = str(body.email, 200)
+    const phone = `+92 ${str(body.phone, 40)}`
+    const message = str(body.message, 4000)
+    const totalQty = quoteItems.reduce((sum, i) => sum + i.qty, 0)
+
     await writeClient.create({
       _type: 'quoteRequest',
-      fullName: str(body.name, 200),
-      email: str(body.email, 200),
-      phone: `${country.dial} ${str(body.phone, 40)}`,
-      country: country.name,
-      region: country.region,
-      streetAddress: str(body.street, 300),
-      extraAddress: str(body.extraAddress, 300),
-      zip: str(body.zip, 40),
-      city: str(body.city, 120),
-      sendTo: str(body.sendTo, 120),
-      businessCategory: str(body.businessCategory, 120),
-      message: str(body.message, 4000),
+      fullName,
+      email,
+      phone,
+      country: 'Pakistan',
+      region: 'Asia',
+      streetAddress: '',
+      extraAddress: '',
+      zip: '',
+      city,
+      sendTo: '',
+      businessCategory: '',
+      message,
       wantsUpdates: Boolean(body.wantsUpdates),
       items: quoteItems,
-      totalQty: quoteItems.reduce((sum, i) => sum + i.qty, 0),
+      totalQty,
       status: 'new',
       submittedAt: new Date().toISOString(),
+    })
+
+    const itemsSummary = quoteItems
+      .map(i => `${i.qty}× ${i.name}${i.sku ? ` (${i.sku})` : ''}`)
+      .join('\n')
+
+    await notifyFormSubmission({
+      formType: 'Quote Cart Request',
+      subject: `New quote request — ${fullName} (${totalQty} units)`,
+      replyTo: email,
+      fields: {
+        Name: fullName,
+        Email: email,
+        Phone: phone,
+        City: city,
+        Country: 'Pakistan',
+        'Total units': totalQty,
+        Products: itemsSummary,
+        Message: message,
+        'Wants updates': Boolean(body.wantsUpdates) ? 'Yes' : 'No',
+      },
     })
 
     return NextResponse.json({ success: true })

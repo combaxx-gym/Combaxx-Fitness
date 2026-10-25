@@ -6,6 +6,9 @@ import Footer from "@/components/Footer"
 import Header from "@/components/Header"
 import QuoteCart from "@/components/QuoteCart"
 import CountryPopup from "@/components/CountryPopup"
+import FloatingContact from "@/components/FloatingContact"
+import HideOnZubair from "@/components/HideOnZubair"
+import SmoothScroll from "@/components/SmoothScroll"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,11 +50,18 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-           <Header />
-          {children}
-          <Footer />
-          <QuoteCart />
-          <CountryPopup />
+          <SmoothScroll>
+            <HideOnZubair>
+              <Header />
+            </HideOnZubair>
+            {children}
+            <HideOnZubair>
+              <Footer />
+              <QuoteCart />
+              <CountryPopup />
+              <FloatingContact />
+            </HideOnZubair>
+          </SmoothScroll>
         </body>
       </html>
     </ClerkProvider>

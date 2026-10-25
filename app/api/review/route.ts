@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { writeClient } from '@/sanity/lib/writeClient'
+import { notifyFormSubmission } from '@/lib/notifyEmail'
 
 export async function POST(request: NextRequest) {
   try {
@@ -43,6 +44,19 @@ export async function POST(request: NextRequest) {
     }
 
     await writeClient.create(doc)
+
+    await notifyFormSubmission({
+      formType: 'Product Review',
+      subject: `New review (${rating}/5)${productName ? ` — ${productName}` : ''} by ${name}`,
+      replyTo: email,
+      fields: {
+        Name: name,
+        Email: email,
+        Rating: `${rating}/5`,
+        Product: productName || '',
+        Review: reviewText,
+      },
+    })
 
     return NextResponse.json({ success: true, message: 'Review submitted successfully! It will be visible after approval.' })
   } catch (err: any) {
