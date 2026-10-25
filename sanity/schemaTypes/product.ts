@@ -57,7 +57,7 @@ export const product = defineType({
       name: 'price',
       title: 'Price',
       type: 'number',
-      description: 'Managed mainly from /Zubair price dashboard',
+      description: 'Managed mainly from /zubair price dashboard',
     }),
     defineField({
       name: 'description',

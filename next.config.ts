@@ -26,6 +26,16 @@ const nextConfig: NextConfig = {
         destination: "/material-engineering",
         permanent: true,
       },
+      {
+        source: "/Zubair",
+        destination: "/zubair",
+        permanent: false,
+      },
+      {
+        source: "/Zubair/:path*",
+        destination: "/zubair/:path*",
+        permanent: false,
+      },
     ];
   },
 };
